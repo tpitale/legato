@@ -1,17 +1,17 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "cepstrum/version"
+require "legato/version"
 
 Gem::Specification.new do |s|
-  s.name        = "cepstrum"
-  s.version     = Cepstrum::VERSION
+  s.name        = "legato"
+  s.version     = Legato::VERSION
   s.authors     = ["Tony Pitale"]
   s.email       = ["tpitale@gmail.com"]
-  s.homepage    = "" # "http://cepstrum.github.com"
+  s.homepage    = "" # "http://legato.github.com"
   s.summary     = %q{TODO: Write a gem summary}
   s.description = %q{TODO: Write a gem description}
 
-  s.rubyforge_project = "cepstrum" # ?
+  s.rubyforge_project = "legato" # ?
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
@@ -24,5 +24,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "bourne"
   # s.add_development_dependency "vcr"
 
-  # s.add_runtime_dependency "" # NOTHING!
+  s.add_runtime_dependency "oauth2"
 end

@@ -1,10 +1,10 @@
-http://en.wikipedia.org/wiki/Cepstrum
+http://en.wikipedia.org/wiki/Legato
 
 Google Analytics Mapper
 
 access\_token = OAuth2 # from Google, provide instructions on getting the token!
 
-user = Cepstrum::User.new(access\_token)
+user = Legato::User.new(access\_token)
 
 user.accounts
 user.accounts.first.profiles
@@ -16,11 +16,11 @@ profile = user.profiles.first
 profile.user == user #=> true
 
 class Exit
-	#? extend Cepstrum::Mapping
-	#? extend Cepstrum::Filtering
-	#? extend Cepstrum::Attribute
+	#? extend Legato::Mapping
+	#? extend Legato::Filtering
+	#? extend Legato::Attribute
 
-	extend Cepstrum # ::Mapper/::Model
+	extend Legato # ::Mapper/::Model
 
 	metrics :exits, :pageviews
 	dimensions :page\_path, :operating\_system, :browser
@@ -81,15 +81,15 @@ Filtering
 Accounts, WebProperties, Profiles, and Goals
 --------------------------------------------
 
-    > Cepstrum::Management::Account.all
-    > Cepstrum::Management::WebProperty.all
-    > Cepstrum::Management::Profile.all
-    > Cepstrum::Management::Goal.all
+    > Legato::Management::Account.all
+    > Legato::Management::WebProperty.all
+    > Legato::Management::Profile.all
+    > Legato::Management::Goal.all
 
 Profiles for a UA- Number (a WebProperty)
 -----------------------------------------
 
-    > profile = Cepstrum::Management::Profile.all.detect {|p| p.web_property_id == 'UA-XXXXXXX-X'}
+    > profile = Legato::Management::Profile.all.detect {|p| p.web_property_id == 'UA-XXXXXXX-X'}
 
 Other Parameters
 ----------------
