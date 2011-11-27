@@ -4,7 +4,7 @@ module Legato
       extend Finder
 
       def self.default_path
-        "/accounts/~all/web_properties"
+        "/accounts/~all/webproperties"
       end
 
       def path
@@ -21,7 +21,7 @@ module Legato
       end
 
       def self.for_account(account)
-        all(account.user, account.path+'/web_properties')
+        all(account.user, account.path+'/webproperties')
       end
     end
   end

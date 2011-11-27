@@ -22,7 +22,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec"
   s.add_development_dependency "mocha"
   s.add_development_dependency "bourne"
-  # s.add_development_dependency "vcr"
+  s.add_development_dependency "vcr", "2.0.0.beta2"
+  s.add_development_dependency "fakeweb"
 
   s.add_runtime_dependency "oauth2"
 end

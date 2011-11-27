@@ -23,14 +23,14 @@ describe Legato::Management::WebProperty do
 
       Legato::Management::WebProperty.for_account(account)
 
-      Legato::Management::WebProperty.should have_received(:all).with('user', 'accounts/12345/web_properties')
+      Legato::Management::WebProperty.should have_received(:all).with('user', 'accounts/12345/webproperties')
     end
   end
 
   context "A WebProperty instance" do
     it 'builds the path for the web_property from the id' do
       web_property = Legato::Management::WebProperty.new({"id" => 123456}, stub)
-      web_property.path.should == '/accounts/~all/web_properties/123456'
+      web_property.path.should == '/accounts/~all/webproperties/123456'
     end
   end
 end

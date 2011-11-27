@@ -16,7 +16,7 @@ client = OAuth2::Client.new('779170787975.apps.googleusercontent.com', 'mbCISoZi
 
 client.auth_code.authorize_url(:scope => 'https://www.googleapis.com/auth/analytics.readonly', :redirect_uri => 'http://localhost')
 
-access_token = client.auth_code.get_token('4/Wdfs_g6f8LU3uIjuPHMd3VgSsiDa', :redirect_uri => 'http://localhost')
+access_token = client.auth_code.get_token('4/UhVpk4AFUSSRnDVKFuEYgk3Qng_M', :redirect_uri => 'http://localhost')
 
 json = access_token.get('https://www.googleapis.com/analytics/v3/management/accounts').body
 JSON.parse(json)

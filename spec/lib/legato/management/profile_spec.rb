@@ -22,23 +22,23 @@ describe Legato::Management::Profile do
 
       Legato::Management::Profile.for_account(account)
 
-      Legato::Management::Profile.should have_received(:all).with('user', 'accounts/12345/web_properties/~all/profiles')
+      Legato::Management::Profile.should have_received(:all).with('user', 'accounts/12345/webproperties/~all/profiles')
     end
 
     it 'returns an array of all profiles available to a user under an web property' do
-      web_property = stub(:user => 'user', :path => 'accounts/~all/web_properties/12345')
+      web_property = stub(:user => 'user', :path => 'accounts/~all/webproperties/12345')
       Legato::Management::Profile.stubs(:all)
 
       Legato::Management::Profile.for_web_property(web_property)
 
-      Legato::Management::Profile.should have_received(:all).with('user', 'accounts/~all/web_properties/12345/profiles')
+      Legato::Management::Profile.should have_received(:all).with('user', 'accounts/~all/webproperties/12345/profiles')
     end
   end
 
   context "A Profile instance" do
     it 'builds the path for the profile from the id' do
       web_property = Legato::Management::Profile.new({"id" => 12345}, stub)
-      web_property.path.should == '/accounts/~all/web_properties/~all/profiles/12345'
+      web_property.path.should == '/accounts/~all/webproperties/~all/profiles/12345'
     end
   end
 end
