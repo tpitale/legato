@@ -19,7 +19,7 @@ describe "Management" do
 
     it 'has web properties' do
       web_properties = Legato::Management::WebProperty.all(@user)
-      web_properties.map(&:id).include?("UA-1189765-1").should == true
+      web_properties.map(&:id).include?("UA-1189765-4").should == true
     end
   end
 

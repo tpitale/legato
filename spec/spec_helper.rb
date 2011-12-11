@@ -8,7 +8,7 @@ require 'vcr'
 
 require File.expand_path('../../lib/legato', __FILE__)
 
-Dir["./spec/support/**/*.rb"].each {|f| require f; p f}
+Dir["./spec/support/**/*.rb"].each {|f| require f}
 
 VCR.configure do |config|
   config.cassette_library_dir = File.expand_path('../cassettes', __FILE__)

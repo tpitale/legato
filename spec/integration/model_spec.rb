@@ -13,7 +13,7 @@ describe 'Legato::Model' do
 
     it 'returns results for the metrics and dimensions' do
       user = Legato::User.new(access_token)
-      profile = Legato::Management::Profile.new({'id' => 25452496, 'name' => 'Some Site'}, user)
+      profile = Legato::Management::Profile.new({'id' => 4506212, 'name' => 'Some Site'}, user)
       ModelTest.results(profile).should_not be_nil
     end
   end

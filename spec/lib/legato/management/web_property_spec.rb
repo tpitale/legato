@@ -20,9 +20,7 @@ describe Legato::Management::WebProperty do
     it 'returns an array of all web properties available to a user under an account' do
       account = stub(:user => 'user', :path => 'accounts/12345')
       Legato::Management::WebProperty.stubs(:all)
-
       Legato::Management::WebProperty.for_account(account)
-
       Legato::Management::WebProperty.should have_received(:all).with('user', 'accounts/12345/webproperties')
     end
   end

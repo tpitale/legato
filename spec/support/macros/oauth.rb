@@ -3,7 +3,7 @@ module Support
     module OAuth
       def token
         # fill me in if you add more tests here, use the rake task oauth:token, update vcr to :record => :all
-        "ya29.AHES6ZQwkY0n7UmIS2sGO4n0R3YH3T3i09bzLb0LYR7XJPP8NqGk"
+        "ya29.AHES6ZREobGegWLc3tyxuuQAkKF7lg071UgpTeLe_4jTcV35uW8"
       end
 
       def client
