@@ -25,6 +25,14 @@ module Legato
   def self.collect_params(set)
     set.map {|param| Legato.to_ga_string(param)}.join(',')
   end
+
+  def self.and_join_character
+    '%3B'
+  end
+
+  def self.or_join_character
+    ','
+  end
 end
 
 require 'legato/user'
@@ -34,7 +42,9 @@ require 'legato/management/account'
 require 'legato/management/web_property'
 require 'legato/management/profile'
 
+require 'legato/list_parameter'
 require 'legato/request'
 require 'legato/filter'
+require 'legato/filter_set'
 require 'legato/query'
 require 'legato/model'

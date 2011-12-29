@@ -28,6 +28,10 @@ describe Legato::Query do
       @query.parent_klass.should == @klass
     end
 
+    it 'defaults to an empty filter set' do
+      @query.filters.to_params.should == Legato::FilterSet.new.to_params
+    end
+
     it 'has filters defined from the parent class' do
       @query.respond_to?(:high).should be_true
     end
@@ -59,9 +63,48 @@ describe Legato::Query do
       @query.to_a.should == [1,2,3]
     end
 
+    it "behaves like an enumerable delegating to the collection" do
+      collection = []
+      collection.stubs(:each)
+      @query.stubs(:collection).returns(collection)
+      @query.stubs(:loaded?).returns(true)
+
+      @query.each {}
+
+      collection.should have_received(:each)
+    end
+
+    it 'has a profile id after being given a profile' do
+      profile = stub(:id => '1234567890')
+      @query.stubs(:profile).returns(profile)
+
+      @query.profile_id.should == 'ga:1234567890'
+
+      profile.should have_received(:id)
+    end
+
+    it 'has no profile id by default' do
+      @query.stubs(:profile).returns(nil)
+      @query.profile_id.should be_nil
+    end
+
+    it 'sets the profile and applies options, returns itself' do
+      @query.stubs(:profile=)
+      @query.stubs(:apply_options)
+
+      @query.results('profile').should == @query
+
+      @query.should have_received(:profile=).with('profile')
+      @query.should have_received(:apply_options).with({})
+    end
+
     context 'when applying filters' do
       before :each do
-        @query.stubs(:eql)
+        @filter = Legato::Filter.new(:key, :eql, 1000)
+        @query.stubs(:eql).returns(@filter)
+
+        @filters = stub(:<<)
+        @query.stubs(:filters).returns(@filters)
       end
 
       it 'returns the query' do
@@ -86,6 +129,22 @@ describe Legato::Query do
         @query.apply_filter(100, profile, block_with_arg)
         @query.should have_received(:eql).with(:key, 100)
         @query.profile.should == profile
+      end
+
+      it 'adds to the filter set' do
+        @query.apply_filter(@block)
+
+        @filters.should have_received(:<<).with(@filter)
+      end
+
+      it 'joins an array of filters with OR' do
+        block = lambda {|*browsers| browsers.map {|browser| eql(:browser, browser)}}
+        @filter.stubs(:join_character=)
+
+        @query.apply_filter('chrome', 'safari', block)
+
+        @filter.should have_received(:join_character=).with(Legato.and_join_character)
+        @filter.should have_received(:join_character=).with(Legato.or_join_character)
       end
     end
 
@@ -183,5 +242,74 @@ describe Legato::Query do
 
     it_defines_operators :eql, :not_eql, :gt, :gte, :lt, :lte, :matches,
       :does_not_match, :contains, :does_not_contain, :substring, :not_substring
+
+    context "as a hash of parameters" do
+      before :each do
+        @query.stubs(:metrics).returns(nil)
+        @query.stubs(:dimensions).returns(nil)
+        @query.stubs(:filters).returns(stub(:to_params => nil))
+      end
+
+      it 'includes the profile id' do
+        @query.stubs(:profile_id).returns('ga:1234567890')
+
+        @query.to_params.should == {
+          'ids' => 'ga:1234567890',
+          'start-date' => Legato.format_time(Time.now-Legato::Query::MONTH),
+          'end-date' => Legato.format_time(Time.now)
+        }
+      end
+
+      it 'includes the start and end dates' do
+        now = Time.now
+        @query.start_date = now
+        @query.end_date = now
+        @query.to_params.should == {'start-date' => Legato.format_time(now), 'end-date' => Legato.format_time(now)}
+      end
+
+      it 'includes the limit' do
+        @query.limit = 1000
+        @query.to_params['max-results'].should == 1000
+      end
+
+      it 'includes the offset' do
+        @query.offset = 50
+        @query.to_params['start-index'].should == 50
+      end
+
+      it 'includes filters' do
+        filters = stub(:to_params => 'filter set parameters')
+        @query.stubs(:filters).returns(filters)
+
+        @query.to_params['filters'].should == 'filter set parameters'
+      end
+
+      it 'includes metrics' do
+        metrics = Legato::ListParameter.new(:metrics)
+        metrics.stubs(:to_params).returns({'metrics' => 'pageviews,exits'})
+        metrics.stubs(:empty?).returns(false)
+        @query.stubs(:metrics).returns(metrics)
+
+        @query.to_params['metrics'].should == 'pageviews,exits'
+      end
+
+      it 'includes dimensions' do
+        dimensions = Legato::ListParameter.new(:dimensions)
+        dimensions.stubs(:to_params).returns({'dimensions' => 'browser,country'})
+        dimensions.stubs(:empty?).returns(false)
+        @query.stubs(:dimensions).returns(dimensions)
+
+        @query.to_params['dimensions'].should == 'browser,country'
+      end
+
+      it 'includes order' do
+        order = Legato::ListParameter.new(:order)
+        order.stubs(:to_params).returns({'order' => 'pageviews'})
+        order.stubs(:empty?).returns(false)
+        @query.stubs(:order).returns(order)
+
+        @query.to_params['order'].should == 'pageviews'
+      end
+    end
   end
 end

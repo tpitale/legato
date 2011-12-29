@@ -23,26 +23,12 @@ module Legato
     attr_reader :parent_klass
     attr_accessor :profile, :start_date, :end_date
     attr_accessor :order, :limit, :offset#, :segment # individual, overwritten
-    # attr_accessor :filters # appended to, may add :segments later for dynamic segments
-
-    def results(profile, options={})
-      url = "https://www.googleapis.com/analytics/v3/data/ga"
-      dimension_params = parent_klass.dimensions.map {|d| Legato.to_ga_string(d)}.join(',')
-      metric_params = parent_klass.metrics.map {|m| Legato.to_ga_string(m)}.join(',')
-
-      profile.user.access_token.get(url, :params => {
-        'ids' => Legato.to_ga_string(profile.id),
-        'dimensions' => dimension_params,
-        'metrics' => metric_params,
-        'start-date' => (Time.now - 2592000).strftime('%Y-%m-%d'),
-        'end-date' => Time.now.strftime('%Y-%m-%d')
-      })
-    end
+    attr_accessor :filters # appended to, may add :segments later for dynamic segments
 
     def initialize(klass)
       @loaded = false
       @parent_klass = klass
-    #   self.filters = FilterSet.new
+      self.filters = FilterSet.new
       self.start_date = Time.now - MONTH
       self.end_date = Time.now
 
@@ -59,14 +45,14 @@ module Legato
     def apply_filter(*args, block)
       @profile = extract_profile(args)
 
-      # join_character = Legato.and_join_character # filters are joined by AND
+      join_character = Legato.and_join_character # filters are joined by AND
 
       # # block returns one filter or an array of filters
       Array.wrap(instance_exec(*args, &block)).each do |filter|
-      #   filter.join_character = join_character
-      #   self.filters << filter
+        filter.join_character = join_character
+        self.filters << filter
 
-      #   join_character = Legato.or_join_character # arrays are joined by OR
+        join_character = Legato.or_join_character # arrays are joined by OR
       end
       self
     end
@@ -78,7 +64,7 @@ module Legato
       end
 
       apply_basic_options(options)
-    #   apply_filter_options(options[:filters])
+      # apply_filter_options(options[:filters])
 
       self
     end
@@ -131,16 +117,16 @@ module Legato
     end
     alias :to_a :collection
 
-    # def each(&block)
-    #   collection.each(&block)
-    # end
+    def each(&block)
+      collection.each(&block)
+    end
 
-    # # backwards compatability
-    # def results(profile=nil, options={})
-    #   self.profile = profile unless profile.nil?
-    #   apply_options(options)
-    #   self
-    # end
+    # if no filters, we use results to add profile
+    def results(profile=nil, options={})
+      self.profile = profile unless profile.nil?
+      apply_options(options)
+      self
+    end
 
     # def total_results
     #   collection.total_results
@@ -150,39 +136,52 @@ module Legato
     #   collection.sampled?
     # end
 
-    # def metrics
-    #   parent_klass.metrics
-    # end
+    def metrics
+      parent_klass.metrics
+    end
 
-    # def dimensions
-    #   parent_klass.dimensions
-    # end
+    def dimensions
+      parent_klass.dimensions
+    end
 
     # def segment_id
     #   segment.nil? ? nil : "gaid::#{segment}"
     # end
 
-    # def profile_id
-    #   # should we raise here?
-    #   profile.nil? ? nil : Legato.to_ga(profile.id)
-    # end
+    def profile_id
+      profile && Legato.to_ga_string(profile.id)
+    end
 
-    # def to_params
-    #   params = {
-    #     'ids' => profile_id,
-    #     'start-date' => Legato.format_time(start_date),
-    #     'end-date' => Legato.format_time(end_date),
-    #     'max-results' => limit,
-    #     'start-index' => offset,
-    #     'segment' => segment_id,
-    #     'filters' => filters.to_params # defaults to AND filtering
-    #   }
+    def to_params
+      params = {
+        'ids' => profile_id,
+        'start-date' => Legato.format_time(start_date),
+        'end-date' => Legato.format_time(end_date),
+        'max-results' => limit,
+        'start-index' => offset,
+        # 'segment' => segment_id,
+        'filters' => filters.to_params # defaults to AND filtering
+      }
 
-    #   [metrics, dimensions, order].each do |report_parameter|
-    #     params.merge!(report_parameter.to_params) unless report_parameter.nil?
-    #   end
+      [metrics, dimensions, order].each do |list|
+        params.merge!(list.to_params) unless (list.nil? || list.empty?)
+      end
 
-    #   params.reject {|k,v| v.nil? || v.to_s.strip.length == 0}
+      params.reject {|k,v| v.nil? || v.to_s.strip.length == 0}
+    end
+
+    # def results(profile, options={})
+    #   url = "https://www.googleapis.com/analytics/v3/data/ga"
+    #   dimension_params = dimensions.map {|d| Legato.to_ga_string(d)}.join(',')
+    #   metric_params = metrics.map {|m| Legato.to_ga_string(m)}.join(',')
+    # 
+    #   profile.user.access_token.get(url, :params => {
+    #     'ids' => Legato.to_ga_string(profile.id),
+    #     'dimensions' => dimension_params,
+    #     'metrics' => metric_params,
+    #     'start-date' => (Time.now - 2592000).strftime('%Y-%m-%d'),
+    #     'end-date' => Time.now.strftime('%Y-%m-%d')
+    #   })
     # end
   end
 end
