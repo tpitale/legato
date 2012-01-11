@@ -5,13 +5,13 @@ module Legato
     # end
 
     def metrics(*fields)
-      @metrics ||= []
-      @metrics += fields
+      @metrics ||= ListParameter.new(:metrics)
+      @metrics << fields
     end
 
     def dimensions(*fields)
-      @dimensions ||= []
-      @dimensions += fields
+      @dimensions ||= ListParameter.new(:dimensions)
+      @dimensions << fields
     end
 
     def filters

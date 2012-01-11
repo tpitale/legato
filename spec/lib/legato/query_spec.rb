@@ -47,17 +47,19 @@ describe Legato::Query do
     end
 
     it "loads a collection of results" do
-      request = stub(:parsed_response => [1,2,3])
-      Legato::Request.stubs(:new).returns(request)
+      response = stub(:collection => [])
+      user = stub(:request => response)
+      @query.stubs(:profile => stub(:user => user))
+
       @query.load
+
       @query.loaded?.should be_true
-      Legato::Request.should have_received(:new).with(@query)
-      request.should have_received(:parsed_response)
+      @query.profile.user.should have_received(:request).with(@query)
+      response.should have_received(:collection)
     end
 
     it "returns the collection" do
-      request = stub(:parsed_response => [1,2,3])
-      Legato::Request.stubs(:new).returns(request)
+      @query.stubs(:request_for_query).returns(stub(:collection => [1,2,3]))
       @query.load
       @query.collection.should == [1,2,3]
       @query.to_a.should == [1,2,3]

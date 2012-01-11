@@ -14,22 +14,22 @@ describe "Legato::Model" do
 
     it 'has a metric' do
       @model.metrics :exits
-      @model.metrics.should == [:exits]
+      @model.metrics.should == Legato::ListParameter.new(:metrics, [:exits])
     end
 
     it 'has metrics' do
       @model.metrics :exits, :pageviews
-      @model.metrics.should == [:exits, :pageviews]
+      @model.metrics.should == Legato::ListParameter.new(:metrics, [:exits, :pageviews])
     end
 
     it 'has a dimension' do
       @model.dimensions :browser
-      @model.dimensions.should == [:browser]
+      @model.dimensions.should == Legato::ListParameter.new(:dimensions, [:browser])
     end
 
     it 'has dimensions' do
       @model.dimensions :browser, :city
-      @model.dimensions.should == [:browser, :city]
+      @model.dimensions.should == Legato::ListParameter.new(:dimensions, [:browser, :city])
     end
 
     context "with filters" do

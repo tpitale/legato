@@ -18,16 +18,16 @@ module Legato
     "#{$1}ga:#{$2}" if str.to_s.camelize(:lower) =~ /^(-)?(.*)$/
   end
 
+  def self.from_ga_string(str)
+    str.gsub("ga:", '')
+  end
+
   def self.format_time(t)
     t.strftime('%Y-%m-%d')
   end
 
-  def self.collect_params(set)
-    set.map {|param| Legato.to_ga_string(param)}.join(',')
-  end
-
   def self.and_join_character
-    '%3B'
+    ';'
   end
 
   def self.or_join_character
@@ -43,7 +43,7 @@ require 'legato/management/web_property'
 require 'legato/management/profile'
 
 require 'legato/list_parameter'
-require 'legato/request'
+require 'legato/response'
 require 'legato/filter'
 require 'legato/filter_set'
 require 'legato/query'

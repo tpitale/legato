@@ -1,6 +1,6 @@
 module Legato
   class Query
-    # include Enumerable
+    include Enumerable
 
     MONTH = 2592000
 
@@ -107,8 +107,8 @@ module Legato
     end
 
     def load
+      @collection = request_for_query.collection
       @loaded = true
-      @collection = Request.new(self).parsed_response
     end
 
     def collection
@@ -164,7 +164,7 @@ module Legato
       }
 
       [metrics, dimensions, order].each do |list|
-        params.merge!(list.to_params) unless (list.nil? || list.empty?)
+        params.merge!(list.to_params) unless list.nil?
       end
 
       params.reject {|k,v| v.nil? || v.to_s.strip.length == 0}
@@ -183,5 +183,9 @@ module Legato
     #     'end-date' => Time.now.strftime('%Y-%m-%d')
     #   })
     # end
+    private
+    def request_for_query
+      profile.user.request(self)
+    end
   end
 end

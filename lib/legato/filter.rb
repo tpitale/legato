@@ -19,7 +19,7 @@ module Legato
       :descending => '-'
     }
 
-    def initialize(field, operator, value, join_character='%3B')
+    def initialize(field, operator, value, join_character=';')
       self.field = field
       self.operator = operator
       self.value = value
@@ -27,15 +27,15 @@ module Legato
     end
 
     def google_field
-      Legato.to_ga(field)
+      Legato.to_ga_string(field)
     end
 
     def google_operator
-      URI.encode(OPERATORS[operator], /[=<>]/)
+      OPERATORS[operator]
     end
 
     def escaped_value
-      CGI::escape(value.to_s.gsub(/([,;\\])/) {|c| '\\'+c})
+      CGI.escape(value.to_s.gsub(/([,;\\])/) {|c| '\\'+c})
     end
 
     def to_param
