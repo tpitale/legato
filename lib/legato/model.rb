@@ -1,8 +1,8 @@
 module Legato
   module Model
-    # def self.extended(base)
-    #   ProfileReports.add_report_method(base)
-    # end
+    def self.extended(base)
+      ProfileMethods.add_profile_method(base)
+    end
 
     def metrics(*fields)
       @metrics ||= ListParameter.new(:metrics)

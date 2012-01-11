@@ -36,6 +36,7 @@ module Legato
 end
 
 require 'legato/user'
+require 'legato/profile_methods'
 
 require 'legato/management/finder'
 require 'legato/management/account'

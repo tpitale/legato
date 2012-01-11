@@ -1,7 +1,9 @@
 module Legato
   module Management
     class Profile
+
       extend Finder
+      include ProfileMethods
 
       def self.default_path
         "/accounts/~all/webproperties/~all/profiles"
