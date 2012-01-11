@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.version     = Legato::VERSION
   s.authors     = ["Tony Pitale"]
   s.email       = ["tpitale@gmail.com"]
-  s.homepage    = "" # "http://legato.github.com"
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.homepage    = "http://github.com/tpitale/legato"
+  s.summary     = %q{Access the Google Analytics API with Ruby}
+  s.description = %q{Access the Google Analytics Core Reporting and Management APIs with Ruby. Create models for metrics and dimensions. Filter your data to tell you what you need.}
 
   s.rubyforge_project = "legato" # ?
 

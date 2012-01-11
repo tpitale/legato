@@ -9,7 +9,6 @@ module Legato
     URL = "https://www.googleapis.com/analytics/v3/data/ga"
 
     def request(query)
-      p query.to_params
       begin
         Response.new(access_token.get(URL, :params => query.to_params))
       rescue => e
@@ -17,5 +16,19 @@ module Legato
         raise e
       end
     end
+
+    # Management
+    def accounts
+      Management::Account.all(self)
+    end
+
+    def web_properties
+      Management::WebProperty.all(self)
+    end
+
+    def profiles
+      Management::Profile.all(self)
+    end
+
   end
 end

@@ -1,95 +1,143 @@
-http://en.wikipedia.org/wiki/Legato
+# Google Analytics Model/Mapper #
 
-Google Analytics Mapper
 
-access\_token = OAuth2 # from Google, provide instructions on getting the token!
+## Google Analytics Management ##
 
-user = Legato::User.new(access\_token)
+1. Get an OAuth2 Access Token from Google, Read OAUTH.md
 
-user.accounts
-user.accounts.first.profiles
+        access_token = OAuth2 Access Token # from Google, see OAUTH.md
 
-user.profiles
+2. Create a New User with the Access Token
 
-profile = user.profiles.first
+        user = Legato::User.new(access_token)
 
-profile.user == user #=> true
+3. List the Accounts and Profiles of the first Account
 
-class Exit
-	#? extend Legato::Mapping
-	#? extend Legato::Filtering
-	#? extend Legato::Attribute
+        user.accounts
+        user.accounts.first.profiles
 
-	extend Legato # ::Mapper/::Model
+4. List all the Profiles the User has Access to
 
-	metrics :exits, :pageviews
-	dimensions :page\_path, :operating\_system, :browser
+        user.profiles
 
-	filter :high_exits, lambda {gte(:exits, 2000)}
-	filter :low_pageviews, lambda {lte(:pageviews, 200)}
+5. Get a Profile
 
-	# or with dimensions
-	filter :browsers, lambda {|*browsers| browsers.map {|browser| matches(:broswer, browser)}}
+        profile = user.profiles.first
 
-	filter :by_pageviews, lambda {order(:pageviews, :desc)}
-	filter :one_week_ago, lambda {starts_at(Time.now - 1.week.ago)} # if you use ActiveSupport
+6. The Profile Carries the User
 
-	filter :some_predefined_ga_filter_by_name #=> optional filter id/number?
-end
+        profile.user == user #=> true
 
-profile.exits #=> Query with all array methods for lazy loading
 
-# Chaining Queries
-profile.exits.high\_exits.low\_pageviews.by\_pageviews
+## Google Analytics Model ##
 
-Exit.results(profile) == profile.exits
-Exit.high\_exits(profile).results == Exit.high\_exits.results(profile)
+    class Exit
+      extend Legato::Model
 
-# results is our kicker, any filter/query can take a profile if you don't chain from a profile
+      metrics :exits, :pageviews
+      dimensions :page_path, :operating_system, :browser
+    end
 
-# warn if filter references something that isn't a metric or dimension
-# warn if using a method for metric on a dimension and reverse
+    profile.exits #=> returns a Legato::Query
+    profile.exits.each {} #=> any enumerable kicks off the request to GA
 
-Filtering
----------
+## Metrics & Dimensions ##
 
-  Google Analytics supports a significant number of filtering options.
+http://code.google.com/apis/analytics/docs/gdata/dimsmets/dimsmets.html
 
-  http://code.google.com/apis/analytics/docs/gdata/gdataReference.html#filtering
+    metrics :exits, :pageviews
+    dimensions :page_path, :operating_system, :browser
 
-  Here is what we can do currently:
-  (the operator is a method on a symbol for the appropriate metric or dimension)
+## Filtering ##
 
-  Operators on metrics:
+Create named filters to wrap query filters.
 
-    eql => '==',
+Here's what google has to say: http://code.google.com/apis/analytics/docs/gdata/v3/reference.html#filters
+
+### Examples ###
+
+Return entries with exits counts greater than or equal to 2000
+
+    filter :high_exits, lambda {gte(:exits, 2000)}
+
+Return entries with pageview metric less than or equal to 200
+
+    filter :low_pageviews, lambda {lte(:pageviews, 200)}
+
+Filters with dimensions
+
+    filter :for_browser, lambda {|browser| matches(:broswer, browser)}
+
+Filters with OR
+
+    filter :browsers, lambda {|*browsers| browsers.map {|browser| matches(:broswer, browser)}}
+
+
+## Using and Chaining Filters ##
+
+Pass the profile as the first or last parameter into any filter.
+
+    Exit.for_browser("Safari", profile)
+
+Chain two filters.
+
+    Exit.high_exits.low_pageviews(profile)
+
+Profile gets a pluralized method for each class extended by Legato::Model
+
+    Exit.results(profile) == profile.exits
+
+We can chain off of that method, too.
+
+    profile.exits.high_exits.low_pageviews.by_pageviews
+
+Chaining order doesn't matter.
+
+    Exit.high_exits(profile).results == Exit.high_exits.results(profile)
+
+Pass the appropriate number of parameters.
+
+For a filter defined like this:
+
+    filter :browsers, lambda {|*browsers| browsers.map {|browser| matches(:broswer, browser)}}
+
+We can use it like this:
+
+    Exit.browsers("Firefox", "Safari", profile)
+
+    # warn if filter references something that isn't a metric or dimension
+    # warn if using a method for metric on a dimension and reverse
+
+## Filtering Methods ##
+
+Google Analytics supports a significant number of filtering options.
+
+Here is what we can do currently:
+(the operator is a method available in filters for the appropriate metric or dimension)
+
+Operators on metrics:
+
+    eql     => '==',
     not_eql => '!=',
-    gt => '>',
-    gte => '>=',
-    lt => '<',
-    lte => '<='
+    gt      => '>',
+    gte     => '>=',
+    lt      => '<',
+    lte     => '<='
 
-  Operators on dimensions:
+Operators on dimensions:
 
-    matches => '==',
-    does_not_match => '!=',
-    contains => '=~',
+    matches          => '==',
+    does_not_match   => '!=',
+    contains         => '=~',
     does_not_contain => '!~',
-    substring => '=@',
-    not_substring => '!@'
+    substring        => '=@',
+    not_substring    => '!@'
 
-Accounts, WebProperties, Profiles, and Goals
---------------------------------------------
+## Accounts, WebProperties, Profiles, and Goals ##
 
-    > Legato::Management::Account.all
-    > Legato::Management::WebProperty.all
-    > Legato::Management::Profile.all
-    > Legato::Management::Goal.all
-
-Profiles for a UA- Number (a WebProperty)
------------------------------------------
-
-    > profile = Legato::Management::Profile.all.detect {|p| p.web_property_id == 'UA-XXXXXXX-X'}
+    > Legato::Management::Account.all(user)
+    > Legato::Management::WebProperty.all(user)
+    > Legato::Management::Profile.all(user)
 
 Other Parameters
 ----------------
@@ -98,4 +146,4 @@ Other Parameters
   * end_date: The date to end, inclusive
   * limit: The maximum number of results to be returned
   * offset: The starting index
-	* order: metric/dimension to order by
+  * order: metric/dimension to order by
