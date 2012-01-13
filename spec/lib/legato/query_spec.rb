@@ -164,24 +164,24 @@ describe Legato::Query do
 
       it "stores the order" do
         @query.apply_options({:order => [:page_path]})
-        @query.order.should == [:page_path]
+        @query.order.should == Legato::ListParameter.new(:order, [:page_path])
       end
 
       it 'replaces the order' do
         @query.order = [:pageviews]
         @query.apply_options({:order => [:page_path]})
-        @query.order.should == [:page_path]
+        @query.order.should == Legato::ListParameter.new(:order, [:page_path])
       end
 
       it "does not replace order if option is omitted" do
         @query.order = [:pageviews]
         @query.apply_options({})
-        @query.order.should == [:pageviews]
+        @query.order.should == Legato::ListParameter.new(:order, [:pageviews])
       end
 
       it "moves :sort option into order" do
         @query.apply_options({:sort => [:page_path]})
-        @query.order.should == [:page_path]
+        @query.order.should == Legato::ListParameter.new(:order, [:page_path])
       end
 
       it "sets the limit" do

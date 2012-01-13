@@ -145,6 +145,10 @@ module Legato
       parent_klass.dimensions
     end
 
+    def order=(arr)
+      @order = Legato::ListParameter.new(:order, arr)
+    end
+
     # def segment_id
     #   segment.nil? ? nil : "gaid::#{segment}"
     # end
