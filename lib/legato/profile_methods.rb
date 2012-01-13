@@ -7,8 +7,8 @@ module Legato
       return unless method_name.length > 0
 
       class_eval <<-CODE
-        def #{method_name}(opts = {}, &block)
-          #{klass}.results(self, opts, &block)
+        def #{method_name}(opts={})
+          #{klass}.results(self, opts)
         end
       CODE
     end

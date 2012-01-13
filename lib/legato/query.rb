@@ -170,19 +170,6 @@ module Legato
       params.reject {|k,v| v.nil? || v.to_s.strip.length == 0}
     end
 
-    # def results(profile, options={})
-    #   url = "https://www.googleapis.com/analytics/v3/data/ga"
-    #   dimension_params = dimensions.map {|d| Legato.to_ga_string(d)}.join(',')
-    #   metric_params = metrics.map {|m| Legato.to_ga_string(m)}.join(',')
-    # 
-    #   profile.user.access_token.get(url, :params => {
-    #     'ids' => Legato.to_ga_string(profile.id),
-    #     'dimensions' => dimension_params,
-    #     'metrics' => metric_params,
-    #     'start-date' => (Time.now - 2592000).strftime('%Y-%m-%d'),
-    #     'end-date' => Time.now.strftime('%Y-%m-%d')
-    #   })
-    # end
     private
     def request_for_query
       profile.user.request(self)

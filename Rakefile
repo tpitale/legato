@@ -4,11 +4,18 @@ require 'oauth2'
 
 namespace :oauth do
   def client
-    OAuth2::Client.new('779170787975.apps.googleusercontent.com', 'mbCISoZiSwyVQIDEbLj4EeEc', :authorize_url => 'https://accounts.google.com/o/oauth2/auth', :token_url => 'https://accounts.google.com/o/oauth2/token')
+    # This is my test client account for Legato.
+    OAuth2::Client.new('779170787975.apps.googleusercontent.com', 'mbCISoZiSwyVQIDEbLj4EeEc', {
+      :authorize_url => 'https://accounts.google.com/o/oauth2/auth',
+      :token_url => 'https://accounts.google.com/o/oauth2/token'
+    })
   end
 
   def auth_url
-    client.auth_code.authorize_url(:scope => 'https://www.googleapis.com/auth/analytics.readonly', :redirect_uri => 'http://localhost')
+    client.auth_code.authorize_url({
+      :scope => 'https://www.googleapis.com/auth/analytics.readonly',
+      :redirect_uri => 'http://localhost'
+    })
   end
 
   desc "Get a new OAuth2 Token"
