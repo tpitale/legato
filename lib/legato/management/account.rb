@@ -18,6 +18,14 @@ module Legato
         self.id = attributes['id']
         self.name = attributes['name']
       end
+
+      def web_properties
+        WebProperty.for_account(self)
+      end
+
+      def profiles
+        Profile.for_account(self)
+      end
     end
   end
 end

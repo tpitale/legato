@@ -97,6 +97,7 @@ module Legato
     def extract_profile(args)
       return args.shift if args.first.is_a?(Management::Profile)
       return args.pop if args.last.is_a?(Management::Profile)
+      profile
     end
 
     define_filter_operators :eql, :not_eql, :gt, :gte, :lt, :lte, :matches,

@@ -1,11 +1,12 @@
 # Google Analytics Model/Mapper #
 
+Check out the [wiki](https://github.com/tpitale/legato/wiki)
 
 ## Google Analytics Management ##
 
-1. Get an OAuth2 Access Token from Google, Read OAUTH.md
+1. Get an OAuth2 Access Token from Google, Read about [OAuth2](https://github.com/tpitale/legato/wiki/OAuth2-and-Google)
 
-        access_token = OAuth2 Access Token # from Google, see OAUTH.md
+        access_token = OAuth2 Access Token # from Google
 
 2. Create a New User with the Access Token
 
@@ -83,39 +84,36 @@ Chain two filters.
 
     Exit.high_exits.low_pageviews(profile)
 
-Profile gets a pluralized method for each class extended by Legato::Model
+Profile gets a method for each class extended by Legato::Model
 
-    Exit.results(profile) == profile.exits
+    Exit.results(profile) == profile.exit
 
 We can chain off of that method, too.
 
-    profile.exits.high_exits.low_pageviews.by_pageviews
+    profile.exit.high_exits.low_pageviews.by_pageviews
 
-Chaining order doesn't matter.
+Chaining order doesn't matter. Profile can be given to any filter.
 
-    Exit.high_exits(profile).results == Exit.high_exits.results(profile)
+    Exit.high_exits(profile).low_pageviews == Exit.low_pageviews(profile).high_exits
 
-Pass the appropriate number of parameters.
+Be sure to pass the appropriate number of arguments matching the lambda for your filter.
 
 For a filter defined like this:
 
     filter :browsers, lambda {|*browsers| browsers.map {|browser| matches(:broswer, browser)}}
 
-We can use it like this:
+We can use it like this, passing any number of arguments:
 
     Exit.browsers("Firefox", "Safari", profile)
 
-    # warn if filter references something that isn't a metric or dimension
-    # warn if using a method for metric on a dimension and reverse
-
-## Filtering Methods ##
+## Google Analytics Supported Filtering Methods ##
 
 Google Analytics supports a significant number of filtering options.
 
 Here is what we can do currently:
 (the operator is a method available in filters for the appropriate metric or dimension)
 
-Operators on metrics:
+Operators on metrics (method => GA equivalent):
 
     eql     => '==',
     not_eql => '!=',
@@ -139,11 +137,10 @@ Operators on dimensions:
     > Legato::Management::WebProperty.all(user)
     > Legato::Management::Profile.all(user)
 
-Other Parameters
-----------------
+## Other Parameters Can be Passed to a call to #results ##
 
-  * start_date: The date of the period you would like this report to start
-  * end_date: The date to end, inclusive
-  * limit: The maximum number of results to be returned
-  * offset: The starting index
-  * order: metric/dimension to order by
+  * :start_date - The date of the period you would like this report to start
+  * :end_date - The date to end, inclusive
+  * :limit - The maximum number of results to be returned
+  * :offset - The starting index
+  * :order - metric/dimension to order by

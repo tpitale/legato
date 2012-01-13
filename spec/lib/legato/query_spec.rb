@@ -133,6 +133,13 @@ describe Legato::Query do
         @query.profile.should == profile
       end
 
+      it 'does not override the existing profile if none is provide' do
+        @query.profile = Legato::Management::Profile.new({}, stub)
+        block_with_arg = lambda {|count| eql(:key, count)}
+        @query.apply_filter(100, block_with_arg)
+        @query.profile.should_not == nil
+      end
+
       it 'adds to the filter set' do
         @query.apply_filter(@block)
 

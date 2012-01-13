@@ -18,9 +18,22 @@ describe Legato::Management::Account do
   end
 
   context "An Account instance" do
+    let(:account) {Legato::Management::Account.new({"id" => 123456}, stub)}
+
     it 'builds the path for the account from the id' do
-      account = Legato::Management::Account.new({"id" => 123456}, stub)
       account.path.should == '/accounts/123456'
+    end
+
+    it 'has web properties beneath it' do
+      Legato::Management::WebProperty.stubs(:for_account).returns('web_properties')
+      account.web_properties.should == 'web_properties'
+      Legato::Management::WebProperty.should have_received(:for_account).with(account)
+    end
+
+    it 'has profiles beneath it' do
+      Legato::Management::Profile.stubs(:for_account).returns('profiles')
+      account.profiles.should == 'profiles'
+      Legato::Management::Profile.should have_received(:for_account).with(account)
     end
   end
 end
