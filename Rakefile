@@ -2,6 +2,12 @@ require "bundler/gem_tasks"
 
 require 'oauth2'
 
+# get oauth2 via device code, unimplemented as of now
+# curl -d "client_id={{client_id}}&scope=https://www.googleapis.com/auth/analytics.readonly" https://accounts.google.com/o/oauth2/device/code
+# { "device_code" : "4/8O1xUKWzOdJESG7ednnulZPsbyNt", "user_code" : "3tywhirg", "verification_url" : "http://www.google.com/device", "expires_in" : 1800, "interval" : 5 }
+# curl -d "client_id={{client_id}}&client_secret={{client_secret}}&code=4/8O1xUKWzOdJESG7ednnulZPsbyNt&grant_type=http://oauth.net/grant_type/device/1.0" https://accounts.google.com/o/oauth2/token
+# { "access_token" : "ERspXATXoblahblahblah", "token_type" : "Bearer", "expires_in" : 3600, "refresh_token" : "1/balhaajsdfklasfdjs;df" }
+
 namespace :oauth do
   def client
     # This is my test client account for Legato.
