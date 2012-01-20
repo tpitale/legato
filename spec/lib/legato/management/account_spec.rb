@@ -9,7 +9,7 @@ describe Legato::Management::Account do
     it_behaves_like "a management finder"
 
     it 'creates a new account instance from a hash of attributes' do
-      user = stub
+      user = stub(:api_key => nil)
       account = Legato::Management::Account.new({"id" => 12345, "name" => "Account 1"}, user)
       account.user.should == user
       account.id.should == 12345

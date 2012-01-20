@@ -192,6 +192,11 @@ module Legato
       params.reject {|k,v| v.nil? || v.to_s.strip.length == 0}
     end
 
+    def to_query_string
+      list = to_params.map {|k,v| [k,v].join("=")}
+      "?#{list.join("&")}"
+    end
+
     private
     def request_for_query
       profile.user.request(self)

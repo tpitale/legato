@@ -3,7 +3,7 @@ shared_examples_for "a management finder" do
     MultiJson.stubs(:decode).returns({'items' => ['item1', 'item2']})
     response = stub(:body => 'some json')
     access_token = stub(:get => response)
-    user = stub(:access_token => access_token)
+    user = stub(:access_token => access_token, :api_key => nil)
     described_class.stubs(:new).returns('thing1', 'thing2')
 
     described_class.all(user).should == ['thing1', 'thing2']

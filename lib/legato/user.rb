@@ -1,16 +1,25 @@
 module Legato
   class User
-    attr_accessor :access_token
+    attr_accessor :access_token, :api_key
 
-    def initialize(token)
+    def initialize(token, api_key = nil)
       self.access_token = token
+      self.api_key = api_key
     end
 
     URL = "https://www.googleapis.com/analytics/v3/data/ga"
 
     def request(query)
       begin
-        Response.new(access_token.get(URL, :params => query.to_params))
+        raw_response = if api_key
+          # oauth 1 + api key
+          access_token.get(URL + query.to_query_string + "&key=#{api_key}")
+        else
+          # oauth 2
+          access_token.get(URL, :params => query.to_params)
+        end
+
+        Response.new(raw_response)
       rescue => e
         p e.code
         raise e
