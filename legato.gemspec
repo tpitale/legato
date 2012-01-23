@@ -25,5 +25,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "vcr", "2.0.0.beta2"
   s.add_development_dependency "fakeweb"
 
+  s.add_runtime_dependency "json" # only for 1.8 support, still required, ugh.
   s.add_runtime_dependency "oauth2"
 end
