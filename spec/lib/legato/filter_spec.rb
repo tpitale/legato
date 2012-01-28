@@ -45,5 +45,15 @@ describe Legato::Filter do
     it 'returns to_param if joining with nil' do
       @filter.join_with(nil).should == @filter.to_param
     end
+
+    it 'properly escapes commas' do
+      @filter.value = ","
+      @filter.escaped_value.should == "\\,"
+    end
+
+    it 'properly escapes semicolons' do
+      @filter.value = ";"
+      @filter.escaped_value.should == "\\;"
+    end
   end
 end

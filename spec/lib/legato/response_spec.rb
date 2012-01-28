@@ -11,5 +11,10 @@ describe Legato::Response do
     it 'has a collection of OpenStruct instances' do
       @response.collection.first.should == OpenStruct.new({:browser=>"Android Browser", :pageviews=>"93"})
     end
+
+    it 'handles no rows returned' do
+    	@response.stubs(:data).returns({'rows' => nil})
+    	@response.collection.should == []
+    end
   end
 end

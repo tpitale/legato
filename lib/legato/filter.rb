@@ -3,20 +3,22 @@ module Legato
     attr_accessor :field, :operator, :value, :join_character
 
     OPERATORS = {
+      # metrics
       :eql => '==',
       :not_eql => '!=',
       :gt => '>',
       :gte => '>=',
       :lt => '<',
       :lte => '<=',
+      # dimensions
       :matches => '==',
       :does_not_match => '!=',
-      :contains => '=~',
-      :does_not_contain => '!~',
       :substring => '=@',
       :not_substring => '!@',
-      :desc => '-',
-      :descending => '-'
+      :contains => '=~', # regex
+      :does_not_contain => '!~' # regex
+      # :desc => '-',
+      # :descending => '-'
     }
 
     def initialize(field, operator, value, join_character=';')
@@ -34,8 +36,12 @@ module Legato
       OPERATORS[operator]
     end
 
+    # escape comma and semicolon in value to differentiate
+    # from those used as join characters for OR/AND
     def escaped_value
-      CGI.escape(value.to_s.gsub(/([,;\\])/) {|c| '\\'+c})
+      # backslash is escaped in strings
+      # oauth will cgi/uri escape for us
+      value.to_s.gsub(/([,;])/) {|c| '\\'+c}
     end
 
     def to_param
