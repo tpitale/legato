@@ -100,6 +100,16 @@ describe Legato::Query do
       @query.should have_received(:apply_options).with({})
     end
 
+    it 'sets options and returns self' do
+      @query.stubs(:profile=)
+      @query.stubs(:apply_options)
+
+      @query.results({:order => [:city]}).should == @query
+
+      @query.should have_received(:profile=).never
+      @query.should have_received(:apply_options).with({:order => [:city]})
+    end
+
     context 'when applying filters' do
       before :each do
         @filter = Legato::Filter.new(:key, :eql, 1000)

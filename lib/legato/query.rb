@@ -124,6 +124,8 @@ module Legato
 
     # if no filters, we use results to add profile
     def results(profile=nil, options={})
+      options, profile = profile, nil if profile.is_a?(Hash)
+
       self.profile = profile unless profile.nil?
       apply_options(options)
       self
