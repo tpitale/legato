@@ -39,7 +39,7 @@ describe Legato::Query do
     it "has filter methods that call apply with the given block" do
       @query.stubs(:apply_filter)
       @query.high('hi')
-      @query.should have_received(:apply_filter).with('hi', @block)
+      @query.should have_received(:apply_filter).with('hi')
     end
 
     it 'does not load results by default' do
@@ -120,17 +120,17 @@ describe Legato::Query do
       end
 
       it 'returns the query' do
-        @query.apply_filter(@block).should == @query
+        @query.apply_filter(&@block).should == @query
       end
 
       it 'executes the block' do
-        @query.apply_filter(@block)
+        @query.apply_filter(&@block)
         @query.should have_received(:eql).with(:key, 1000)
       end
 
       it 'accepts a profile as the first argument' do
         profile = Legato::Management::Profile.new({}, stub)
-        @query.apply_filter(profile, @block)
+        @query.apply_filter(profile, &@block)
         @query.should have_received(:eql)
         @query.profile.should == profile
       end
@@ -138,7 +138,7 @@ describe Legato::Query do
       it 'accepts a profile as the last argument' do
         profile = Legato::Management::Profile.new({}, stub)
         block_with_arg = lambda {|count| eql(:key, count)}
-        @query.apply_filter(100, profile, block_with_arg)
+        @query.apply_filter(100, profile, &block_with_arg)
         @query.should have_received(:eql).with(:key, 100)
         @query.profile.should == profile
       end
@@ -146,12 +146,12 @@ describe Legato::Query do
       it 'does not override the existing profile if none is provide' do
         @query.profile = Legato::Management::Profile.new({}, stub)
         block_with_arg = lambda {|count| eql(:key, count)}
-        @query.apply_filter(100, block_with_arg)
+        @query.apply_filter(100, &block_with_arg)
         @query.profile.should_not == nil
       end
 
       it 'adds to the filter set' do
-        @query.apply_filter(@block)
+        @query.apply_filter(&@block)
 
         @filters.should have_received(:<<).with(@filter)
       end
@@ -160,7 +160,7 @@ describe Legato::Query do
         block = lambda {|*browsers| browsers.map {|browser| eql(:browser, browser)}}
         @filter.stubs(:join_character=)
 
-        @query.apply_filter('chrome', 'safari', block)
+        @query.apply_filter('chrome', 'safari', &block)
 
         @filter.should have_received(:join_character=).with(Legato.and_join_character)
         @filter.should have_received(:join_character=).with(Legato.or_join_character)

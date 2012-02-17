@@ -6,7 +6,7 @@ module Legato
     end
 
     def data
-      @data ||= JSON.parse(@raw_response.body)
+      @data ||= MultiJson.decode(@raw_response.body)
     end
 
     def collection

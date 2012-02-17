@@ -18,11 +18,11 @@ module Legato
       @filters ||= {}
     end
 
-    def filter(name, block)
+    def filter(name, &block)
       filters[name] = block
 
       (class << self; self; end).instance_eval do
-        define_method(name) {|*args| Query.new(self).apply_filter(*args, block)}
+        define_method(name) {|*args| Query.new(self).apply_filter(*args, &block)}
       end
     end
 

@@ -4,9 +4,9 @@ module Legato
 
     MONTH = 2592000
 
-    def define_filter(name, block)
+    def define_filter(name, &block)
       (class << self; self; end).instance_eval do
-        define_method(name) {|*args| apply_filter(*args, block)}
+        define_method(name) {|*args| apply_filter(*args, &block)}
       end
     end
 
@@ -33,7 +33,7 @@ module Legato
       self.end_date = Time.now
 
       klass.filters.each do |name, block|
-        define_filter(name, block)
+        define_filter(name, &block)
       end
 
       # may add later for dynamic segments
@@ -42,7 +42,7 @@ module Legato
       # end
     end
 
-    def apply_filter(*args, block)
+    def apply_filter(*args, &block)
       @profile = extract_profile(args)
 
       join_character = Legato.and_join_character # filters are joined by AND

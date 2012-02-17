@@ -38,12 +38,12 @@ describe "Legato::Model" do
       end
 
       it 'creates a class method' do
-        @model.filter :high, @block
+        @model.filter :high, &@block
         @model.respond_to?(:high).should be_true
       end
 
       it 'stores the filter' do
-        @model.filter :high, @block
+        @model.filter :high, &@block
         @model.filters[:high].should == @block
       end
 
@@ -51,11 +51,11 @@ describe "Legato::Model" do
         query = stub(:apply_filter => "a query")
         Legato::Query.stubs(:new).returns(query)
 
-        @model.filter :high, @block
+        @model.filter :high, &@block
         @model.high('arg1').should == 'a query'
 
         Legato::Query.should have_received(:new).with(@model)
-        query.should have_received(:apply_filter).with('arg1', @block)
+        query.should have_received(:apply_filter).with('arg1')
       end
     end
 

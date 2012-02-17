@@ -11,7 +11,7 @@
 #     end
 # 
 #     def parsed_response
-#       JSON.parse(raw_response)
+#       MultiJson.decode(raw_response)
 #     end
 # 
 #     def raw_response

@@ -1,7 +1,7 @@
 require "legato/version"
 
-require 'json'
 require 'oauth2'
+require 'multi_json'
 require 'cgi'
 require 'ostruct'
 

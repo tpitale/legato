@@ -7,7 +7,7 @@ module Legato
 
       def all(user, path=default_path)
         json = user.access_token.get(base_uri + path).body
-        JSON.parse(json)['items'].map {|item| new(item, user)}
+        MultiJson.decode(json)['items'].map {|item| new(item, user)}
       end
     end
   end

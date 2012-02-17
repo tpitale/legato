@@ -27,5 +27,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "vcr", "2.0.0.beta2"
   s.add_development_dependency "fakeweb"
 
+  s.add_runtime_dependency "multi_json"
   s.add_runtime_dependency "oauth2"
 end
