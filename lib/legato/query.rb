@@ -13,8 +13,8 @@ module Legato
     def self.define_filter_operators(*methods)
       methods.each do |method|
         class_eval <<-CODE
-          def #{method}(field, value)
-            Filter.new(field, :#{method}, value) # defaults to joining with AND
+          def #{method}(field, value, join_character=nil)
+            Filter.new(field, :#{method}, value, join_character)
           end
         CODE
       end
@@ -49,7 +49,7 @@ module Legato
 
       # # block returns one filter or an array of filters
       Array.wrap(instance_exec(*args, &block)).each do |filter|
-        filter.join_character = join_character
+        filter.join_character ||= join_character # only set when not set explicitly
         self.filters << filter
 
         join_character = Legato.or_join_character # arrays are joined by OR

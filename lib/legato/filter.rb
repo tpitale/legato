@@ -21,11 +21,11 @@ module Legato
       # :descending => '-'
     }
 
-    def initialize(field, operator, value, join_character=';')
+    def initialize(field, operator, value, join_character)
       self.field = field
       self.operator = operator
       self.value = value
-      self.join_character = join_character
+      self.join_character = join_character # if nil, will be overridden by Query#apply_filter
     end
 
     def google_field

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Legato::Filter do
   context "a Filter instance" do
     before :each do
-      @filter = Legato::Filter.new(:exits, :lt, 1000)
+      @filter = Legato::Filter.new(:exits, :lt, 1000, nil)
     end
 
     it 'has a field' do
@@ -28,8 +28,8 @@ describe Legato::Filter do
       @filter.value.should == 1000
     end
 
-    it 'has a default join character' do
-      @filter.join_character.should == ';'
+    it 'has a no default join character' do
+      @filter.join_character.should == nil
     end
 
     it 'represents itself as a parameter' do
