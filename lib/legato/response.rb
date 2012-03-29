@@ -13,6 +13,14 @@ module Legato
       raw_attributes.map {|attributes| @instance_klass.new(attributes)}
     end
 
+    def total_results
+      data["totalResults"]
+    end
+
+    def totals_for_all_results
+      Hash[data["totalsForAllResults"].map{|k,v| [Legato.from_ga_string(k), number_for(v)]}]
+    end
+
     private
     def headers
       data['columnHeaders']
@@ -28,6 +36,11 @@ module Legato
 
     def raw_attributes
       rows.map {|row| Hash[fields.zip(row)]}
+    end
+
+    def number_for(str)
+      return str.to_f if str.index('.')
+      str.to_i
     end
   end
 end

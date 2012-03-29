@@ -47,7 +47,7 @@ describe Legato::Query do
     end
 
     it "loads a collection of results" do
-      response = stub(:collection => [])
+      response = stub(:collection => [], :total_results => 0, :totals_for_all_results => {})
       user = stub(:request => response)
       @query.stubs(:profile => stub(:user => user))
 
@@ -56,13 +56,27 @@ describe Legato::Query do
       @query.loaded?.should be_true
       @query.profile.user.should have_received(:request).with(@query)
       response.should have_received(:collection)
+      response.should have_received(:total_results)
+      response.should have_received(:totals_for_all_results)
     end
 
     it "returns the collection" do
-      @query.stubs(:request_for_query).returns(stub(:collection => [1,2,3]))
+      @query.stubs(:request_for_query).returns(stub(:collection => [1,2,3], :total_results => 3, :totals_for_all_results => {'foo' => 34.2}))
       @query.load
       @query.collection.should == [1,2,3]
       @query.to_a.should == [1,2,3]
+    end
+
+    it "returns the total number of results" do
+      @query.stubs(:request_for_query).returns(stub(:collection => [1,2,3], :total_results => 3, :totals_for_all_results => {'foo' => 34.2}))
+      @query.load
+      @query.total_results.should == 3
+    end
+
+    it "returns the totals for all results" do
+      @query.stubs(:request_for_query).returns(stub(:collection => [1,2,3], :total_results => 3, :totals_for_all_results => {'foo' => 34.2}))
+      @query.load
+      @query.totals_for_all_results.should == {'foo' => 34.2}
     end
 
     it "behaves like an enumerable delegating to the collection" do
@@ -104,10 +118,10 @@ describe Legato::Query do
       @query.stubs(:profile=)
       @query.stubs(:apply_options)
 
-      @query.results({:order => [:city]}).should == @query
+      @query.results({:sort => [:city]}).should == @query
 
       @query.should have_received(:profile=).never
-      @query.should have_received(:apply_options).with({:order => [:city]})
+      @query.should have_received(:apply_options).with({:sort => [:city]})
     end
 
     context 'when applying filters' do
@@ -172,26 +186,26 @@ describe Legato::Query do
         @query.apply_options({}).should == @query
       end
 
-      it "stores the order" do
-        @query.apply_options({:order => [:page_path]})
-        @query.order.should == Legato::ListParameter.new(:order, [:page_path])
-      end
-
-      it 'replaces the order' do
-        @query.order = [:pageviews]
-        @query.apply_options({:order => [:page_path]})
-        @query.order.should == Legato::ListParameter.new(:order, [:page_path])
-      end
-
-      it "does not replace order if option is omitted" do
-        @query.order = [:pageviews]
-        @query.apply_options({})
-        @query.order.should == Legato::ListParameter.new(:order, [:pageviews])
-      end
-
-      it "moves :sort option into order" do
+      it "stores the sort" do
         @query.apply_options({:sort => [:page_path]})
-        @query.order.should == Legato::ListParameter.new(:order, [:page_path])
+        @query.sort.should == Legato::ListParameter.new(:sort, [:page_path])
+      end
+
+      it 'replaces the sort' do
+        @query.sort = [:pageviews]
+        @query.apply_options({:sort => [:page_path]})
+        @query.sort.should == Legato::ListParameter.new(:sort, [:page_path])
+      end
+
+      it "does not replace sort if option is omitted" do
+        @query.sort = [:pageviews]
+        @query.apply_options({})
+        @query.sort.should == Legato::ListParameter.new(:sort, [:pageviews])
+      end
+
+      it "moves :sort option into sort" do
+        @query.apply_options({:sort => [:page_path]})
+        @query.sort.should == Legato::ListParameter.new(:sort, [:page_path])
       end
 
       it "sets the limit" do
@@ -321,13 +335,13 @@ describe Legato::Query do
         @query.to_params['dimensions'].should == 'browser,country'
       end
 
-      it 'includes order' do
-        order = Legato::ListParameter.new(:order)
-        order.stubs(:to_params).returns({'order' => 'pageviews'})
-        order.stubs(:empty?).returns(false)
-        @query.stubs(:order).returns(order)
+      it 'includes sort' do
+        sort = Legato::ListParameter.new(:sort)
+        sort.stubs(:to_params).returns({'sort' => 'pageviews'})
+        sort.stubs(:empty?).returns(false)
+        @query.stubs(:sort).returns(sort)
 
-        @query.to_params['order'].should == 'pageviews'
+        @query.to_params['sort'].should == 'pageviews'
       end
     end
   end
