@@ -12,9 +12,17 @@ describe Legato::Response do
       @response.collection.first.should == OpenStruct.new({:browser=>"Android Browser", :pageviews=>"93"})
     end
 
+    it 'has the number of total results' do
+      @response.total_results.should == 13
+    end
+
+    it 'has the totals for all results hash' do
+      @response.totals_for_all_results.should == {'pageviews' => 3710}
+    end
+
     it 'handles no rows returned' do
-    	@response.stubs(:data).returns({'rows' => nil})
-    	@response.collection.should == []
+      @response.stubs(:data).returns({'rows' => nil})
+      @response.collection.should == []
     end
   end
 end

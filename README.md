@@ -143,7 +143,7 @@ Operators on dimensions:
   * :end_date - The date to end, inclusive
   * :limit - The maximum number of results to be returned
   * :offset - The starting index
-  * :order - metric/dimension to order by
+  * :sort - metric/dimension to sort by
 
 ## License ##
 

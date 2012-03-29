@@ -22,7 +22,7 @@ module Legato
 
     attr_reader :parent_klass
     attr_accessor :profile, :start_date, :end_date
-    attr_accessor :order, :limit, :offset#, :segment # individual, overwritten
+    attr_accessor :sort, :limit, :offset#, :segment # individual, overwritten
     attr_accessor :filters # appended to, may add :segments later for dynamic segments
 
     def initialize(klass)
@@ -60,7 +60,7 @@ module Legato
     def apply_options(options)
       if options.has_key?(:sort)
         # warn
-        options[:order] = options.delete(:sort)
+        options[:sort] = options.delete(:sort)
       end
 
       apply_basic_options(options)
@@ -70,7 +70,7 @@ module Legato
     end
 
     def apply_basic_options(options)
-      [:order, :limit, :offset, :start_date, :end_date].each do |key| #:segment
+      [:sort, :limit, :offset, :start_date, :end_date].each do |key| #:segment
         self.send("#{key}=".to_sym, options[key]) if options.has_key?(key)
       end
     end
@@ -108,7 +108,10 @@ module Legato
     end
 
     def load
-      @collection = request_for_query.collection
+      response = request_for_query
+      @collection = response.collection
+      @total_results = response.total_results
+      @totals_for_all_results = response.totals_for_all_results
       @loaded = true
     end
 
@@ -117,6 +120,16 @@ module Legato
       @collection
     end
     alias :to_a :collection
+
+    def total_results
+      load unless loaded?
+      @total_results
+    end
+
+    def totals_for_all_results
+      load unless loaded?
+      @totals_for_all_results
+    end
 
     def each(&block)
       collection.each(&block)
@@ -147,8 +160,8 @@ module Legato
       parent_klass.dimensions
     end
 
-    def order=(arr)
-      @order = Legato::ListParameter.new(:order, arr)
+    def sort=(arr)
+      @sort = Legato::ListParameter.new(:sort, arr)
     end
 
     # def segment_id
@@ -170,7 +183,7 @@ module Legato
         'filters' => filters.to_params # defaults to AND filtering
       }
 
-      [metrics, dimensions, order].each do |list|
+      [metrics, dimensions, sort].each do |list|
         params.merge!(list.to_params) unless list.nil?
       end
 
