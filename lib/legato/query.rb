@@ -108,7 +108,10 @@ module Legato
     end
 
     def load
-      @collection = request_for_query.collection
+      response = request_for_query
+      @collection = response.collection
+      @total_results = response.total_results
+      @totals_for_all_results = response.totals_for_all_results
       @loaded = true
     end
 
@@ -117,6 +120,16 @@ module Legato
       @collection
     end
     alias :to_a :collection
+
+    def total_results
+      load unless loaded?
+      @total_results
+    end
+
+    def totals_for_all_results
+      load unless loaded?
+      @totals_for_all_results
+    end
 
     def each(&block)
       collection.each(&block)

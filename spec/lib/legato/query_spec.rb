@@ -47,7 +47,7 @@ describe Legato::Query do
     end
 
     it "loads a collection of results" do
-      response = stub(:collection => [])
+      response = stub(:collection => [], :total_results => 0, :totals_for_all_results => {})
       user = stub(:request => response)
       @query.stubs(:profile => stub(:user => user))
 
@@ -56,13 +56,27 @@ describe Legato::Query do
       @query.loaded?.should be_true
       @query.profile.user.should have_received(:request).with(@query)
       response.should have_received(:collection)
+      response.should have_received(:total_results)
+      response.should have_received(:totals_for_all_results)
     end
 
     it "returns the collection" do
-      @query.stubs(:request_for_query).returns(stub(:collection => [1,2,3]))
+      @query.stubs(:request_for_query).returns(stub(:collection => [1,2,3], :total_results => 3, :totals_for_all_results => {'foo' => 34.2}))
       @query.load
       @query.collection.should == [1,2,3]
       @query.to_a.should == [1,2,3]
+    end
+
+    it "returns the total number of results" do
+      @query.stubs(:request_for_query).returns(stub(:collection => [1,2,3], :total_results => 3, :totals_for_all_results => {'foo' => 34.2}))
+      @query.load
+      @query.total_results.should == 3
+    end
+
+    it "returns the totals for all results" do
+      @query.stubs(:request_for_query).returns(stub(:collection => [1,2,3], :total_results => 3, :totals_for_all_results => {'foo' => 34.2}))
+      @query.load
+      @query.totals_for_all_results.should == {'foo' => 34.2}
     end
 
     it "behaves like an enumerable delegating to the collection" do
