@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Legato by tpitale</title>
+    
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Legato</h1>
+        <p>GA Core Reporting &amp; Management API Client</p>
+        <p class="view"><a href="https://github.com/tpitale/legato">View the Project on GitHub <small>tpitale/legato</small></a></p>
+        <ul>
+          <li><a href="https://github.com/tpitale/legato/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/tpitale/legato/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/tpitale/legato">Fork On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Legato: Google Analytics Model/Mapper</h1>
+
+<h2><a href="https://github.com/tpitale/legato/wiki">Check out the Wiki!</a></h2>
+
+<h2>Google Analytics Management</h2>
+
+<ol>
+<li>
+<p>Get an OAuth2 Access Token from Google, Read about <a href="https://github.com/tpitale/legato/wiki/OAuth2-and-Google">OAuth2</a></p>
+
+<pre><code>access_token = OAuth2 Access Token # from Google
+</code></pre>
+</li>
+<li>
+<p>Create a New User with the Access Token</p>
+
+<pre><code>user = Legato::User.new(access_token)
+</code></pre>
+</li>
+<li>
+<p>List the Accounts and Profiles of the first Account</p>
+
+<pre><code>user.accounts
+user.accounts.first.profiles
+</code></pre>
+</li>
+<li>
+<p>List all the Profiles the User has Access to</p>
+
+<pre><code>user.profiles
+</code></pre>
+</li>
+<li>
+<p>Get a Profile</p>
+
+<pre><code>profile = user.profiles.first
+</code></pre>
+</li>
+<li>
+<p>The Profile Carries the User</p>
+
+<pre><code>profile.user == user #=&gt; true
+</code></pre>
+</li>
+</ol><h2>Google Analytics Model</h2>
+
+<pre><code>class Exit
+  extend Legato::Model
+
+  metrics :exits, :pageviews
+  dimensions :page_path, :operating_system, :browser
+end
+
+profile.exits #=&gt; returns a Legato::Query
+profile.exits.each {} #=&gt; any enumerable kicks off the request to GA
+</code></pre>
+
+<h2>Metrics &amp; Dimensions</h2>
+
+<p><a href="http://code.google.com/apis/analytics/docs/gdata/dimsmets/dimsmets.html">http://code.google.com/apis/analytics/docs/gdata/dimsmets/dimsmets.html</a></p>
+
+<pre><code>metrics :exits, :pageviews
+dimensions :page_path, :operating_system, :browser
+</code></pre>
+
+<h2>Filtering</h2>
+
+<p>Create named filters to wrap query filters.</p>
+
+<p>Here's what google has to say: <a href="http://code.google.com/apis/analytics/docs/gdata/v3/reference.html#filters">http://code.google.com/apis/analytics/docs/gdata/v3/reference.html#filters</a></p>
+
+<h3>Examples</h3>
+
+<p>Return entries with exits counts greater than or equal to 2000</p>
+
+<pre><code>filter :high_exits, lambda {gte(:exits, 2000)}
+</code></pre>
+
+<p>Return entries with pageview metric less than or equal to 200</p>
+
+<pre><code>filter :low_pageviews, lambda {lte(:pageviews, 200)}
+</code></pre>
+
+<p>Filters with dimensions</p>
+
+<pre><code>filter :for_browser, lambda {|browser| matches(:broswer, browser)}
+</code></pre>
+
+<p>Filters with OR</p>
+
+<pre><code>filter :browsers, lambda {|*browsers| browsers.map {|browser| matches(:broswer, browser)}}
+</code></pre>
+
+<h2>Using and Chaining Filters</h2>
+
+<p>Pass the profile as the first or last parameter into any filter.</p>
+
+<pre><code>Exit.for_browser("Safari", profile)
+</code></pre>
+
+<p>Chain two filters.</p>
+
+<pre><code>Exit.high_exits.low_pageviews(profile)
+</code></pre>
+
+<p>Profile gets a method for each class extended by Legato::Model</p>
+
+<pre><code>Exit.results(profile) == profile.exit
+</code></pre>
+
+<p>We can chain off of that method, too.</p>
+
+<pre><code>profile.exit.high_exits.low_pageviews.by_pageviews
+</code></pre>
+
+<p>Chaining order doesn't matter. Profile can be given to any filter.</p>
+
+<pre><code>Exit.high_exits(profile).low_pageviews == Exit.low_pageviews(profile).high_exits
+</code></pre>
+
+<p>Be sure to pass the appropriate number of arguments matching the lambda for your filter.</p>
+
+<p>For a filter defined like this:</p>
+
+<pre><code>filter :browsers, lambda {|*browsers| browsers.map {|browser| matches(:broswer, browser)}}
+</code></pre>
+
+<p>We can use it like this, passing any number of arguments:</p>
+
+<pre><code>Exit.browsers("Firefox", "Safari", profile)
+</code></pre>
+
+<h2>Google Analytics Supported Filtering Methods</h2>
+
+<p>Google Analytics supports a significant number of filtering options.</p>
+
+<p>Here is what we can do currently:
+(the operator is a method available in filters for the appropriate metric or dimension)</p>
+
+<p>Operators on metrics (method =&gt; GA equivalent):</p>
+
+<pre><code>eql     =&gt; '==',
+not_eql =&gt; '!=',
+gt      =&gt; '&gt;',
+gte     =&gt; '&gt;=',
+lt      =&gt; '&lt;',
+lte     =&gt; '&lt;='
+</code></pre>
+
+<p>Operators on dimensions:</p>
+
+<pre><code>matches          =&gt; '==',
+does_not_match   =&gt; '!=',
+contains         =&gt; '=~',
+does_not_contain =&gt; '!~',
+substring        =&gt; '=@',
+not_substring    =&gt; '!@'
+</code></pre>
+
+<h2>Accounts, WebProperties, Profiles, and Goals</h2>
+
+<pre><code>&gt; Legato::Management::Account.all(user)
+&gt; Legato::Management::WebProperty.all(user)
+&gt; Legato::Management::Profile.all(user)
+</code></pre>
+
+<h2>Other Parameters Can be Passed to a call to #results</h2>
+
+<ul>
+<li>:start_date - The date of the period you would like this report to start</li>
+<li>:end_date - The date to end, inclusive</li>
+<li>:limit - The maximum number of results to be returned</li>
+<li>:offset - The starting index</li>
+<li>:sort - metric/dimension to sort by</li>
+</ul><h2>License</h2>
+
+<p>(The MIT License)</p>
+
+<p>Copyright (c) 2012 Tony Pitale</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining
+  a copy of this software and associated documentation files (the
+  'Software'), to deal in the Software without restriction, including
+  without limitation the rights to use, copy, modify, merge, publish,
+  distribute, sublicense, and/or sell copies of the Software, and to
+  permit persons to whom the Software is furnished to do so, subject to
+  the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/tpitale">tpitale</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>
