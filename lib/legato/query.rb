@@ -3,6 +3,7 @@ module Legato
     include Enumerable
 
     MONTH = 2592000
+    REQUEST_FIELDS = 'columnHeaders/name,rows,totalResults,totalsForAllResults'
 
     def define_filter(name, &block)
       (class << self; self; end).instance_eval do
@@ -180,7 +181,8 @@ module Legato
         'max-results' => limit,
         'start-index' => offset,
         # 'segment' => segment_id,
-        'filters' => filters.to_params # defaults to AND filtering
+        'filters' => filters.to_params, # defaults to AND filtering
+        'fields' => REQUEST_FIELDS
       }
 
       [metrics, dimensions, sort].each do |list|
