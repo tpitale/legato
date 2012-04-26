@@ -289,6 +289,7 @@ describe Legato::Query do
         @query.to_params.should == {
           'ids' => 'ga:1234567890',
           'start-date' => Legato.format_time(Time.now-Legato::Query::MONTH),
+          'fields' => Legato::Query::REQUEST_FIELDS,
           'end-date' => Legato.format_time(Time.now)
         }
       end
@@ -297,7 +298,11 @@ describe Legato::Query do
         now = Time.now
         @query.start_date = now
         @query.end_date = now
-        @query.to_params.should == {'start-date' => Legato.format_time(now), 'end-date' => Legato.format_time(now)}
+        @query.to_params.should == {
+          'start-date' => Legato.format_time(now),
+          'fields' => Legato::Query::REQUEST_FIELDS,
+          'end-date' => Legato.format_time(now)
+        }
       end
 
       it 'includes the limit' do
