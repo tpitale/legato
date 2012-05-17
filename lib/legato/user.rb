@@ -10,20 +10,17 @@ module Legato
     URL = "https://www.googleapis.com/analytics/v3/data/ga"
 
     def request(query)
-      begin
-        raw_response = if api_key
-          # oauth 1 + api key
-          access_token.get(URL + query.to_query_string + "&key=#{api_key}")
-        else
-          # oauth 2
-          access_token.get(URL, :params => query.to_params)
-        end
+      raw_response = if api_key
+        # oauth 1 + api key
+        query_string = URI.escape(query.to_query_string, '<>') # may need to add !~@
 
-        Response.new(raw_response)
-      rescue => e
-        p e.code
-        raise e
+        access_token.get(URL + query_string + "&key=#{api_key}")
+      else
+        # oauth 2
+        access_token.get(URL, :params => query.to_params)
       end
+
+      Response.new(raw_response)
     end
 
     # Management
