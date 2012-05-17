@@ -31,5 +31,10 @@ describe Legato::ListParameter do
       @list_parameter << :pageviews
       @list_parameter.to_params.should == {"metrics" => "ga:exits,ga:pageviews"}
     end
+
+    it 'clears the list' do
+      @list_parameter.clear
+      @list_parameter.elements.should == []
+    end
   end
 end
