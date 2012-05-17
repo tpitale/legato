@@ -43,6 +43,10 @@ module Legato
       # end
     end
 
+    def instance_klass
+      @parent_klass.instance_klass
+    end
+
     def apply_filter(*args, &block)
       @profile = extract_profile(args)
 

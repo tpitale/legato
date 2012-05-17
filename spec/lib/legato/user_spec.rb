@@ -8,12 +8,13 @@ describe Legato::User do
     end
 
     it 'returns a response for a given query' do
+      klass = Class.new
       @access_token.stubs(:get).returns('a response')
       Legato::Response.stubs(:new)
 
-      @user.request(stub(:to_params => "params"))
+      @user.request(stub(:to_params => "params", :instance_klass => klass))
 
-      Legato::Response.should have_received(:new).with('a response')
+      Legato::Response.should have_received(:new).with('a response', klass)
       @access_token.should have_received(:get).with(Legato::User::URL, :params => "params")
     end
 

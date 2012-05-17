@@ -32,6 +32,16 @@ describe "Legato::Model" do
       @model.dimensions.should == Legato::ListParameter.new(:dimensions, [:browser, :city])
     end
 
+    it 'knows the instance class it should use' do
+      klass = Class.new
+      @model.set_instance_klass(klass)
+      @model.instance_klass.should == klass
+    end
+
+    it "defaults to OpenStruct for its instance class" do
+      @model.instance_klass.should == OpenStruct
+    end
+
     context "with filters" do
       before :each do
         @block = lambda {}

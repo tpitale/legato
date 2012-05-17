@@ -26,13 +26,13 @@ module Legato
       end
     end
 
-    # def set_instance_klass(klass)
-    #   @instance_klass = klass
-    # end
+    def set_instance_klass(klass)
+      @instance_klass = klass
+    end
 
-    # def instance_klass
-    #   @instance_klass || OpenStruct
-    # end
+    def instance_klass
+      @instance_klass || OpenStruct
+    end
 
     def results(profile, options = {})
       Query.new(self).results(profile, options)

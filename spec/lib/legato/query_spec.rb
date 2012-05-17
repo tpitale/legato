@@ -46,6 +46,12 @@ describe Legato::Query do
       @query.loaded?.should == false
     end
 
+    it 'delegates the instance klass from the parent klass' do
+      klass = Class.new
+      @query.parent_klass.stubs(:instance_klass).returns(klass)
+      @query.instance_klass.should == klass
+    end
+
     it "loads a collection of results" do
       response = stub(:collection => [], :total_results => 0, :totals_for_all_results => {})
       user = stub(:request => response)

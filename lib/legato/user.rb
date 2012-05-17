@@ -20,7 +20,7 @@ module Legato
         access_token.get(URL, :params => query.to_params)
       end
 
-      Response.new(raw_response)
+      Response.new(raw_response, query.instance_klass)
     end
 
     # Management
