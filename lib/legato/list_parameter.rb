@@ -17,6 +17,10 @@ module Legato
       self
     end
 
+    def clear
+      @elements = []
+    end
+
     def to_params
       value = elements.map{|element| Legato.to_ga_string(element)}.join(',')
       value.empty? ? {} : {name => value}
