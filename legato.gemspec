@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require "legato/version"
 
 Gem::Specification.new do |s|
-  s.required_ruby_version = '>= 1.9.2'
+  s.required_ruby_version = '>= 1.8.7'
 
   s.name        = "legato"
   s.version     = Legato::VERSION
