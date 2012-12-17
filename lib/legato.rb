@@ -4,7 +4,10 @@ require 'multi_json'
 require 'cgi'
 require 'ostruct'
 
-unless Object.const_defined?("ActiveSupport")
+if Object.const_defined?("ActiveSupport")
+  require "active_support/core_ext/string"
+  require "active_support/core_ext/array"
+else
   require "legato/core_ext/string"
   require "legato/core_ext/array"
 end
