@@ -9,7 +9,8 @@ module Legato
     # @param *fields [Symbol] the names of the fields to retrieve
     # @return [ListParameter] the set of all metrics
     def metrics(*fields)
-      @metrics ||= ListParameter.new(:metrics)
+      fields, options = options_from_fields(fields)
+      @metrics ||= ListParameter.new(:metrics, [], options.fetch(:tracking_scope, "ga"))
       @metrics << fields
     end
 
@@ -18,7 +19,8 @@ module Legato
     # @param *fields [Symbol] the names of the fields to retrieve
     # @return [ListParameter] the set of all dimensions
     def dimensions(*fields)
-      @dimensions ||= ListParameter.new(:dimensions)
+      fields, options = options_from_fields(fields)
+      @dimensions ||= ListParameter.new(:dimensions, [], options.fetch(:tracking_scope, "ga"))
       @dimensions << fields
     end
 
@@ -85,7 +87,16 @@ module Legato
     #   model, allowing for chainable behavior before kicking of the request
     #   to Google Analytics which returns the result data
     def results(profile, options = {})
+      # TODO: making tracking scope configurable when results are querried.  not sure how to do this.
       Query.new(self).results(profile, options)
+    end
+
+    def options_from_fields(fields)
+      options = fields.find{|field| field.is_a?(Hash)}
+      if options
+        fields = fields[0...-1]
+      end
+      return fields, options || {}
     end
 
   end
