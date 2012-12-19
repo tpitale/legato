@@ -25,13 +25,15 @@ module Legato
     attr_accessor :profile, :start_date, :end_date
     attr_accessor :sort, :limit, :offset#, :segment # individual, overwritten
     attr_accessor :filters # appended to, may add :segments later for dynamic segments
+    attr_accessor :tracking_scope
 
-    def initialize(klass)
+    def initialize(klass, tracking_scope = "ga")
       @loaded = false
       @parent_klass = klass
       self.filters = FilterSet.new
       self.start_date = Time.now - MONTH
       self.end_date = Time.now
+      self.tracking_scope = tracking_scope
 
       klass.filters.each do |name, block|
         define_filter(name, &block)
@@ -166,7 +168,7 @@ module Legato
     end
 
     def sort=(arr)
-      @sort = Legato::ListParameter.new(:sort, arr)
+      @sort = Legato::ListParameter.new(:sort, arr, tracking_scope)
     end
 
     # def segment_id

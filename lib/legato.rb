@@ -13,12 +13,12 @@ module Legato
   module Management
   end
 
-  def self.to_ga_string(str)
-    "#{$1}ga:#{$2}" if str.to_s.camelize(:lower) =~ /^(-)?(.*)$/
+  def self.to_ga_string(str, tracking_scope = "ga")
+    "#{$1}#{tracking_scope}:#{$2}" if str.to_s.camelize(:lower) =~ /^(-)?(.*)$/
   end
 
   def self.from_ga_string(str)
-    str.gsub("ga:", '')
+    str.gsub(/ga:|mcf:/, '')
   end
 
   def self.format_time(t)
