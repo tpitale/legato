@@ -1,7 +1,12 @@
 require "bundler/gem_tasks"
+require 'rspec/core/rake_task'
 
 require 'oauth'
 require 'oauth2'
+
+RSpec::Core::RakeTask.new(:spec)
+
+task :default => :spec
 
 # get oauth2 via device code, unimplemented as of now
 # curl -d "client_id={{client_id}}&scope=https://www.googleapis.com/auth/analytics.readonly" https://accounts.google.com/o/oauth2/device/code
