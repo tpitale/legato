@@ -1,5 +1,4 @@
-require 'bundler'
-Bundler.setup(:test)
+require 'bundler/setup'
 
 require 'rspec'
 require 'mocha'
