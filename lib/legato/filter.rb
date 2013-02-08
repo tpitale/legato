@@ -1,6 +1,6 @@
 module Legato
   class Filter
-    attr_accessor :field, :operator, :value, :join_character
+    attr_accessor :field, :operator, :value, :join_character, :tracking_scope
 
     OPERATORS = {
       # metrics
@@ -21,15 +21,16 @@ module Legato
       # :descending => '-'
     }
 
-    def initialize(field, operator, value, join_character)
+    def initialize(field, operator, value, join_character, tracking_scope = "ga")
       self.field = field
       self.operator = operator
       self.value = value
       self.join_character = join_character # if nil, will be overridden by Query#apply_filter
+      self.tracking_scope = tracking_scope
     end
 
     def google_field
-      Legato.to_ga_string(field)
+      Legato.to_ga_string(field, tracking_scope)
     end
 
     def google_operator

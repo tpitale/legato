@@ -5,12 +5,14 @@ module Legato
     end
 
     def metrics(*fields)
-      @metrics ||= ListParameter.new(:metrics)
+      fields, options = options_from_fields(fields)
+      @metrics ||= ListParameter.new(:metrics, [], options.fetch(:tracking_scope, "ga"))
       @metrics << fields
     end
 
     def dimensions(*fields)
-      @dimensions ||= ListParameter.new(:dimensions)
+      fields, options = options_from_fields(fields)
+      @dimensions ||= ListParameter.new(:dimensions, [], options.fetch(:tracking_scope, "ga"))
       @dimensions << fields
     end
 
@@ -35,7 +37,16 @@ module Legato
     end
 
     def results(profile, options = {})
+      # TODO: making tracking scope configurable when results are querried.  not sure how to do this.
       Query.new(self).results(profile, options)
+    end
+
+    def options_from_fields(fields)
+      options = fields.find{|field| field.is_a?(Hash)}
+      if options
+        fields = fields[0...-1]
+      end
+      return fields, options || {}
     end
 
   end
