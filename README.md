@@ -144,6 +144,7 @@ Operators on dimensions:
   * :limit - The maximum number of results to be returned
   * :offset - The starting index
   * :sort - metric/dimension to sort by
+  * :quota_user - any arbitrary string that uniquely identifies a user (40 characters max)
 
 ## License ##
 
