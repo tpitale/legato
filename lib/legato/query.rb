@@ -23,7 +23,7 @@ module Legato
 
     attr_reader :parent_klass
     attr_accessor :profile, :start_date, :end_date
-    attr_accessor :sort, :limit, :offset#, :segment # individual, overwritten
+    attr_accessor :sort, :limit, :offset, :quota_user #, :segment # individual, overwritten
     attr_accessor :filters # appended to, may add :segments later for dynamic segments
 
     def initialize(klass)
@@ -75,14 +75,14 @@ module Legato
     end
 
     def apply_basic_options(options)
-      [:sort, :limit, :offset, :start_date, :end_date].each do |key| #:segment
+      [:sort, :limit, :offset, :start_date, :end_date, :quota_user].each do |key| #:segment
         self.send("#{key}=".to_sym, options[key]) if options.has_key?(key)
       end
     end
 
     # def apply_filter_options(filter_options)
     #   join_character = Legato.and_join_character
-    # 
+    #
     #   Array.wrap(filter_options).compact.each do |filter|
     #     filter.each do |key, value|
     #       self.filters << hash_to_filter(key, value, join_character)
@@ -186,7 +186,8 @@ module Legato
         'start-index' => offset,
         # 'segment' => segment_id,
         'filters' => filters.to_params, # defaults to AND filtering
-        'fields' => REQUEST_FIELDS
+        'fields' => REQUEST_FIELDS,
+        'quotaUser' => quota_user
       }
 
       [metrics, dimensions, sort].each do |list|
