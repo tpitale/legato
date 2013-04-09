@@ -248,6 +248,23 @@ describe Legato::Query do
         @query.offset.should == 200
       end
 
+      it "sets the quota_user" do
+        @query.apply_options({:quota_user => 'an id'})
+        @query.quota_user.should == 'an id'
+      end
+
+      it "replaces the quota_user" do
+        @query.quota_user = 'an id'
+        @query.apply_options({:quota_user => 'a different id'})
+        @query.quota_user.should == 'a different id'
+      end
+
+      it "does not replace quota_user if option is omitted" do
+        @query.quota_user = 'an id'
+        @query.apply_options({})
+        @query.quota_user.should == 'an id'
+      end
+
       context "with Time" do
         before :each do
           @now = Time.now
@@ -319,6 +336,15 @@ describe Legato::Query do
       it 'includes the offset' do
         @query.offset = 50
         @query.to_params['start-index'].should == 50
+      end
+
+      it 'includes the quotaUser if quota_user is set' do
+        @query.quota_user = 'an id'
+        @query.to_params['quotaUser'].should == 'an id'
+      end
+
+      it 'excludes the quotaUser if quota_user is not set' do
+        @query.to_params.keys.should_not include('quotaUser')
       end
 
       it 'includes filters' do
