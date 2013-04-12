@@ -10,11 +10,14 @@ describe Legato::Management::Profile do
 
     it 'creates a new profile instance from a hash of attributes' do
       user = stub
-      profile = Legato::Management::Profile.new({"id" => 12345, "name" => "Profile 1", "webPropertyId" => "WebProperty 7"}, user)
+      profile = Legato::Management::Profile.new({"id" => 12345, "name" => "Profile 1", "webPropertyId" => "WebProperty 7", "timezone" => "America/Edmonton"}, user)
       profile.user.should == user
       profile.id.should == 12345
       profile.name.should == "Profile 1"
       profile.web_property_id.should == "WebProperty 7"
+
+      profile.attributes["timezone"].should == "America/Edmonton"
+      profile.attributes.has_key?("id").should be_false
     end
 
     it 'returns an array of all profiles available to a user under an account' do
