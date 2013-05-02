@@ -1,4 +1,5 @@
 # Legato: Google Analytics Model/Mapper #
+[![Build Status](https://travis-ci.org/tpitale/legato.png)](https://travis-ci.org/tpitale/legato)
 
 ## [Check out the Wiki!](https://github.com/tpitale/legato/wiki) ##
 
