@@ -3,6 +3,14 @@
 
 ## [Check out the Wiki!](https://github.com/tpitale/legato/wiki) ##
 
+If you've come here from Garb, welcome! There are a few changes from Garb, so you'll want to check out:
+
+* [Model Data](https://github.com/tpitale/legato/wiki/Model-Data)
+* [Query Parameters](https://github.com/tpitale/legato/wiki/Query-Parameters)
+* And the biggest difference: [Filtering](https://github.com/tpitale/legato/wiki/Filtering)
+ 
+If you're not able to upgrade quite yet, Garb has been maintained https://github.com/Sija/garb
+
 ## Google Analytics Management ##
 
 1. Get an OAuth2 Access Token from Google, Read about [OAuth2](https://github.com/tpitale/legato/wiki/OAuth2-and-Google)
