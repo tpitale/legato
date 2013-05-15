@@ -76,11 +76,11 @@ Return entries with pageview metric less than or equal to 200
 
 Filters with dimensions
 
-    filter :for_browser, &lambda {|browser| matches(:broswer, browser)}
+    filter :for_browser, &lambda {|browser| matches(:browser, browser)}
 
 Filters with OR
 
-    filter :browsers, &lambda {|*browsers| browsers.map {|browser| matches(:broswer, browser)}}
+    filter :browsers, &lambda {|*browsers| browsers.map {|browser| matches(:browser, browser)}}
 
 
 ## Using and Chaining Filters ##
@@ -109,7 +109,7 @@ Be sure to pass the appropriate number of arguments matching the lambda for your
 
 For a filter defined like this:
 
-    filter :browsers, lambda {|*browsers| browsers.map {|browser| matches(:broswer, browser)}}
+    filter :browsers, lambda {|*browsers| browsers.map {|browser| matches(:browser, browser)}}
 
 We can use it like this, passing any number of arguments:
 
