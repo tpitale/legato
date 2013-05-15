@@ -68,19 +68,19 @@ Here's what google has to say: http://code.google.com/apis/analytics/docs/gdata/
 
 Return entries with exits counts greater than or equal to 2000
 
-    filter :high_exits, lambda {gte(:exits, 2000)}
+    filter :high_exits, &lambda {gte(:exits, 2000)}
 
 Return entries with pageview metric less than or equal to 200
 
-    filter :low_pageviews, lambda {lte(:pageviews, 200)}
+    filter :low_pageviews, &lambda {lte(:pageviews, 200)}
 
 Filters with dimensions
 
-    filter :for_browser, lambda {|browser| matches(:broswer, browser)}
+    filter :for_browser, &lambda {|browser| matches(:broswer, browser)}
 
 Filters with OR
 
-    filter :browsers, lambda {|*browsers| browsers.map {|browser| matches(:broswer, browser)}}
+    filter :browsers, &lambda {|*browsers| browsers.map {|browser| matches(:broswer, browser)}}
 
 
 ## Using and Chaining Filters ##
