@@ -109,7 +109,7 @@ Be sure to pass the appropriate number of arguments matching the lambda for your
 
 For a filter defined like this:
 
-    filter :browsers, lambda {|*browsers| browsers.map {|browser| matches(:browser, browser)}}
+    filter :browsers, &lambda {|*browsers| browsers.map {|browser| matches(:browser, browser)}}
 
 We can use it like this, passing any number of arguments:
 
