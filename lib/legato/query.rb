@@ -11,6 +11,12 @@ module Legato
       end
     end
 
+    def define_segment_filter(name, &block)
+      (class << self; self; end).instance_eval do
+        define_method(name) {|*args| apply_segment_filter(*args, &block)}
+      end
+    end
+
     def self.define_filter_operators(*methods)
       methods.each do |method|
         class_eval <<-CODE
@@ -24,12 +30,13 @@ module Legato
     attr_reader :parent_klass
     attr_accessor :profile, :start_date, :end_date
     attr_accessor :sort, :limit, :offset, :quota_user #, :segment # individual, overwritten
-    attr_accessor :filters # appended to, may add :segments later for dynamic segments
+    attr_accessor :filters, :segment_filters # combined, can be appended to
 
     def initialize(klass)
       @loaded = false
       @parent_klass = klass
       self.filters = FilterSet.new
+      self.segment_filters = FilterSet.new
       self.start_date = Time.now - MONTH
       self.end_date = Time.now
 
@@ -49,6 +56,10 @@ module Legato
 
     def apply_filter(*args, &block)
       apply_filter_expression(self.filters, *args, &block)
+    end
+
+    def apply_segment_filter(*args, &block)
+      apply_filter_expression(self.segment_filters, *args, &block)
     end
 
     def apply_filter_expression(filter_set, *args, &block)
@@ -173,6 +184,10 @@ module Legato
       @sort = Legato::ListParameter.new(:sort, arr)
     end
 
+    def segment
+      "dynamic::#{segment_filters.to_params}" if segment_filters.any?
+    end
+
     # def segment_id
     #   segment.nil? ? nil : "gaid::#{segment}"
     # end
@@ -188,7 +203,7 @@ module Legato
         'end-date' => Legato.format_time(end_date),
         'max-results' => limit,
         'start-index' => offset,
-        # 'segment' => segment_id,
+        'segment' => segment,
         'filters' => filters.to_params, # defaults to AND filtering
         'fields' => REQUEST_FIELDS,
         'quotaUser' => quota_user
