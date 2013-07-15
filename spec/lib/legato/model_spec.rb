@@ -69,6 +69,33 @@ describe "Legato::Model" do
       end
     end
 
+    context "with segments" do
+      before :each do
+        @block = lambda {}
+      end
+
+      it 'creates a class method' do
+        @model.segment :high, &@block
+        @model.respond_to?(:high).should be_true
+      end
+
+      it 'stores the segment' do
+        @model.segment :high, &@block
+        @model.segments[:high].should == @block
+      end
+
+      it 'returns a Query instance for a segment' do
+        query = stub(:apply_segment_filter => "a query")
+        Legato::Query.stubs(:new).returns(query)
+
+        @model.segment :high, &@block
+        @model.high('arg1').should == 'a query'
+
+        Legato::Query.should have_received(:new).with(@model)
+        query.should have_received(:apply_segment_filter).with('arg1')
+      end
+    end
+
     # xit 'has an instance klass'
     # xit 'sets an instance klass'
 

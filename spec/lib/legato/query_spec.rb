@@ -20,6 +20,7 @@ describe Legato::Query do
       @klass = Class.new
       @block = lambda {eql(:key, 1000)}
       @klass.stubs(:filters).returns({:high => @block})
+      @klass.stubs(:segments).returns([])
 
       @query = Legato::Query.new(@klass)
     end

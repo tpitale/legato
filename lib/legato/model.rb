@@ -26,6 +26,18 @@ module Legato
       end
     end
 
+    def segments
+      @segments ||= {}
+    end
+
+    def segment(name, &block)
+      segments[name] = block
+
+      (class << self; self; end).instance_eval do
+        define_method(name) {|*args| Query.new(self).apply_segment_filter(*args, &block)}
+      end
+    end
+
     def set_instance_klass(klass)
       @instance_klass = klass
     end

@@ -44,10 +44,9 @@ module Legato
         define_filter(name, &block)
       end
 
-      # may add later for dynamic segments
-      # klass.segment_definitions.each do |name, segment|
-      #   self.class.define_segment(name, segment)
-      # end
+      klass.segments.each do |name, block|
+        define_segment_filter(name, &block)
+      end
     end
 
     def instance_klass
