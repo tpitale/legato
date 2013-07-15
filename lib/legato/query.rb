@@ -48,6 +48,10 @@ module Legato
     end
 
     def apply_filter(*args, &block)
+      apply_filter_expression(self.filters, *args, &block)
+    end
+
+    def apply_filter_expression(filter_set, *args, &block)
       @profile = extract_profile(args)
 
       join_character = Legato.and_join_character # filters are joined by AND
@@ -55,7 +59,7 @@ module Legato
       # # block returns one filter or an array of filters
       Array.wrap(instance_exec(*args, &block)).each do |filter|
         filter.join_character ||= join_character # only set when not set explicitly
-        self.filters << filter
+        filter_set << filter
 
         join_character = Legato.or_join_character # arrays are joined by OR
       end
