@@ -140,6 +140,45 @@ Operators on dimensions:
     substring        => '=@',
     not_substring    => '!@'
 
+## Dynamic Segment
+
+Your query can have a dynamic segment, which works with filter expressions. It
+works like an [advanced
+segment](https://support.google.com/analytics/answer/1033017?hl=en), except you
+don't have to create it beforehand, you can just specify it at query time.
+
+Some of the numbers you'll get will be different from using a filter, since
+[the subset of visits matched happens before dimensions and metrics are
+calculated](http://ga-dev-tools.appspot.com/explorer/) (hover on the `segment`
+parameter to see).
+
+Some metrics and dimensions are not allowed for segments, see the [API
+documentation](https://developers.google.com/analytics/devguides/reporting/core/v3/reference#segment)
+for more details.
+
+### Defining, using and chaining filters
+
+Return entries with exits counts greater than or equal to 2000
+
+    segment :high_exits do
+      gte(:exits, 2000)
+    end
+
+Return entries with pageview metric less than or equal to 200
+
+    segment :low_pageviews do
+      lte(:pageviews, 200)
+    end
+
+You can chain them
+
+    Exit.high_exits.low_pageviews(profile)
+
+and call them directly on the profile
+
+    profile.exit.high_exits.low_pageviews
+
+
 ## Accounts, WebProperties, Profiles, and Goals ##
 
     > Legato::Management::Account.all(user)
