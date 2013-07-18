@@ -20,6 +20,7 @@ describe Legato::Query do
       @klass = Class.new
       @block = lambda {eql(:key, 1000)}
       @klass.stubs(:filters).returns({:high => @block})
+      @klass.stubs(:segments).returns([])
 
       @query = Legato::Query.new(@klass)
     end
@@ -352,6 +353,13 @@ describe Legato::Query do
         @query.stubs(:filters).returns(filters)
 
         @query.to_params['filters'].should == 'filter set parameters'
+      end
+
+      it 'includes the dynamic segment' do
+        segment_filters = stub(:to_params => 'segment parameter', :any? => true)
+        @query.stubs(:segment_filters).returns(segment_filters)
+
+        @query.to_params['segment'].should == 'dynamic::segment parameter'
       end
 
       it 'includes metrics' do
