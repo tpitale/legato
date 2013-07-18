@@ -31,4 +31,13 @@ describe "Management" do
       profiles.map(&:id).include?("4506212").should == true
     end
   end
+
+  context "Management::Finder without results" do
+    use_vcr_cassette 'management/no_profiles'
+
+    it 'has no profiles' do
+      profiles = Legato::Management::Profile.all(@user)
+      profiles.map(&:id).should == []
+    end
+  end
 end
