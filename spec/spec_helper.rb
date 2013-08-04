@@ -19,4 +19,6 @@ RSpec.configure do |config|
 
   config.extend VCR::RSpec::Macros
   config.include Support::Macros::OAuth
+
+  config.order = 'random'
 end
