@@ -25,5 +25,9 @@ module Legato
     def ==(other)
       name == other.name && elements == other.elements
     end
+
+    def include?(element)
+      @elements.include?(element)
+    end
   end
 end

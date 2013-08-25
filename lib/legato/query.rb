@@ -172,11 +172,11 @@ module Legato
     # end
 
     def metrics
-      parent_klass.metrics
+      @metrics ||= parent_klass.metrics.dup
     end
 
     def dimensions
-      parent_klass.dimensions
+      @dimensions ||= parent_klass.dimensions.dup
     end
 
     def sort=(arr)

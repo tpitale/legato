@@ -18,6 +18,7 @@ describe Legato::Query do
   context "a query" do
     before :each do
       @klass = Class.new
+      @klass.extend(Legato::Model)
       @block = lambda {eql(:key, 1000)}
       @klass.stubs(:filters).returns({:high => @block})
       @klass.stubs(:segments).returns([])
@@ -129,6 +130,34 @@ describe Legato::Query do
 
       @query.should have_received(:profile=).never
       @query.should have_received(:apply_options).with({:sort => [:city]})
+    end
+
+    context "when modifying dimensions" do
+      it 'changes the query dimensions' do
+        @query.dimensions << :city
+        @query.dimensions.include?(:city).should be_true
+      end
+
+      it 'does not change the parent class dimensions' do
+        empty_dimensions = Legato::ListParameter.new(:dimensions, [])
+
+        @query.dimensions << :city
+        @klass.dimensions.should eq(empty_dimensions)
+      end
+    end
+
+    context "when modifying metrics" do
+      it 'changes the query metrics' do
+        @query.metrics << :pageviews
+        @query.metrics.include?(:pageviews).should be_true
+      end
+
+      it 'does not change the parent class metrics' do
+        empty_metrics = Legato::ListParameter.new(:metrics, [])
+
+        @query.metrics << :pageviews
+        @klass.metrics.should eq(empty_metrics)
+      end
     end
 
     context 'when applying filters' do
