@@ -1,3 +1,17 @@
+## Legato 0.2.0 ##
+
+*   Changed Query API for #metrics & #dimensions
+
+      If you add metrics and dimensions to a query, it will not modify the
+      parent (of the query) class's dimensions or metrics. Resolves issue #40.
+
+    *Tony Pitale*
+
+## Legato 0.1.0 ##
+
+*   Added dynamic segment support from @etiennebarrie
+*   Fixed some readme typos from PR by @juuso
+
 ## Legato 0.0.3 ##
 
 *   Merged branch oauth-1-support
