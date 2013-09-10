@@ -1,40 +1,40 @@
 module Legato
   module Management
-    class Profile
+    class Goal
 
       extend Finder
-      include ProfileMethods
 
       def self.default_path
-        "/accounts/~all/webproperties/~all/profiles"
+        "/accounts/~all/webproperties/~all/profiles/~all/goals"
       end
 
       def path
         self.class.default_path + "/" + id.to_s
       end
 
-      attr_accessor :id, :name, :web_property_id, :user, :attributes
+      attr_accessor :id, :name, :web_property_id, :profile_id, :user, :attributes
 
       def initialize(attributes, user)
         self.user = user
         self.id = attributes['id']
         self.name = attributes['name']
         self.web_property_id = attributes['webPropertyId']
+        self.profile_id = attributes['profileId']
 
-        ['id', 'name', 'webPropertyId'].each { |key| attributes.delete(key) }
+        ['id', 'name', 'webPropertyId', 'profileId'].each { |key| attributes.delete(key) }
         self.attributes = attributes
       end
 
       def self.for_account(account)
-        all(account.user, account.path+'/webproperties/~all/profiles')
+        all(account.user, account.path+'/webproperties/~all/profiles/~all/goals')
       end
 
       def self.for_web_property(web_property)
-        all(web_property.user, web_property.path+'/profiles')
+        all(web_property.user, web_property.path+'/profiles/~all/goals')
       end
 
-      def goals
-        Goal.for_profile(user, self)
+      def self.for_profile(profile)
+        all(profile.user, profile.path+'/goals')
       end
     end
   end

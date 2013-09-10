@@ -41,8 +41,8 @@ describe Legato::Management::Profile do
 
   context "A Profile instance" do
     it 'builds the path for the profile from the id' do
-      web_property = Legato::Management::Profile.new({"id" => 12345}, stub)
-      web_property.path.should == '/accounts/~all/webproperties/~all/profiles/12345'
+      profile = Legato::Management::Profile.new({"id" => 12345}, stub)
+      profile.path.should == '/accounts/~all/webproperties/~all/profiles/12345'
     end
   end
 end

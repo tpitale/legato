@@ -44,6 +44,7 @@ require 'legato/management/finder'
 require 'legato/management/account'
 require 'legato/management/web_property'
 require 'legato/management/profile'
+require 'legato/management/goal'
 
 require 'legato/list_parameter'
 require 'legato/response'
