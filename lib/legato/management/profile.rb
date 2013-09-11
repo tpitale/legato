@@ -34,7 +34,7 @@ module Legato
       end
 
       def goals
-        Goal.for_profile(user, self)
+        Goal.for_profile(self)
       end
     end
   end
