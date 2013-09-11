@@ -8,16 +8,17 @@ module Legato
       end
 
       def path
-        self.class.default_path + "/" + id.to_s
+        "/accounts/#{account_id}/webproperties/#{id}"
       end
 
-      attr_accessor :id, :name, :website_url, :user
+      attr_accessor :id, :name, :website_url, :account_id, :user
 
       def initialize(attributes, user)
         self.user = user
         self.id = attributes['id']
         self.name = attributes['name']
         self.website_url = attributes['websiteUrl']
+        self.account_id = attributes['accountId']
       end
 
       def self.for_account(account)

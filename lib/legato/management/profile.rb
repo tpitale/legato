@@ -10,18 +10,19 @@ module Legato
       end
 
       def path
-        self.class.default_path + "/" + id.to_s
+        "/accounts/#{account_id}/webproperties/#{web_property_id}/profiles/#{id}"
       end
 
-      attr_accessor :id, :name, :web_property_id, :user, :attributes
+      attr_accessor :id, :name, :web_property_id, :account_id, :user, :attributes
 
       def initialize(attributes, user)
         self.user = user
         self.id = attributes['id']
         self.name = attributes['name']
+        self.account_id = attributes['accountId']
         self.web_property_id = attributes['webPropertyId']
 
-        ['id', 'name', 'webPropertyId'].each { |key| attributes.delete(key) }
+        ['id', 'name', 'accountId', 'webPropertyId'].each { |key| attributes.delete(key) }
         self.attributes = attributes
       end
 

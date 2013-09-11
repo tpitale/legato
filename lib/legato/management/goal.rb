@@ -12,16 +12,17 @@ module Legato
         self.class.default_path + "/" + id.to_s
       end
 
-      attr_accessor :id, :name, :web_property_id, :profile_id, :user, :attributes
+      attr_accessor :id, :name, :account_id, :web_property_id, :profile_id, :user, :attributes
 
       def initialize(attributes, user)
         self.user = user
         self.id = attributes['id']
         self.name = attributes['name']
+        self.account_id = attributes['accountId']
         self.web_property_id = attributes['webPropertyId']
         self.profile_id = attributes['profileId']
 
-        ['id', 'name', 'webPropertyId', 'profileId'].each { |key| attributes.delete(key) }
+        ['id', 'name', 'accountId', 'webPropertyId', 'profileId'].each { |key| attributes.delete(key) }
         self.attributes = attributes
       end
 
