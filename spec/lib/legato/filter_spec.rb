@@ -1,6 +1,21 @@
 require 'spec_helper'
 
 describe Legato::Filter do
+  context "a Filter instance with mcf" do
+    before :each do
+      @filter = Legato::Filter.new(:exits, :lt, 1000, nil, "mcf")
+    end
+
+    it 'represents itself as a parameter' do
+      @filter.to_param.should == "mcf:exits<1000"
+    end
+
+    it 'joins with another filter' do
+      filter2 = Legato::Filter.new(:pageviews, :gt, 1000, ',', "mcf")
+      filter2.join_with(@filter.to_param).should == "mcf:exits<1000,mcf:pageviews>1000"
+    end
+  end
+
   context "a Filter instance" do
     before :each do
       @filter = Legato::Filter.new(:exits, :lt, 1000, nil)
