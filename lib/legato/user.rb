@@ -2,6 +2,8 @@ module Legato
   class User
     attr_accessor :access_token, :api_key, :tracking_scope
 
+    VALID_TRACKING_SCOPES = ['ga', 'mcf']
+
     def initialize(token, api_key = nil, tracking_scope = "ga")
       raise "invalid tracking_scope" unless tracking_scope_valid?(tracking_scope)
       self.tracking_scope = tracking_scope
@@ -43,7 +45,7 @@ module Legato
     end
 
     def tracking_scope_valid?(tracking_scope)
-      tracking_scope == "ga" || tracking_scope == "mcf"
+      VALID_TRACKING_SCOPES.include?(tracking_scope)
     end
   end
 end
