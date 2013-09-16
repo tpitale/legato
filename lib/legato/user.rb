@@ -42,11 +42,11 @@ module Legato
       Management::Profile.all(self)
     end
 
-    private
-
     def url
       "https://www.googleapis.com/analytics/v3/data/#{tracking_scope}"
     end
+
+    private
 
     def tracking_scope_valid?(tracking_scope)
       VALID_TRACKING_SCOPES.include?(tracking_scope)

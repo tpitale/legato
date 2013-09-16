@@ -92,11 +92,8 @@ module Legato
     end
 
     def options_from_fields(fields)
-      options = options.pop if fields.last.is_a?(Hash)
-      if options
-        fields = fields[0...-1]
-      end
-      return fields, (options || {})
+      options = fields.pop if fields.last.is_a?(Hash)
+      [fields, (options || {})]
     end
 
   end

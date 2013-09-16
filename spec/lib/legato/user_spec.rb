@@ -12,7 +12,7 @@ describe Legato::User do
 
     it 'sets the correct endpoint url' do
       user = Legato::User.new(@access_token, nil, "mcf")
-      user.send(:url).should == "https://www.googleapis.com/analytics/v3/data/mcf"
+      user.url.should == "https://www.googleapis.com/analytics/v3/data/mcf"
     end
   end
 
@@ -23,7 +23,7 @@ describe Legato::User do
     end
 
     it 'has the correct api endpoint' do
-      @user.send(:url).should == "https://www.googleapis.com/analytics/v3/data/ga"
+      @user.url.should == "https://www.googleapis.com/analytics/v3/data/ga"
     end
 
     it 'returns a response for a given query' do
