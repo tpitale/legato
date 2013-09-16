@@ -17,6 +17,8 @@ module Legato
         self.user = user
         self.id = attributes['id']
         self.name = attributes['name']
+        ['id', 'name'].each { |key| attributes.delete(key) }
+        self.attributes = attributes
       end
 
       def web_properties
