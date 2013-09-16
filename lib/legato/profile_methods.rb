@@ -3,7 +3,7 @@ module Legato
     def self.add_profile_method(klass)
       # demodulize leaves potential to redefine
       # these methods given different namespaces
-      method_name = method_name_from_klass
+      method_name = method_name_from_klass(klass)
 
       return unless method_name.length > 0
 
