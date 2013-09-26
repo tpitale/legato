@@ -1,6 +1,6 @@
 module Legato
   module Management
-    class Goal
+    class Filter
 
       extend Finder
 
