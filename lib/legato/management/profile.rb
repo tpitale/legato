@@ -38,9 +38,6 @@ module Legato
         Goal.for_profile(self)
       end
 
-      def filters
-        Filter.for_profile(self)
-      end
     end
   end
 end
