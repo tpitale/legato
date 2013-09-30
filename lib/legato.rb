@@ -41,6 +41,7 @@ require 'legato/user'
 require 'legato/profile_methods'
 
 require 'legato/management/finder'
+require 'legato/management/segment'
 require 'legato/management/account'
 require 'legato/management/web_property'
 require 'legato/management/profile'
