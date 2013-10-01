@@ -10,12 +10,22 @@ describe Legato::Management::WebProperty do
 
     it 'creates a new web property instance from a hash of attributes' do
       user = stub
-      web_property = Legato::Management::WebProperty.new({"id" => "UA-123456-2", "name" => "WebProperty 1", "websiteUrl" => "http://google.com", "accountId" => "123456"}, user)
+      web_property = Legato::Management::WebProperty.new({
+        "id" => "UA-123456-2",
+        "name" => "WebProperty 1",
+        "websiteUrl" => "http://google.com",
+        "accountId" => "123456",
+        "profileCount" => 8,
+        "industryVertical" => "ecommerce"
+      }, user)
+
       web_property.user.should == user
       web_property.id.should == "UA-123456-2"
       web_property.name.should == "WebProperty 1"
       web_property.website_url.should == 'http://google.com'
       web_property.account_id.should == "123456"
+      web_property.attributes['profileCount'].should == 8
+      web_property.attributes['industryVertical'].should == "ecommerce"
     end
 
     it 'returns an array of all web properties available to a user under an account' do

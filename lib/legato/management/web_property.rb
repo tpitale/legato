@@ -11,14 +11,15 @@ module Legato
         "/accounts/#{account_id}/webproperties/#{id}"
       end
 
-      attr_accessor :id, :name, :website_url, :account_id, :user
+      attr_accessor :id, :name, :website_url, :account_id, :user, :attributes
 
       def initialize(attributes, user)
         self.user = user
         self.id = attributes['id']
-        self.name = attributes['name']
-        self.website_url = attributes['websiteUrl']
-        self.account_id = attributes['accountId']
+        self.name = attributes.delete('name')
+        self.website_url = attributes.delete('websiteUrl')
+        self.account_id = attributes.delete('accountId')
+        self.attributes = attributes
       end
 
       def self.for_account(account)
