@@ -11,7 +11,7 @@ module Legato
         "/accounts/#{account_id}/webproperties/#{id}"
       end
 
-      attr_accessor :id, :name, :website_url, :account_id, :user
+      attr_accessor :id, :name, :website_url, :account_id, :user, :attributes
 
       def initialize(attributes, user)
         self.user = user
