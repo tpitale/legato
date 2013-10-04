@@ -16,8 +16,7 @@ module Legato
       def initialize(attributes, user)
         self.user = user
         self.id = attributes['id']
-        self.name = attributes['name']
-        ['id', 'name'].each { |key| attributes.delete(key) }
+        self.name = attributes.delete('name')
         self.attributes = attributes
       end
 

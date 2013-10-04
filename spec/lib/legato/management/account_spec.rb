@@ -10,10 +10,15 @@ describe Legato::Management::Account do
 
     it 'creates a new account instance from a hash of attributes' do
       user = stub(:api_key => nil)
-      account = Legato::Management::Account.new({"id" => 12345, "name" => "Account 1"}, user)
+      account = Legato::Management::Account.new({
+        "id" => 12345,
+        "name" => "Account 1",
+        "selfLink" => "https://www.googleapis.com/analytics/v3/management/accounts/12345"
+      }, user)
       account.user.should == user
       account.id.should == 12345
       account.name.should == "Account 1"
+      account.attributes['selfLink'].should == "https://www.googleapis.com/analytics/v3/management/accounts/12345"
     end
   end
 
