@@ -1,4 +1,3 @@
-require 'ostruct'
 require File.expand_path('../../../../../lib/legato/core_ext/array', __FILE__)
 
 module Test
