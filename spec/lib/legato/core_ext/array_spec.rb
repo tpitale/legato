@@ -63,7 +63,7 @@ describe Array, 'Core Extension Methods' do
     end
 
     it "returns a hash in an array" do
-      subject.wrap({ data: [1,2] }).should == [{ data: [1,2] }]
+      subject.wrap({ :data => [1,2] }).should == [{ :data => [1,2] }]
     end
   end
 end
