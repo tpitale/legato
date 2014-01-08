@@ -1,3 +1,15 @@
+## Legato 0.3.0 ##
+
+*   Adds Management Goal under Profile
+*   Adds Management Segment
+*   Adds all `attributes` to WebProperty
+*   Adds `legato` CLI
+
+      Loads OAuth2 configuration and a legato user before dropping you into an
+      `irb` session.
+
+    *Tony Pitale*
+
 ## Legato 0.2.0 ##
 
 *   Changed Query API for #metrics & #dimensions
