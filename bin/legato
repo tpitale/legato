@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'legato'
+require 'legato/cli'
+
+cli = Legato::CLI.new
+
+@legato_user = cli.build_user
+
+def legato_user
+  @legato_user
+end
+
+include Legato::Management
+
+cli.run
