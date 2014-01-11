@@ -23,15 +23,19 @@ module Legato
       Response.new(raw_response, query.instance_klass)
     end
 
-    # Management
+    # Management Associations
+
+    # All the `Account` records available to this user
     def accounts
       Management::Account.all(self)
     end
 
+    # All the `WebProperty` records available to this user
     def web_properties
       Management::WebProperty.all(self)
     end
 
+    # All the `Profile` records available to this user
     def profiles
       Management::Profile.all(self)
     end
