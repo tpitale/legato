@@ -5,3 +5,4 @@ pkg/*
 lib/demo.rb
 .rvmrc
 coverage
+.DS_Store
