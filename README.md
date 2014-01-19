@@ -1,5 +1,7 @@
 # Legato: Google Analytics Model/Mapper #
+
 [![Build Status](https://travis-ci.org/tpitale/legato.png)](https://travis-ci.org/tpitale/legato)
+[![Code Climate](https://codeclimate.com/github/tpitale/legato.png)](https://codeclimate.com/github/tpitale/legato)
 
 ## [Check out the Wiki!](https://github.com/tpitale/legato/wiki) ##
 
