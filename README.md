@@ -71,8 +71,10 @@ profile.exits.each {} #=> any enumerable kicks off the request to GA
 
 http://code.google.com/apis/analytics/docs/gdata/dimsmets/dimsmets.html
 
-    metrics :exits, :pageviews
-    dimensions :page_path, :operating_system, :browser
+```ruby
+metrics :exits, :pageviews
+dimensions :page_path, :operating_system, :browser
+```
 
 ## Filtering ##
 
@@ -82,54 +84,78 @@ Here's what google has to say: http://code.google.com/apis/analytics/docs/gdata/
 
 ### Examples ###
 
+Inside of any `Legato::Model` class, the method `filter` is available (like `metrics` and `dimensions`).
+
 Return entries with exits counts greater than or equal to 2000
 
-    filter :high_exits, &lambda {gte(:exits, 2000)}
+```ruby
+filter :high_exits, &lambda {gte(:exits, 2000)}
+```
 
 Return entries with pageview metric less than or equal to 200
 
-    filter :low_pageviews, &lambda {lte(:pageviews, 200)}
+```ruby
+filter :low_pageviews, &lambda {lte(:pageviews, 200)}
+```
 
 Filters with dimensions
 
-    filter :for_browser, &lambda {|browser| matches(:browser, browser)}
+```ruby
+filter :for_browser, &lambda {|browser| matches(:browser, browser)}
+```
 
 Filters with OR
 
-    filter :browsers, &lambda {|*browsers| browsers.map {|browser| matches(:browser, browser)}}
+```ruby
+filter :browsers, &lambda {|*browsers| browsers.map {|browser| matches(:browser, browser)}}
+```
 
 
 ## Using and Chaining Filters ##
 
 Pass the profile as the first or last parameter into any filter.
 
-    Exit.for_browser("Safari", profile)
+```ruby
+Exit.for_browser("Safari", profile)
+```
 
 Chain two filters.
 
-    Exit.high_exits.low_pageviews(profile)
+```ruby
+Exit.high_exits.low_pageviews(profile)
+```
 
 Profile gets a method for each class extended by Legato::Model
 
-    Exit.results(profile) == profile.exit
+```ruby
+Exit.results(profile) == profile.exit
+```
 
 We can chain off of that method, too.
 
-    profile.exit.high_exits.low_pageviews.by_pageviews
+```ruby
+profile.exit.high_exits.low_pageviews.by_pageviews
+```
 
 Chaining order doesn't matter. Profile can be given to any filter.
 
-    Exit.high_exits(profile).low_pageviews == Exit.low_pageviews(profile).high_exits
+```ruby
+Exit.high_exits(profile).low_pageviews == Exit.low_pageviews(profile).high_exits
+```
 
 Be sure to pass the appropriate number of arguments matching the lambda for your filter.
 
 For a filter defined like this:
 
-    filter :browsers, &lambda {|*browsers| browsers.map {|browser| matches(:browser, browser)}}
+```ruby
+filter :browsers, &lambda {|*browsers| browsers.map {|browser| matches(:browser, browser)}}
+```
 
 We can use it like this, passing any number of arguments:
 
-    Exit.browsers("Firefox", "Safari", profile)
+```ruby
+Exit.browsers("Firefox", "Safari", profile)
+```
 
 ## Google Analytics Supported Filtering Methods ##
 
@@ -176,30 +202,40 @@ for more details.
 
 Return entries with exits counts greater than or equal to 2000
 
-    segment :high_exits do
-      gte(:exits, 2000)
-    end
+```ruby
+segment :high_exits do
+  gte(:exits, 2000)
+end
+```
 
 Return entries with pageview metric less than or equal to 200
 
-    segment :low_pageviews do
-      lte(:pageviews, 200)
-    end
+```ruby
+segment :low_pageviews do
+  lte(:pageviews, 200)
+end
+```
 
 You can chain them
 
-    Exit.high_exits.low_pageviews(profile)
+```ruby
+Exit.high_exits.low_pageviews(profile)
+```
 
 and call them directly on the profile
 
-    profile.exit.high_exits.low_pageviews
+```ruby
+profile.exit.high_exits.low_pageviews
+```
 
 
 ## Accounts, WebProperties, Profiles, and Goals ##
 
-    > Legato::Management::Account.all(user)
-    > Legato::Management::WebProperty.all(user)
-    > Legato::Management::Profile.all(user)
+```ruby
+Legato::Management::Account.all(user)
+Legato::Management::WebProperty.all(user)
+Legato::Management::Profile.all(user)
+```
 
 ## Other Parameters Can be Passed to a call to #results ##
 
