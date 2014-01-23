@@ -1,5 +1,6 @@
 # Legato: Google Analytics Model/Mapper #
 
+[![Gem Version](https://badge.fury.io/rb/legato.png)](http://badge.fury.io/rb/legato)
 [![Build Status](https://travis-ci.org/tpitale/legato.png)](https://travis-ci.org/tpitale/legato)
 [![Code Climate](https://codeclimate.com/github/tpitale/legato.png)](https://codeclimate.com/github/tpitale/legato)
 
