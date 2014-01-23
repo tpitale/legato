@@ -17,41 +17,55 @@ If you're not able to upgrade quite yet, Garb has been maintained https://github
 
 1. Get an OAuth2 Access Token from Google, Read about [OAuth2](https://github.com/tpitale/legato/wiki/OAuth2-and-Google)
 
-        access_token = OAuth2 Access Token # from Google
+```ruby
+access_token = OAuth2 Access Token # from Google
+```
 
 2. Create a New User with the Access Token
 
-        user = Legato::User.new(access_token)
+```ruby
+user = Legato::User.new(access_token)
+```
 
 3. List the Accounts and Profiles of the first Account
 
-        user.accounts
-        user.accounts.first.profiles
+```ruby
+user.accounts
+user.accounts.first.profiles
+```
 
 4. List all the Profiles the User has Access to
 
-        user.profiles
+```ruby
+user.profiles
+```
 
 5. Get a Profile
 
-        profile = user.profiles.first
+```ruby
+profile = user.profiles.first
+```
 
 6. The Profile Carries the User
 
-        profile.user == user #=> true
+```ruby
+profile.user == user #=> true
+```
 
 
 ## Google Analytics Model ##
 
-    class Exit
-      extend Legato::Model
+```ruby
+class Exit
+  extend Legato::Model
 
-      metrics :exits, :pageviews
-      dimensions :page_path, :operating_system, :browser
-    end
+  metrics :exits, :pageviews
+  dimensions :page_path, :operating_system, :browser
+end
 
-    profile.exits #=> returns a Legato::Query
-    profile.exits.each {} #=> any enumerable kicks off the request to GA
+profile.exits #=> returns a Legato::Query
+profile.exits.each {} #=> any enumerable kicks off the request to GA
+```
 
 ## Metrics & Dimensions ##
 
