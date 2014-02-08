@@ -11,7 +11,10 @@ module Legato
       self.api_key = api_key
     end
 
+    # TODO: refactor into request object again
     def request(query)
+      url = url_for(query)
+
       raw_response = if api_key
         # oauth 1 + api key
         query_string = URI.escape(query.to_query_string, '<>') # may need to add !~@
@@ -42,8 +45,10 @@ module Legato
       Management::Profile.all(self)
     end
 
-    def url
-      "https://www.googleapis.com/analytics/v3/data/#{tracking_scope}"
+    def url_for(query)
+      endpoint = query.realtime? ? 'realtime' : tracking_scope
+
+      "https://www.googleapis.com/analytics/v3/data/#{endpoint}"
     end
 
     private
