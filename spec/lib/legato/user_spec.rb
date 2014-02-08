@@ -12,7 +12,7 @@ describe Legato::User do
 
     it 'sets the correct endpoint url' do
       user = Legato::User.new(@access_token, nil, "mcf")
-      user.url.should == "https://www.googleapis.com/analytics/v3/data/mcf"
+      user.url_for(stub(:realtime? => false)).should == "https://www.googleapis.com/analytics/v3/data/mcf"
     end
   end
 
@@ -23,14 +23,18 @@ describe Legato::User do
     end
 
     it 'has the correct api endpoint' do
-      @user.url.should == "https://www.googleapis.com/analytics/v3/data/ga"
+      @user.url_for(stub(:realtime? => false)).should == "https://www.googleapis.com/analytics/v3/data/ga"
+    end
+
+    it 'has the realtime api endpoint' do
+      @user.url_for(stub(:realtime? => true)).should == "https://www.googleapis.com/analytics/v3/data/realtime"
     end
 
     it 'returns a response for a given query' do
       klass = Class.new
       @access_token.stubs(:get).returns('a response')
       Legato::Response.stubs(:new)
-      @user.stubs(:url).returns("the_api_url")
+      @user.stubs(:url_for).returns("the_api_url")
 
       @user.request(stub(:to_params => "params", :instance_klass => klass))
 

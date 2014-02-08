@@ -228,8 +228,6 @@ and call them directly on the profile
 ```ruby
 profile.exit.high_exits.low_pageviews
 ```
-
-
 ## Accounts, WebProperties, Profiles, and Goals ##
 
 ```ruby
@@ -237,7 +235,6 @@ Legato::Management::Account.all(user)
 Legato::Management::WebProperty.all(user)
 Legato::Management::Profile.all(user)
 ```
-
 ## Other Parameters Can be Passed to a call to #results ##
 
   * :start_date - The date of the period you would like this report to start
@@ -246,6 +243,18 @@ Legato::Management::Profile.all(user)
   * :offset - The starting index
   * :sort - metric/dimension to sort by
   * :quota_user - any arbitrary string that uniquely identifies a user (40 characters max)
+
+## Real Time Reporting ##
+
+https://developers.google.com/analytics/devguides/reporting/realtime/v3/
+
+GA provides an endpoint to do **basic** reporting in near-realtime. Please read the above documentation to know which features are or are not available. It is also only available in **beta** so you must already have access.
+
+Inside of Legato, you can simply add `realtime` to your query, like this:
+
+```ruby
+Exit.realtime.results(profile)
+```
 
 ## License ##
 
