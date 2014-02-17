@@ -6,3 +6,6 @@ rvm:
   - 2.0.0
   - 2.1.0
 script: bundle exec rspec spec
+notifications:
+  webhooks:
+    - "https://pitaleerb.slack.com/services/hooks/travis?token=wNtbVP9B3j1npZkLzK4bpq8Q"
