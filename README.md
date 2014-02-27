@@ -64,8 +64,8 @@ class Exit
   dimensions :page_path, :operating_system, :browser
 end
 
-profile.exits #=> returns a Legato::Query
-profile.exits.each {} #=> any enumerable kicks off the request to GA
+profile.exit #=> returns a Legato::Query
+profile.exit.each {} #=> any enumerable kicks off the request to GA
 ```
 
 ## Metrics & Dimensions ##
