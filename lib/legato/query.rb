@@ -29,7 +29,7 @@ module Legato
 
     attr_reader :parent_klass
     attr_accessor :profile, :start_date, :end_date
-    attr_accessor :sort, :limit, :offset, :quota_user #, :segment # individual, overwritten
+    attr_accessor :sort, :limit, :offset, :quota_user, :sampling_level #, :segment # individual, overwritten
     attr_accessor :filters, :segment_filters # combined, can be appended to
     attr_accessor :tracking_scope
 
@@ -92,7 +92,7 @@ module Legato
     end
 
     def apply_basic_options(options)
-      [:sort, :limit, :offset, :start_date, :end_date, :quota_user].each do |key| #:segment
+      [:sort, :limit, :offset, :start_date, :end_date, :quota_user, :sampling_level].each do |key| #:segment
         self.send("#{key}=".to_sym, options[key]) if options.has_key?(key)
       end
     end

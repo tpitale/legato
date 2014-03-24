@@ -243,6 +243,7 @@ Legato::Management::Profile.all(user)
   * :offset - The starting index
   * :sort - metric/dimension to sort by
   * :quota_user - any arbitrary string that uniquely identifies a user (40 characters max)
+  * :sampling_level - 'FASTER' or 'HIGHER_PRECISION' https://developers.google.com/analytics/devguides/reporting/core/v3/reference#samplingLevel
 
 ## Real Time Reporting ##
 
