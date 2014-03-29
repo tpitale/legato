@@ -1,4 +1,4 @@
-# Legato: Google Analytics Model/Mapper #
+# Legato: Ruby Client for the Google Analytics Core Reporting and Management API #
 
 [![Gem Version](https://badge.fury.io/rb/legato.png)](http://badge.fury.io/rb/legato)
 [![Build Status](https://travis-ci.org/tpitale/legato.png)](https://travis-ci.org/tpitale/legato)
