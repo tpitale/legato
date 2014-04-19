@@ -384,11 +384,11 @@ describe Legato::Query do
         @query.to_params['filters'].should == 'filter set parameters'
       end
 
-      it 'includes the dynamic segment' do
-        segment_filters = stub(:to_params => 'segment parameter', :any? => true)
+      it 'includes the session level conditional segment' do
+        segment_filters = stub(:to_params => 'ga::parameter', :any? => true)
         @query.stubs(:segment_filters).returns(segment_filters)
 
-        @query.to_params['segment'].should == 'dynamic::segment parameter'
+        @query.to_params['segment'].should == 'sessions::condition::ga::parameter'
       end
 
       it 'includes metrics' do

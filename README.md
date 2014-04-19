@@ -185,9 +185,9 @@ Operators on dimensions:
     substring        => '=@',
     not_substring    => '!@'
 
-## Dynamic Segment
+## Session-level Segments
 
-Your query can have a dynamic segment, which works with filter expressions. It
+Your query can have a session-level segment, which works with filter expressions. It
 works like an [advanced
 segment](https://support.google.com/analytics/answer/1033017?hl=en), except you
 don't have to create it beforehand, you can just specify it at query time.
@@ -200,6 +200,8 @@ parameter to see).
 Some metrics and dimensions are not allowed for segments, see the [API
 documentation](https://developers.google.com/analytics/devguides/reporting/core/v3/reference#segment)
 for more details.
+
+**Note**: Legato does _not_ support [Users vs Sessions](https://developers.google.com/analytics/devguides/reporting/core/v3/segments#users-vs-sessions), yet. The default will be sessions (the equivalent of the earlier, now removed, dynamic segments).
 
 ### Defining, using and chaining filters
 

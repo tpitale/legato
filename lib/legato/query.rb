@@ -187,7 +187,7 @@ module Legato
     end
 
     def segment
-      "dynamic::#{segment_filters.to_params}" if segment_filters.any?
+      "sessions::condition::#{segment_filters.to_params}" if segment_filters.any?
     end
 
     # def segment_id
