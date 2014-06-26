@@ -1,3 +1,9 @@
+## Legato 0.3.1 ##
+
+*   Fixes `realtime` on query to change the `tracking_scope` to 'rt' and return `self`, a `Query`
+
+    *Tony Pitale*
+
 ## Legato 0.3.0 ##
 
 *   Adds Management Goal under Profile
