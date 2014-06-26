@@ -46,7 +46,7 @@ module Legato
     end
 
     def to_param
-      "#{google_field}#{google_operator}#{escaped_value}"
+      [google_field, google_operator, escaped_value].join
     end
 
     def join_with(param)
