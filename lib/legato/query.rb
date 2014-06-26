@@ -200,6 +200,7 @@ module Legato
 
     def realtime
       @realtime = true
+      self
     end
 
     def realtime?
