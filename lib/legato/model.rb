@@ -91,6 +91,24 @@ module Legato
       Query.new(self).results(profile, options)
     end
 
+    # Builds a `paginated query` to get results from GA
+    # 
+    # @param profile [Legato::Management::Profile] the profile to query GA against
+    # @param options [Hash] options:
+    #   * start_date
+    #   * end_date
+    #   * total_limit
+    #   * request_limit
+    #   * sort
+    #   * quota_user
+    # @return [Query] a new query with all the filters/segments defined on the
+    #   model, allowing for chainable behavior before kicking of the request
+    #   to Google Analytics which returns the result data
+    def paginated_results(profile, options = {})
+      # TODO: making tracking scope configurable when results are querried.  not sure how to do this.
+      PaginatedQuery.new(self).results(profile, options)
+    end
+
     def options_from_fields(fields)
       options = fields.pop if fields.last.is_a?(Hash)
       [fields, (options || {})]
