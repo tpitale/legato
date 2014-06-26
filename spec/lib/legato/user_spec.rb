@@ -2,17 +2,18 @@ require 'spec_helper'
 
 describe Legato::User do
   context "an instance of Legato::User with the scope set" do
+    let(:user) {user = Legato::User.new(@access_token, nil)}
+
     before :each do
       @access_token = stub
     end
 
     it 'raises when an invalid scope is passed in' do
-      expect { Legato::User.new(@access_token, nil, "whatever")}.to raise_error
+      expect { user.url_for(stub(:tracking_scope => "what"))}.to raise_error
     end
 
     it 'sets the correct endpoint url' do
-      user = Legato::User.new(@access_token, nil, "mcf")
-      user.url_for(stub(:realtime? => false)).should == "https://www.googleapis.com/analytics/v3/data/mcf"
+      user.url_for(stub(:tracking_scope => 'mcf')).should == "https://www.googleapis.com/analytics/v3/data/mcf"
     end
   end
 
@@ -23,11 +24,11 @@ describe Legato::User do
     end
 
     it 'has the correct api endpoint' do
-      @user.url_for(stub(:realtime? => false)).should == "https://www.googleapis.com/analytics/v3/data/ga"
+      @user.url_for(stub(:tracking_scope => 'ga')).should == "https://www.googleapis.com/analytics/v3/data/ga"
     end
 
     it 'has the realtime api endpoint' do
-      @user.url_for(stub(:realtime? => true)).should == "https://www.googleapis.com/analytics/v3/data/realtime"
+      @user.url_for(stub(:tracking_scope => 'rt')).should == "https://www.googleapis.com/analytics/v3/data/realtime"
     end
 
     it 'returns a response for a given query' do

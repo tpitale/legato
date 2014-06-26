@@ -36,7 +36,6 @@ module Legato
     def initialize(klass, tracking_scope = "ga")
       @loaded = false
       @parent_klass = klass
-      @realtime = false
       self.filters = FilterSet.new
       self.segment_filters = FilterSet.new
       self.start_date = Time.now - MONTH
@@ -199,12 +198,8 @@ module Legato
     end
 
     def realtime
-      @realtime = true
+      self.tracking_scope = 'rt'
       self
-    end
-
-    def realtime?
-      @realtime
     end
 
     def to_params

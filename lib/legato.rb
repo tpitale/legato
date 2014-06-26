@@ -21,7 +21,7 @@ module Legato
   end
 
   def self.from_ga_string(str)
-    str.gsub(/ga:|mcf:/, '')
+    str.gsub(/ga:|mcf:|rt:/, '')
   end
 
   def self.format_time(t)

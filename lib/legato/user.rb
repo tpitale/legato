@@ -1,12 +1,14 @@
 module Legato
   class User
-    attr_accessor :access_token, :api_key, :tracking_scope
+    attr_accessor :access_token, :api_key
 
-    VALID_TRACKING_SCOPES = ['ga', 'mcf']
+    VALID_TRACKING_SCOPES = {
+      'ga' => 'ga',
+      'mcf' => 'mcf',
+      'rt' => 'realtime'
+    }
 
-    def initialize(token, api_key = nil, tracking_scope = "ga")
-      raise "invalid tracking_scope" unless tracking_scope_valid?(tracking_scope)
-      self.tracking_scope = tracking_scope
+    def initialize(token, api_key = nil)
       self.access_token = token
       self.api_key = api_key
     end
@@ -46,7 +48,9 @@ module Legato
     end
 
     def url_for(query)
-      endpoint = query.realtime? ? 'realtime' : tracking_scope
+      raise "invalid tracking_scope" unless tracking_scope_valid?(query.tracking_scope)
+
+      endpoint = VALID_TRACKING_SCOPES[query.tracking_scope]
 
       "https://www.googleapis.com/analytics/v3/data/#{endpoint}"
     end
@@ -54,7 +58,7 @@ module Legato
     private
 
     def tracking_scope_valid?(tracking_scope)
-      VALID_TRACKING_SCOPES.include?(tracking_scope)
+      VALID_TRACKING_SCOPES.keys.include?(tracking_scope)
     end
   end
 end

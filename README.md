@@ -258,8 +258,9 @@ Legato::Management::Profile.all(user)
 ## Real Time Reporting ##
 
 https://developers.google.com/analytics/devguides/reporting/realtime/v3/
+https://developers.google.com/analytics/devguides/reporting/realtime/dimsmets/
 
-GA provides an endpoint to do **basic** reporting in near-realtime. Please read the above documentation to know which features are or are not available. It is also only available in **beta** so you must already have access.
+GA provides an endpoint to do **basic** reporting in near-realtime. Please read the above documentation to know which features (and dimentsion/metrics) are or are _not_ available. It is also only available in **beta** so you must already have access.
 
 Inside of Legato, you can simply add `realtime` to your query, like this:
 
