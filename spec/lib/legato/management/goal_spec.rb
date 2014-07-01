@@ -18,7 +18,7 @@ describe Legato::Management::Goal do
       goal.profile_id.should == "Profile 111"
 
       goal.attributes["value"].should == "/blah"
-      goal.attributes.has_key?("id").should be_false
+      goal.attributes.has_key?("id").should eq(false)
     end
 
     it 'returns an array of all goals available to a user under an account' do

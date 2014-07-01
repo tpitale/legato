@@ -49,7 +49,7 @@ describe "Legato::Model" do
 
       it 'creates a class method' do
         @model.filter :high, &@block
-        @model.respond_to?(:high).should be_true
+        @model.respond_to?(:high).should eq(true)
       end
 
       it 'stores the filter' do
@@ -76,7 +76,7 @@ describe "Legato::Model" do
 
       it 'creates a class method' do
         @model.segment :high, &@block
-        @model.respond_to?(:high).should be_true
+        @model.respond_to?(:high).should eq(true)
       end
 
       it 'stores the segment' do

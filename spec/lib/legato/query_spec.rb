@@ -4,7 +4,7 @@ describe Legato::Query do
   def self.it_defines_operators(*operators)
     operators.each do |operator|
       it "creates a method for the operator #{operator}" do
-        @query.respond_to?(operator).should be_true
+        @query.respond_to?(operator).should eq(true)
       end
 
       it "returns a new filter for #{operator} to the set" do
@@ -35,7 +35,7 @@ describe Legato::Query do
     end
 
     it 'has filters defined from the parent class' do
-      @query.respond_to?(:high).should be_true
+      @query.respond_to?(:high).should eq(true)
     end
 
     it "has filter methods that call apply with the given block" do
@@ -61,7 +61,7 @@ describe Legato::Query do
 
       @query.load
 
-      @query.loaded?.should be_true
+      @query.loaded?.should eq(true)
       @query.profile.user.should have_received(:request).with(@query)
       response.should have_received(:collection)
       response.should have_received(:total_results)
@@ -135,7 +135,7 @@ describe Legato::Query do
     context "when modifying dimensions" do
       it 'changes the query dimensions' do
         @query.dimensions << :city
-        @query.dimensions.include?(:city).should be_true
+        @query.dimensions.include?(:city).should eq(true)
       end
 
       it 'does not change the parent class dimensions' do
@@ -149,7 +149,7 @@ describe Legato::Query do
     context "when modifying metrics" do
       it 'changes the query metrics' do
         @query.metrics << :pageviews
-        @query.metrics.include?(:pageviews).should be_true
+        @query.metrics.include?(:pageviews).should eq(true)
       end
 
       it 'does not change the parent class metrics' do

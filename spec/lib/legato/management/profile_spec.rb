@@ -18,7 +18,7 @@ describe Legato::Management::Profile do
       profile.web_property_id.should == "UA-12345-2"
 
       profile.attributes["timezone"].should == "America/Edmonton"
-      profile.attributes.has_key?("id").should be_false
+      profile.attributes.has_key?("id").should eq(false)
     end
 
     it 'returns an array of all profiles available to a user under an account' do
