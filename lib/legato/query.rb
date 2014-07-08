@@ -212,7 +212,8 @@ module Legato
         'segment' => segment,
         'filters' => filters.to_params, # defaults to AND filtering
         'fields' => REQUEST_FIELDS,
-        'quotaUser' => quota_user
+        'quotaUser' => quota_user,
+        'samplingLevel' => sampling_level
       }
 
       [metrics, dimensions, sort].each do |list|

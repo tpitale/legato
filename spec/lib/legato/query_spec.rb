@@ -377,6 +377,15 @@ describe Legato::Query do
         @query.to_params.keys.should_not include('quotaUser')
       end
 
+      it 'includes the samplingLevel if sampling_level is set' do
+        @query.sampling_level = 'FASTER'
+        @query.to_params['samplingLevel'].should == 'FASTER'
+      end
+
+      it 'excludes the samplingLevel if sampling_level is not set' do
+        @query.to_params.keys.should_not include('samplingLevel')
+      end
+
       it 'includes filters' do
         filters = stub(:to_params => 'filter set parameters')
         @query.stubs(:filters).returns(filters)
