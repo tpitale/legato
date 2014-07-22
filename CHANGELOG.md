@@ -1,3 +1,9 @@
+## Legato 0.3.2 ##
+
+*   Fixes `sampling_level` not being properly sent in query params
+
+    *Tony Pitale*
+
 ## Legato 0.3.1 ##
 
 *   Fixes `realtime` on query to change the `tracking_scope` to 'rt' and return `self`, a `Query`
