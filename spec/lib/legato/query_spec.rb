@@ -164,6 +164,14 @@ describe Legato::Query do
         @query.metrics.include?(:pageviews).should eq(true)
         @query.metrics.include?(:sessions).should eq(true)
       end
+
+      it 'does not share metrics across queries' do
+        query1 = Legato::Query.new(@klass)
+        query2 = Legato::Query.new(@klass)
+
+        query1.metrics << :pageviews
+        expect(query2.metrics).to_not include(:pageviews)
+      end
     end
 
     context 'when applying filters' do
