@@ -158,6 +158,12 @@ describe Legato::Query do
         @query.metrics << :pageviews
         @klass.metrics.should eq(empty_metrics)
       end
+
+      it 'accepts an array of metrics' do
+        @query.metrics << [:pageviews, :sessions]
+        @query.metrics.include?(:pageviews).should eq(true)
+        @query.metrics.include?(:sessions).should eq(true)
+      end
     end
 
     context 'when applying filters' do
