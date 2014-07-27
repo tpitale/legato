@@ -1,5 +1,9 @@
-require 'simplecov'
-SimpleCov.start
+begin
+  require 'simplecov'
+  SimpleCov.start
+rescue
+  # we do not have simplecov in 1.8
+end
 
 require 'bundler/setup'
 
