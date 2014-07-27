@@ -144,6 +144,20 @@ describe Legato::Query do
         @query.dimensions << :city
         @klass.dimensions.should eq(empty_dimensions)
       end
+
+      it 'accepts an array of dimensions' do
+        @query.dimensions << [:city, :browser]
+        @query.dimensions.include?(:city).should eq(true)
+        @query.dimensions.include?(:browser).should eq(true)
+      end
+
+      it 'does not share metrics across queries' do
+        query1 = Legato::Query.new(@klass)
+        query2 = Legato::Query.new(@klass)
+
+        query1.dimensions << :city
+        expect(query2.dimensions).to_not include(:city)
+      end
     end
 
     context "when modifying metrics" do
