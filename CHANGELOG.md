@@ -1,3 +1,9 @@
+## Legato 0.3.3 ##
+
+*   Adds `realtime` to `Legato::Model`, returns `Query` with tracking_scope set for the realtime API
+
+    *Tony Pitale*
+
 ## Legato 0.3.2 ##
 
 *   Fixes `sampling_level` not being properly sent in query params
