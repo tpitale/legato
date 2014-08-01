@@ -197,6 +197,10 @@ module Legato
       profile && Legato.to_ga_string(profile.id)
     end
 
+    def realtime?
+      tracking_scope == 'rt'
+    end
+
     def realtime
       self.tracking_scope = 'rt'
       self

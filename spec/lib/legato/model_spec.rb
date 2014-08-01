@@ -110,5 +110,10 @@ describe "Legato::Model" do
       Legato::Query.should have_received(:new).with(@model)
       query.should have_received(:results).with(profile, options)
     end
+
+    it 'has a query with realtime set' do
+      query = @model.realtime
+      expect(query.realtime?).to eq(true)
+    end
   end
 end

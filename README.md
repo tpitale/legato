@@ -269,6 +269,14 @@ Exit.results(profile).realtime
 ```
 The results you iterate over (with `.each`, etc) will be from the realtime reporting API.
 
+You can also call `realtime` on your model to get a new `Query` instance with realtime API set.
+
+```ruby
+query = Exit.realtime
+query.realtime? #=> true
+query.tracking_scope #=> 'rt'
+```
+
 ## License ##
 
   (The MIT License)

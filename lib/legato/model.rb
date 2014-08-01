@@ -91,6 +91,13 @@ module Legato
       Query.new(self).results(profile, options)
     end
 
+    # Builds a `query` and sets the `realtime` property
+    # 
+    # @return [Query] a new query with `realtime` property set
+    def realtime
+      Query.new(self).realtime
+    end
+
     def options_from_fields(fields)
       options = fields.pop if fields.last.is_a?(Hash)
       [fields, (options || {})]
