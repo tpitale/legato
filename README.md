@@ -262,11 +262,12 @@ https://developers.google.com/analytics/devguides/reporting/realtime/dimsmets/
 
 GA provides an endpoint to do **basic** reporting in near-realtime. Please read the above documentation to know which features (and dimentsion/metrics) are or are _not_ available. It is also only available in **beta** so you must already have access.
 
-Inside of Legato, you can simply add `realtime` to your query, like this:
+Inside of Legato, you can simply add `realtime` to your query (`#results` returns a `Query` instance), like this:
 
 ```ruby
-Exit.realtime.results(profile)
+Exit.results(profile).realtime
 ```
+The results you iterate over (with `.each`, etc) will be from the realtime reporting API.
 
 ## License ##
 
