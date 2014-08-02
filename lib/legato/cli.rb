@@ -40,7 +40,7 @@ module Legato
 
       build_access_token
 
-      print_yaml
+      print_yaml unless File.exists?(path)
     end
 
     def run
