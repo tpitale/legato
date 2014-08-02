@@ -26,10 +26,10 @@ module Legato
 
   class CLI
     def initialize
-      path = File.join(ENV['HOME'], '.legato.yml')
+      config_path = File.join(ENV['HOME'], '.legato.yml')
 
-      if File.exists?(path)
-        @config = YAML.load_file(path) rescue {}
+      if File.exists?(config_path)
+        @config = YAML.load_file(config_path) rescue {}
       else
         puts "##########################################################"
         puts "We can auto-load OAuth2 config from ~/.legato.yml"
@@ -40,7 +40,7 @@ module Legato
 
       build_access_token
 
-      print_yaml
+      print_yaml unless File.exists?(config_path)
     end
 
     def run
