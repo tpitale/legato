@@ -61,6 +61,11 @@ profile = user.profiles.first
 profile.user == user #=> true
 ```
 
+7. The profile can also lookup its "parent" Web Property
+
+```ruby
+profile.web_propery
+```
 
 ## Google Analytics Model ##
 

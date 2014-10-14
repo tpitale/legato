@@ -1,3 +1,7 @@
+## Legato 0.4.0 ##
+
+*   Adds support to lookup parent `web_property` or `account` from a child `profile`.
+
 ## Legato 0.3.3 ##
 
 *   Adds `realtime` to `Legato::Model`, returns `Query` with tracking_scope set for the realtime API
