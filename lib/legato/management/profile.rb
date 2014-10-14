@@ -13,16 +13,23 @@ module Legato
         "/accounts/#{account_id}/webproperties/#{web_property_id}/profiles/#{id}"
       end
 
-      attr_accessor :id, :name, :web_property_id, :account_id, :user, :attributes
+      GA_ATTRIBUTES = {
+        :id => 'id',
+        :name => 'name',
+        :account_id => 'accountId',
+        :web_property_id => 'webPropertyId'
+      }
+
+      attr_accessor *GA_ATTRIBUTES.keys
+      attr_accessor :user, :attributes
 
       def initialize(attributes, user)
         self.user = user
-        self.id = attributes['id']
-        self.name = attributes['name']
-        self.account_id = attributes['accountId']
-        self.web_property_id = attributes['webPropertyId']
 
-        ['id', 'name', 'accountId', 'webPropertyId'].each { |key| attributes.delete(key) }
+        GA_ATTRIBUTES.each do |key,string_key|
+          self.send("#{key}=", attributes.delete(string_key) || attributes.delete(key))
+        end
+
         self.attributes = attributes
       end
 
@@ -32,6 +39,14 @@ module Legato
 
       def self.for_web_property(web_property)
         all(web_property.user, web_property.path+'/profiles')
+      end
+
+      def account
+        @account ||= Account.from_child(self)
+      end
+
+      def web_property
+        @web_property ||= WebProperty.from_child(self)
       end
 
       def goals
