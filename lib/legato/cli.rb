@@ -93,6 +93,10 @@ module Legato
 
         @access_token = client.auth_code.get_token(code, :redirect_uri => 'http://localhost')
         @config['token'] = @access_token.token
+
+        puts
+        print "Your oauth token is #{@config['token']}"
+        puts
       end
     end
 

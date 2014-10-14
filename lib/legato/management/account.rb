@@ -15,8 +15,9 @@ module Legato
 
       def initialize(attributes, user)
         self.user = user
-        self.id = attributes['id']
-        self.name = attributes['name']
+
+        self.id = attributes['id'] || attributes[:id]
+        self.name = attributes['name'] || attributes[:name]
       end
 
       def web_properties
@@ -25,6 +26,10 @@ module Legato
 
       def profiles
         Profile.for_account(self)
+      end
+
+      def self.from_child(child)
+        all(child.user).detect {|a| a.id == child.account_id}
       end
     end
   end

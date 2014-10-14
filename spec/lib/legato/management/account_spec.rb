@@ -15,6 +15,12 @@ describe Legato::Management::Account do
       account.id.should == 12345
       account.name.should == "Account 1"
     end
+
+    it 'finds an instance from a child management instance' do
+      user = stub(:api_key => nil)
+      profile = Legato::Management::Profile.new({:account_id => 123}, user)
+      # account = Legato::Management::Account
+    end
   end
 
   context "An Account instance" do
