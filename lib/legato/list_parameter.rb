@@ -1,11 +1,11 @@
 module Legato
   class ListParameter
 
-    attr_reader :name, :elements, :tracking_scope
+    attr_reader :name, :tracking_scope
 
     def initialize(name, elements=[], tracking_scope = "ga")
       @name = name
-      @elements = Array.wrap(elements)
+      @elements = Set.new Array.wrap(elements).compact
       @tracking_scope = tracking_scope
     end
 
@@ -14,13 +14,12 @@ module Legato
     end
 
     def <<(element)
-      (@elements += Array.wrap(element)).compact!
+      @elements += Array.wrap(element).compact
       self
     end
 
-    def |(element)
-      (@elements |= Array.wrap(element)).compact!
-      self
+    def elements
+      @elements.to_a
     end
 
     def to_params
