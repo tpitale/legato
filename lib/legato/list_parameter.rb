@@ -18,6 +18,11 @@ module Legato
       self
     end
 
+    def |(element)
+      (@elements |= Array.wrap(element)).compact!
+      self
+    end
+
     def to_params
       value = elements.map{|element| Legato.to_ga_string(element, tracking_scope)}.join(',')
       value.empty? ? {} : {name => value}

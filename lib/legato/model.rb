@@ -11,7 +11,7 @@ module Legato
     def metrics(*fields)
       fields, options = options_from_fields(fields)
       @metrics ||= ListParameter.new(:metrics, [], options.fetch(:tracking_scope, "ga"))
-      @metrics << fields
+      @metrics |= fields
     end
 
     # Adds dimensions to the class for retrieval from GA
@@ -21,7 +21,7 @@ module Legato
     def dimensions(*fields)
       fields, options = options_from_fields(fields)
       @dimensions ||= ListParameter.new(:dimensions, [], options.fetch(:tracking_scope, "ga"))
-      @dimensions << fields
+      @dimensions |= fields
     end
 
     def filters
