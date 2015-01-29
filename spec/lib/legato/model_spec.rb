@@ -22,6 +22,13 @@ describe "Legato::Model" do
       @model.metrics.should == Legato::ListParameter.new(:metrics, [:exits, :pageviews])
     end
 
+    it 'does not add duplicated metrics' do
+      @model.metrics :exits
+      @model.metrics :exits
+      @model.metrics :exits, :exits
+      @model.metrics.should == Legato::ListParameter.new(:metrics, [:exits])
+    end
+
     it 'has a dimension' do
       @model.dimensions :browser
       @model.dimensions.should == Legato::ListParameter.new(:dimensions, [:browser])
@@ -30,6 +37,13 @@ describe "Legato::Model" do
     it 'has dimensions' do
       @model.dimensions :browser, :city
       @model.dimensions.should == Legato::ListParameter.new(:dimensions, [:browser, :city])
+    end
+
+    it 'does not add duplicated dimensions' do
+      @model.dimensions :browser
+      @model.dimensions :browser
+      @model.dimensions :browser, :browser
+      @model.dimensions.should == Legato::ListParameter.new(:dimensions, [:browser])
     end
 
     it 'knows the instance class it should use' do

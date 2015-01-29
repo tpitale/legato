@@ -61,7 +61,7 @@ module Legato
     end
 
     # Set the class used to make new instances of returned results from GA
-    # 
+    #
     # @param klass [Class] any class that accepts a hash of attributes to
     #   initialize the values of the class
     # @return the original class given
@@ -74,7 +74,7 @@ module Legato
     end
 
     # Builds a `query` to get results from GA
-    # 
+    #
     # @param profile [Legato::Management::Profile] the profile to query GA against
     # @param options [Hash] options:
     #   * start_date
@@ -92,7 +92,7 @@ module Legato
     end
 
     # Builds a `query` and sets the `realtime` property
-    # 
+    #
     # @return [Query] a new query with `realtime` property set
     def realtime
       Query.new(self).realtime
