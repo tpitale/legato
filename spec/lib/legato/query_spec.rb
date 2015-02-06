@@ -386,6 +386,17 @@ describe Legato::Query do
         }
       end
 
+      it "supports string formatted dates" do
+        @query.start_date = "2014-01-01"
+        @query.end_date = "yesterday"
+
+        @query.to_params.should == {
+          'start-date' => "2014-01-01",
+          'end-date' => "yesterday",
+          'fields' => Legato::Query::REQUEST_FIELDS,
+        }
+      end
+
       it 'includes the limit' do
         @query.limit = 1000
         @query.to_params['max-results'].should == 1000
