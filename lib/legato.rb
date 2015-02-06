@@ -25,7 +25,11 @@ module Legato
   end
 
   def self.format_time(t)
-    t.strftime('%Y-%m-%d')
+    if t.is_a?(String)
+      t
+    else
+      t.strftime('%Y-%m-%d')
+    end
   end
 
   def self.and_join_character
