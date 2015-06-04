@@ -9,8 +9,7 @@ module Legato
     # @param *fields [Symbol] the names of the fields to retrieve
     # @return [ListParameter] the set of all metrics
     def metrics(*fields)
-      fields, options = options_from_fields(fields)
-      @metrics ||= ListParameter.new(:metrics, [], options.fetch(:tracking_scope, "ga"))
+      @metrics ||= ListParameter.new(:metrics, [])
       @metrics << fields
     end
 
@@ -19,8 +18,7 @@ module Legato
     # @param *fields [Symbol] the names of the fields to retrieve
     # @return [ListParameter] the set of all dimensions
     def dimensions(*fields)
-      fields, options = options_from_fields(fields)
-      @dimensions ||= ListParameter.new(:dimensions, [], options.fetch(:tracking_scope, "ga"))
+      @dimensions ||= ListParameter.new(:dimensions, [])
       @dimensions << fields
     end
 
@@ -97,11 +95,5 @@ module Legato
     def realtime
       Query.new(self).realtime
     end
-
-    def options_from_fields(fields)
-      options = fields.pop if fields.last.is_a?(Hash)
-      [fields, (options || {})]
-    end
-
   end
 end
