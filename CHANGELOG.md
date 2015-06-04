@@ -1,3 +1,9 @@
+## Legato 0.5.0 ##
+
+*   Use Query#tracking_scope when converting `metrics`, `dimensions`, and `sort` list of parameters with `to_params`
+
+    *Tony Pitale*
+
 ## Legato 0.4.0 ##
 
 *   Adds support to lookup parent `web_property` or `account` from a child `profile`.
