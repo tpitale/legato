@@ -182,7 +182,7 @@ module Legato
     end
 
     def sort=(arr)
-      @sort = Legato::ListParameter.new(:sort, arr, tracking_scope)
+      @sort = Legato::ListParameter.new(:sort, arr)
     end
 
     def segment
@@ -221,7 +221,7 @@ module Legato
       }
 
       [metrics, dimensions, sort].each do |list|
-        params.merge!(list.to_params) unless list.nil?
+        params.merge!(list.to_params(tracking_scope)) unless list.nil?
       end
 
       params.reject {|k,v| v.nil? || v.to_s.strip.length == 0}

@@ -1,12 +1,11 @@
 module Legato
   class ListParameter
 
-    attr_reader :name, :tracking_scope
+    attr_reader :name
 
-    def initialize(name, elements=[], tracking_scope = "ga")
+    def initialize(name, elements=[])
       @name = name
       @elements = Set.new Array.wrap(elements).compact
-      @tracking_scope = tracking_scope
     end
 
     def name
@@ -22,7 +21,7 @@ module Legato
       @elements.to_a
     end
 
-    def to_params
+    def to_params(tracking_scope)
       value = elements.map{|element| Legato.to_ga_string(element, tracking_scope)}.join(',')
       value.empty? ? {} : {name => value}
     end

@@ -29,7 +29,7 @@ describe Legato::ListParameter do
 
     it 'converts itself to params' do
       @list_parameter << :pageviews
-      @list_parameter.to_params.should == {"metrics" => "ga:exits,ga:pageviews"}
+      @list_parameter.to_params("ga").should == {"metrics" => "ga:exits,ga:pageviews"}
     end
   end
 end
