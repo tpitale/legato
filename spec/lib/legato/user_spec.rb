@@ -60,5 +60,17 @@ describe Legato::User do
       @user.profiles
       Legato::Management::Profile.should have_received(:all).with(@user)
     end
+
+    it 'has segments' do
+      Legato::Management::Segment.stubs(:all)
+      @user.segments
+      Legato::Management::Segment.should have_received(:all).with(@user)
+    end
+
+    it 'has goals' do
+      Legato::Management::Goal.stubs(:all)
+      @user.goals
+      Legato::Management::Goal.should have_received(:all).with(@user)
+    end
   end
 end

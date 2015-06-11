@@ -47,6 +47,16 @@ module Legato
       Management::Profile.all(self)
     end
 
+    # All the `Segment` records available to this user
+    def segments
+      Management::Segment.all(self)
+    end
+
+    # All the `Goal` records available to this user
+    def goals
+      Management::Goal.all(self)
+    end
+
     def url_for(query)
       raise "invalid tracking_scope" unless tracking_scope_valid?(query.tracking_scope)
 
