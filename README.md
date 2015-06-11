@@ -104,6 +104,10 @@ Return entries with exits counts greater than or equal to 2000
 
 ```ruby
 filter(:high_exits) {gte(:exits, 2000)}
+
+# or ...
+
+filter :high_exits, &lambda {gte(:exits, 2000)}
 ```
 
 Return entries with pageview metric less than or equal to 200
