@@ -1,3 +1,11 @@
+## Legato 0.5.1 ##
+
+*   `Legato::User#segments`
+*   `Legato::User#goals`
+*   README fixes to `filter` block syntax
+
+    *Yuji Yamamoto*
+
 ## Legato 0.5.0 ##
 
 *   Use Query#tracking_scope when converting `metrics`, `dimensions`, and `sort` list of parameters with `to_params`
