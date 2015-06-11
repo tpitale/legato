@@ -103,25 +103,29 @@ Inside of any `Legato::Model` class, the method `filter` is available (like `met
 Return entries with exits counts greater than or equal to 2000
 
 ```ruby
+filter(:high_exits) {gte(:exits, 2000)}
+
+# or ...
+
 filter :high_exits, &lambda {gte(:exits, 2000)}
 ```
 
 Return entries with pageview metric less than or equal to 200
 
 ```ruby
-filter :low_pageviews, &lambda {lte(:pageviews, 200)}
+filter(:low_pageviews) {lte(:pageviews, 200)}
 ```
 
 Filters with dimensions
 
 ```ruby
-filter :for_browser, &lambda {|browser| matches(:browser, browser)}
+filter(:for_browser) {|browser| matches(:browser, browser)}
 ```
 
 Filters with OR
 
 ```ruby
-filter :browsers, &lambda {|*browsers| browsers.map {|browser| matches(:browser, browser)}}
+filter(:browsers) {|*browsers| browsers.map {|browser| matches(:browser, browser)}}
 ```
 
 
@@ -162,7 +166,7 @@ Be sure to pass the appropriate number of arguments matching the lambda for your
 For a filter defined like this:
 
 ```ruby
-filter :browsers, &lambda {|*browsers| browsers.map {|browser| matches(:browser, browser)}}
+filter(:browsers) {|*browsers| browsers.map {|browser| matches(:browser, browser)}}
 ```
 
 We can use it like this, passing any number of arguments:
