@@ -29,7 +29,7 @@ module Legato
 
     attr_reader :parent_klass
     attr_accessor :profile, :start_date, :end_date
-    attr_accessor :sort, :limit, :offset, :quota_user, :sampling_level #, :segment # individual, overwritten
+    attr_accessor :sort, :limit, :offset, :quota_user, :sampling_level, :segment_id #, :segment # individual, overwritten
     attr_accessor :filters, :segment_filters # combined, can be appended to
     attr_accessor :tracking_scope
 
@@ -91,7 +91,7 @@ module Legato
     end
 
     def apply_basic_options(options)
-      [:sort, :limit, :offset, :start_date, :end_date, :quota_user, :sampling_level].each do |key| #:segment
+      [:sort, :limit, :offset, :start_date, :end_date, :quota_user, :sampling_level, :segment_id].each do |key| #:segment
         self.send("#{key}=".to_sym, options[key]) if options.has_key?(key)
       end
     end
@@ -189,9 +189,9 @@ module Legato
       "sessions::condition::#{segment_filters.to_params}" if segment_filters.any?
     end
 
-    # def segment_id
-    #   segment.nil? ? nil : "gaid::#{segment}"
-    # end
+    def segment_id=(segment_id)
+      @segment_id = "gaid::#{segment_id}"
+    end
 
     def profile_id
       profile && Legato.to_ga_string(profile.id)
@@ -213,7 +213,7 @@ module Legato
         'end-date' => Legato.format_time(end_date),
         'max-results' => limit,
         'start-index' => offset,
-        'segment' => segment,
+        'segment' => segment_id || segment,
         'filters' => filters.to_params, # defaults to AND filtering
         'fields' => REQUEST_FIELDS,
         'quotaUser' => quota_user,
