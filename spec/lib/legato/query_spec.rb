@@ -323,6 +323,12 @@ describe Legato::Query do
         @query.quota_user.should == 'an id'
       end
 
+      it "sets the segment_id" do
+        segment_id = '123122534'
+        @query.apply_options({:segment_id => segment_id})
+        @query.segment_id.should == "gaid::#{segment_id}"
+      end
+
       context "with Time" do
         before :each do
           @now = Time.now
@@ -437,6 +443,20 @@ describe Legato::Query do
         @query.stubs(:segment_filters).returns(segment_filters)
 
         @query.to_params['segment'].should == 'sessions::condition::ga::parameter'
+      end
+
+      it 'includes segment_id' do
+        @query.stubs(:segment_id).returns('gaid::12453453')
+
+        @query.to_params['segment'].should == 'gaid::12453453'
+      end
+
+      it 'includes segment_id and segment_filters' do
+        segment_filters = stub(:to_params => 'ga::parameter', :any? => true)
+        @query.stubs(:segment_filters).returns(segment_filters)
+        @query.stubs(:segment_id).returns('gaid::12453453')
+
+        @query.to_params['segment'].should == 'gaid::12453453'
       end
 
       it 'includes metrics' do

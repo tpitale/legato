@@ -81,6 +81,7 @@ module Legato
     #   * offset
     #   * sort
     #   * quota_user
+    #   * segment_id
     # @return [Query] a new query with all the filters/segments defined on the
     #   model, allowing for chainable behavior before kicking of the request
     #   to Google Analytics which returns the result data
