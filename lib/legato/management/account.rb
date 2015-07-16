@@ -13,16 +13,19 @@ module Legato
 
       attr_accessor :id, :name, :user
 
-      def initialize(attributes, user, web_properties=nil)
+      def initialize(attributes, user)
         self.user = user
 
         self.id = attributes['id'] || attributes[:id]
         self.name = attributes['name'] || attributes[:name]
-        @web_properties = web_properties
       end
 
       def web_properties
         @web_properties ||= WebProperty.for_account(self)
+      end
+
+      def web_properties=(value)
+        @web_properties = value
       end
 
       def profiles
@@ -38,14 +41,13 @@ module Legato
       end
 
       def self.build_from_summary(attributes, user)
-        web_properties_attributes = attributes['webProperties'] || attributes[:webProperties]
+        properties = attributes['webProperties'] || attributes[:webProperties]
+        account = Account.new(attributes, user)
 
-        summary_properties = web_properties_attributes.inject([]) { |props, web_property_attributes|
-          web_property_attributes['accountId'] = attributes['id'] || attributes[:id]
-          props << WebProperty.build_from_summary(web_property_attributes, user)
-        }
+        props = properties.inject([]) { |props, property| props << WebProperty.build_from_summary(property, user, account) }
 
-        Account.new(attributes, user, summary_properties)
+        account.web_properties = props
+        account
       end
     end
   end

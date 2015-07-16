@@ -42,19 +42,32 @@ module Legato
       end
 
       def account
-        Account.from_child(self)
+        @account ||= Account.from_child(self)
+      end
+
+      def account=(value)
+        @account = value
+        @account_id = value.id
       end
 
       def web_property
-        WebProperty.from_child(self)
+        @web_property ||= WebProperty.from_child(self)
+      end
+
+      def web_property=(value)
+        @web_property = value
+        @web_property_id = value.id
       end
 
       def goals
         Goal.for_profile(self)
       end
 
-      def self.build_from_summary(attributes, user)
-        Profile.new(attributes, user)
+      def self.build_from_summary(attributes, user, account, web_property)
+        profile = Profile.new(attributes, user)
+        profile.account = account
+        profile.web_property = web_property
+        profile
       end
     end
   end

@@ -60,6 +60,7 @@ describe Legato::Management::AccountSummary do
 
     before do
       @user = stub(:api_key => nil)
+      puts sample_dict.inspect
       @account_summaries = Legato::Management::AccountSummary.new(sample_dict, @user)
     end
 
