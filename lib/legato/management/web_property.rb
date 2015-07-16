@@ -21,7 +21,7 @@ module Legato
       attr_accessor *GA_ATTRIBUTES.keys
       attr_accessor :user, :attributes
 
-      def initialize(attributes, user)
+      def initialize(attributes, user, profiles=nil)
         self.user = user
 
         GA_ATTRIBUTES.each do |key,string_key|
@@ -29,6 +29,7 @@ module Legato
         end
 
         self.attributes = attributes
+        @profiles = profiles
       end
 
       def self.for_account(account)
@@ -36,17 +37,28 @@ module Legato
       end
 
       def profiles
-        Profile.for_web_property(self)
+        @profiles ||= Profile.for_web_property(self)
       end
 
       def account
-        @account ||= Account.from_child(self)
+        Account.from_child(self)
       end
 
       def self.from_child(child)
         path = new({:id => child.web_property_id, :account_id => child.account_id}, nil).path
 
         get(child.user, path)
+      end
+
+      def self.build_from_summary(attributes, user)
+        profiles = attributes['profiles'] || attributes[:profiles]
+
+        summary_profiles = profiles.inject([]) { |summary_profiles, profile|
+          profile['webPropertyId'] = attributes['id'] || attributes[:id]
+          summary_profiles << Profile.build_from_summary(profile, user)
+        }
+
+        WebProperty.new(attributes, user, summary_profiles)
       end
     end
   end

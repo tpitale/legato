@@ -37,6 +37,10 @@ module Legato
       Management::Account.all(self)
     end
 
+    def account_summary
+      Management::AccountSummary.all(self)
+    end
+
     # All the `WebProperty` records available to this user
     def web_properties
       Management::WebProperty.all(self)
