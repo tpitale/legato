@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Legato::Management::AccountSummaries do
+describe Legato::Management::AccountSummary do
   sample_dict = {
       :id => 12345,
       :kind => "analytics#accountSummary",
@@ -53,21 +53,51 @@ describe Legato::Management::AccountSummaries do
       ]
   }
 
-  context "The Account Summaries class" do
+  context "The AccountSummary class" do
     def self.subject_class_name
-      "account_summaries"
+      "account_summary"
+    end
+
+    before do
+      @user = stub(:api_key => nil)
+      @account_summaries = Legato::Management::AccountSummary.new(sample_dict, @user)
     end
 
     it_behaves_like "a management finder"
 
-    it 'creates a new account summaries instance from a hash of attributes' do
-      user = stub(:api_key => nil)
-      account_summaries = Legato::Management::AccountSummaries.new(sample_dict, user)
-      account_summaries.user.should == user
-      account_summaries.account.id.should == 12345
-      account_summaries.account.name.should == "Account 1"
-      account_summaries.summary_web_properties.size.should == 2
-      account_summaries.summary_profiles.size.should == 4
+    it 'creates a new account summary instance from a hash of attributes' do
+      @account_summaries.user.should == @user
+      @account_summaries.account.class == Legato::Management::Account
+      @account_summaries.web_properties.first.class == Legato::Management::WebProperty
+      @account_summaries.profiles.first.class == Legato::Management::Profile
+    end
+
+    it 'builds the account instance' do
+      @account_summaries.account.id.should == 12345
+      @account_summaries.account.name.should == "Account 1"
+      @account_summaries.account.user.should == @user
+    end
+
+    it "builds the web_properties instances" do
+      @account_summaries.web_properties.size.should == 2
+      @account_summaries.web_properties.first.attributes[:kind].should == "analytics#webPropertySummary"
+      @account_summaries.web_properties.first.attributes[:internalWebPropertyId].should == 123
+      @account_summaries.web_properties.first.attributes[:level].should == "STANDARD"
+      @account_summaries.web_properties.last.attributes[:kind].should == "analytics#webPropertySummary"
+      @account_summaries.web_properties.last.attributes[:internalWebPropertyId].should == 456
+      @account_summaries.web_properties.last.attributes[:level].should == "STANDARD"
+    end
+
+    it "builds the profiles" do
+      @account_summaries.profiles.size.should == 4
+      @account_summaries.profiles[0].attributes[:kind].should == "analytics#profileSummary"
+      @account_summaries.profiles[0].attributes[:type].should == "WEB"
+      @account_summaries.profiles[1].attributes[:kind].should == "analytics#profileSummary"
+      @account_summaries.profiles[1].attributes[:type].should == "WEB"
+      @account_summaries.profiles[2].attributes[:kind].should == "analytics#profileSummary"
+      @account_summaries.profiles[2].attributes[:type].should == "WEB"
+      @account_summaries.profiles[3].attributes[:kind].should == "analytics#profileSummary"
+      @account_summaries.profiles[3].attributes[:type].should == "WEB"
     end
   end
 end
