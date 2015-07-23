@@ -20,6 +20,7 @@ module Legato
 
       attr_accessor *GA_ATTRIBUTES.keys
       attr_accessor :user, :attributes
+      attr_writer :account, :profiles
 
       def initialize(attributes, user)
         self.user = user
@@ -39,17 +40,8 @@ module Legato
         @profiles ||= Profile.for_web_property(self)
       end
 
-      def profiles=(value)
-        @profiles = value
-      end
-
       def account
         @account ||= Account.from_child(self)
-      end
-
-      def account=(value)
-        @account = value
-        @account_id = value.id
       end
 
       def self.from_child(child)
@@ -59,17 +51,16 @@ module Legato
       end
 
       def self.build_from_summary(attributes, user, account)
-        profiles = attributes['profiles'] || attributes[:profiles]
-        attributes.delete('profiles')
-        web_property = WebProperty.new(attributes, user)
+        profiles = attributes.delete('profiles') || attributes.delete(:profiles)
 
-        summary_profiles = profiles.inject([]) { |summary_profiles, profile|
-          summary_profiles << Profile.build_from_summary(profile, user, account, web_property)
+        WebProperty.new(attributes, user).tap { |web_property|
+          web_property.account = account
+          web_property.profiles = profiles.map { |profile|
+            profile['accountId'] = account.id
+            profile['webPropertyId'] = web_property.id
+            Profile.build_from_summary(profile, user, account, web_property)
+          }
         }
-
-        web_property.account = account
-        web_property.profiles = summary_profiles
-        web_property
       end
     end
   end

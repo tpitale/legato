@@ -12,6 +12,7 @@ module Legato
       end
 
       attr_accessor :id, :name, :user
+      attr_writer :web_properties
 
       def initialize(attributes, user)
         self.user = user
@@ -24,16 +25,10 @@ module Legato
         @web_properties ||= WebProperty.for_account(self)
       end
 
-      def web_properties=(value)
-        @web_properties = value
-      end
-
       def profiles
-        if @web_properties
-          @web_properties.inject([]) { |profiles, prop| profiles.concat(prop.profiles) }
-        else
+        @web_properties ?
+          @web_properties.map { |property| property.profiles }.flatten :
           Profile.for_account(self)
-        end
       end
 
       def self.from_child(child)
@@ -42,12 +37,13 @@ module Legato
 
       def self.build_from_summary(attributes, user)
         properties = attributes['webProperties'] || attributes[:webProperties]
-        account = Account.new(attributes, user)
 
-        props = properties.inject([]) { |props, property| props << WebProperty.build_from_summary(property, user, account) }
-
-        account.web_properties = props
-        account
+        Account.new(attributes, user).tap { |account|
+          account.web_properties = properties.map { |property|
+            property['accountId'] = account.id
+            WebProperty.build_from_summary(property, user, account)
+          }
+        }
       end
     end
   end
