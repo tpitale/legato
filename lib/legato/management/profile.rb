@@ -22,6 +22,7 @@ module Legato
 
       attr_accessor *GA_ATTRIBUTES.keys
       attr_accessor :user, :attributes
+      attr_writer :account, :web_property
 
       def initialize(attributes, user)
         self.user = user
@@ -51,6 +52,13 @@ module Legato
 
       def goals
         Goal.for_profile(self)
+      end
+
+      def self.build_from_summary(attributes, user, account, web_property)
+        Profile.new(attributes, user).tap { |profile|
+          profile.account = account
+          profile.web_property = web_property
+        }
       end
     end
   end
