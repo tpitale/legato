@@ -253,6 +253,7 @@ profile.exit.high_exits.low_pageviews
 Legato::Management::Account.all(user)
 Legato::Management::WebProperty.all(user)
 Legato::Management::Profile.all(user)
+Legato::Management::Goal.all(user)
 ```
 ## Other Parameters Can be Passed to a call to #results ##
 
