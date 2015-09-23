@@ -5,6 +5,12 @@ module Legato
     MONTH = 2592000
     REQUEST_FIELDS = 'columnHeaders/name,rows,totalResults,totalsForAllResults'
 
+    VALID_TRACKING_SCOPES = {
+      'ga' => 'ga',
+      'mcf' => 'mcf',
+      'rt' => 'realtime'
+    }
+
     def define_filter(name, &block)
       (class << self; self; end).instance_eval do
         define_method(name) {|*args| apply_filter(*args, &block)}
@@ -229,10 +235,23 @@ module Legato
 
     def to_query_string
       list = to_params.map {|k,v| [k,v].join("=")}
-      "?#{list.join("&")}"
+      "#{list.join("&")}"
+    end
+
+    def base_url
+      raise "invalid tracking_scope" unless tracking_scope_valid?
+
+      endpoint = VALID_TRACKING_SCOPES[tracking_scope]
+
+      "https://www.googleapis.com/analytics/v3/data/#{endpoint}"
     end
 
     private
+
+    def tracking_scope_valid?
+      VALID_TRACKING_SCOPES.keys.include?(tracking_scope)
+    end
+
     def request_for_query
       profile.user.request(self)
     end
