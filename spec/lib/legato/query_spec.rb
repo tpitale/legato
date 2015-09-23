@@ -360,6 +360,28 @@ describe Legato::Query do
       end
     end
 
+    context "with the scope set" do
+      it 'raises when an invalid scope is passed in' do
+        @query.tracking_scope = "what"
+        expect { @query.base_url }.to raise_error
+      end
+
+      it 'sets the correct endpoint url' do
+        @query.tracking_scope = "mcf"
+        expect(@query.base_url).to eql("https://www.googleapis.com/analytics/v3/data/mcf")
+      end
+
+      it 'has the correct api endpoint' do
+        @query.tracking_scope = "ga"
+        expect(@query.base_url).to eql("https://www.googleapis.com/analytics/v3/data/ga")
+      end
+
+      it 'has the realtime api endpoint' do
+        @query.tracking_scope = "rt"
+        expect(@query.base_url).to eql("https://www.googleapis.com/analytics/v3/data/realtime")
+      end
+    end
+
     it_defines_operators :eql, :not_eql, :gt, :gte, :lt, :lte, :matches,
       :does_not_match, :contains, :does_not_contain, :substring, :not_substring
 

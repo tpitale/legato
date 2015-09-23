@@ -41,9 +41,11 @@ module Legato
   end
 end
 
+require 'legato/request'
 require 'legato/user'
 require 'legato/profile_methods'
 
+require 'legato/management/query'
 require 'legato/management/finder'
 require 'legato/management/segment'
 require 'legato/management/account'

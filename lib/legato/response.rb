@@ -21,6 +21,14 @@ module Legato
       Hash[data["totalsForAllResults"].map{|k,v| [Legato.from_ga_string(k), number_for(v)]}]
     end
 
+    def rows
+      Array.wrap(data['rows']).compact
+    end
+
+    def items
+      Array.wrap(data['items']).compact
+    end
+
     private
     def headers
       data['columnHeaders']
@@ -28,10 +36,6 @@ module Legato
 
     def fields
       headers.map {|header| Legato.from_ga_string(header['name'])}
-    end
-
-    def rows
-      Array.wrap(data['rows']).compact
     end
 
     def raw_attributes
