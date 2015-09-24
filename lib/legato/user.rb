@@ -1,6 +1,6 @@
 module Legato
   class User
-    attr_accessor :access_token, :api_key
+    attr_accessor :access_token, :api_key, :quota_user, :user_ip
 
     def initialize(token, api_key = nil)
       self.access_token = token
@@ -9,6 +9,8 @@ module Legato
 
     # TODO: refactor into request object again
     def request(query)
+      append_quotas_to_query(query)
+
       Request.new(self, query).response
     end
 
@@ -41,6 +43,12 @@ module Legato
     # All the `Goal` records available to this user
     def goals
       Management::Goal.all(self)
+    end
+
+    private
+    def append_quotas_to_query(query)
+      query.quota_user = quota_user if quota_user
+      query.user_ip = user_ip if user_ip
     end
   end
 end

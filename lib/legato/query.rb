@@ -35,7 +35,7 @@ module Legato
 
     attr_reader :parent_klass
     attr_accessor :profile, :start_date, :end_date
-    attr_accessor :sort, :limit, :offset, :quota_user, :sampling_level, :segment_id #, :segment # individual, overwritten
+    attr_accessor :sort, :limit, :offset, :quota_user, :user_ip, :sampling_level, :segment_id #, :segment # individual, overwritten
     attr_accessor :filters, :segment_filters # combined, can be appended to
     attr_accessor :tracking_scope
 
@@ -97,7 +97,7 @@ module Legato
     end
 
     def apply_basic_options(options)
-      [:sort, :limit, :offset, :start_date, :end_date, :quota_user, :sampling_level, :segment_id].each do |key| #:segment
+      [:sort, :limit, :offset, :start_date, :end_date, :quota_user, :user_ip, :sampling_level, :segment_id].each do |key| #:segment
         self.send("#{key}=".to_sym, options[key]) if options.has_key?(key)
       end
     end
@@ -223,6 +223,7 @@ module Legato
         'filters' => filters.to_params, # defaults to AND filtering
         'fields' => REQUEST_FIELDS,
         'quotaUser' => quota_user,
+        'userIp' => user_ip,
         'samplingLevel' => sampling_level
       }
 
@@ -234,8 +235,7 @@ module Legato
     end
 
     def to_query_string
-      list = to_params.map {|k,v| [k,v].join("=")}
-      "#{list.join("&")}"
+      to_params.map {|k,v| [k,v].join("=")}.join("&")
     end
 
     def base_url

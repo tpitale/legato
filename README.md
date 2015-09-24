@@ -287,6 +287,17 @@ query.realtime? #=> true
 query.tracking_scope #=> 'rt'
 ```
 
+## Managing Quotas ##
+
+Assigning a `quota_user` or `user_ip` on a user instance will be used by management and query requests.
+
+    ```ruby
+    user = Legato::User.new(access_token)
+    user.quota_user = 'some_unique_user_identifier'
+    # OR
+    user.user_ip = ip_address_from_a_web_user_or_something
+    ```
+
 ## License ##
 
   (The MIT License)
