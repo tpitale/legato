@@ -1,3 +1,12 @@
+## Legato 0.5.2 ##
+
+* Refactor `User.request` into a `Request` class
+* Implement a query class for management requests
+* Use `Request` for management with new query
+* Add `quota_user` and `user_ip` on `User` for quota management
+
+    *Tony Pitale*
+
 ## Legato 0.5.1 ##
 
 *   `Legato::User#segments`
