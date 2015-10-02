@@ -132,6 +132,15 @@ describe Legato::Query do
       @query.should have_received(:apply_options).with({:sort => [:city]})
     end
 
+    it 'creates a new query if collection has already been loaded' do
+      @query.stubs(:loaded?).returns(true)
+
+      new_query = @query.results({offset: 10_000})
+
+      expect(new_query).to_not eql(@query)
+      expect(new_query.offset).to eql(10_000)
+    end
+
     context "when modifying dimensions" do
       it 'changes the query dimensions' do
         @query.dimensions << :city
