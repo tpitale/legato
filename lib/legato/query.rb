@@ -170,9 +170,9 @@ module Legato
     def results(profile=nil, options={})
       query = loaded? ? Query.from_query(self) : self
 
-      options, profile = profile, nil if profile.is_a?(Hash)
+      options, profile = profile, self.profile if profile.is_a?(Hash)
 
-      query.profile = profile unless profile.nil?
+      query.profile = profile
       query.apply_options(options)
       query
     end

@@ -123,12 +123,13 @@ describe Legato::Query do
     end
 
     it 'sets options and returns self' do
+      profile = @query.profile
       @query.stubs(:profile=)
       @query.stubs(:apply_options)
 
       @query.results({:sort => [:city]}).should == @query
 
-      @query.should have_received(:profile=).never
+      @query.should have_received(:profile=).with(profile)
       @query.should have_received(:apply_options).with({:sort => [:city]})
     end
 
