@@ -1,3 +1,9 @@
+## Legato 0.6.1 ##
+
+* Fix bug in `Query` where calling `results` did not retain previous basic options
+
+    *Tony Pitale*
+
 ## Legato 0.6.0 ##
 
 * Fix bug in `Query` where calling `results` after loading a collection would not load new data into the collection
