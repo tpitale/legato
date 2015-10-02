@@ -5,6 +5,11 @@ module Legato
     MONTH = 2592000
     REQUEST_FIELDS = 'columnHeaders/name,rows,totalResults,totalsForAllResults'
 
+    BASIC_OPTION_KEYS = [
+      :sort, :limit, :offset, :start_date, :end_date, :quota_user,
+      :user_ip, :sampling_level, :segment_id
+    ]
+
     VALID_TRACKING_SCOPES = {
       'ga' => 'ga',
       'mcf' => 'mcf',
@@ -101,9 +106,14 @@ module Legato
     end
 
     def apply_basic_options(options)
-      [:sort, :limit, :offset, :start_date, :end_date, :quota_user, :user_ip, :sampling_level, :segment_id].each do |key| #:segment
+      BASIC_OPTION_KEYS.each do |key| #:segment
         self.send("#{key}=".to_sym, options[key]) if options.has_key?(key)
       end
+    end
+
+    # return a hash of basic options to merge
+    def basic_options
+      Hash[BASIC_OPTION_KEYS.map { |k| [k, send(k)] }].reject {|_,v| v.nil?}
     end
 
     # def apply_filter_options(filter_options)
@@ -173,7 +183,7 @@ module Legato
       options, profile = profile, self.profile if profile.is_a?(Hash)
 
       query.profile = profile
-      query.apply_options(options)
+      query.apply_options(self.basic_options.merge(options))
       query
     end
 
