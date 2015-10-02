@@ -39,6 +39,10 @@ module Legato
     attr_accessor :filters, :segment_filters # combined, can be appended to
     attr_accessor :tracking_scope
 
+    def self.from_query(query)
+      new(query.parent_klass, query.tracking_scope)
+    end
+
     def initialize(klass, tracking_scope = "ga")
       @loaded = false
       @parent_klass = klass
@@ -164,11 +168,13 @@ module Legato
 
     # if no filters, we use results to add profile
     def results(profile=nil, options={})
-      options, profile = profile, nil if profile.is_a?(Hash)
+      query = loaded? ? Query.from_query(self) : self
 
-      self.profile = profile unless profile.nil?
-      apply_options(options)
-      self
+      options, profile = profile, self.profile if profile.is_a?(Hash)
+
+      query.profile = profile
+      query.apply_options(options)
+      query
     end
 
     # def total_results

@@ -123,13 +123,23 @@ describe Legato::Query do
     end
 
     it 'sets options and returns self' do
+      profile = @query.profile
       @query.stubs(:profile=)
       @query.stubs(:apply_options)
 
       @query.results({:sort => [:city]}).should == @query
 
-      @query.should have_received(:profile=).never
+      @query.should have_received(:profile=).with(profile)
       @query.should have_received(:apply_options).with({:sort => [:city]})
+    end
+
+    it 'creates a new query if collection has already been loaded' do
+      @query.stubs(:loaded?).returns(true)
+
+      new_query = @query.results({offset: 10_000})
+
+      expect(new_query).to_not eql(@query)
+      expect(new_query.offset).to eql(10_000)
     end
 
     context "when modifying dimensions" do
