@@ -1,3 +1,9 @@
+## Legato 0.6.2 ##
+
+* Add `filters` and `segment_filters` to query duplicating
+
+    *Tony Pitale*
+
 ## Legato 0.6.1 ##
 
 * Fix bug in `Query` where calling `results` did not retain previous basic options
