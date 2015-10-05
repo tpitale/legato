@@ -45,14 +45,14 @@ module Legato
     attr_accessor :tracking_scope
 
     def self.from_query(query)
-      new(query.parent_klass, query.tracking_scope)
+      new(query.parent_klass, query.tracking_scope, query.filters, query.segment_filters)
     end
 
-    def initialize(klass, tracking_scope = "ga")
+    def initialize(klass, tracking_scope = "ga", filters = FilterSet.new, segment_filters = FilterSet.new)
       @loaded = false
       @parent_klass = klass
-      self.filters = FilterSet.new
-      self.segment_filters = FilterSet.new
+      self.filters = filters
+      self.segment_filters = segment_filters
       self.start_date = Time.now - MONTH
       self.end_date = Time.now
       self.tracking_scope = tracking_scope
@@ -97,6 +97,10 @@ module Legato
       if options.has_key?(:sort)
         # warn
         options[:sort] = options.delete(:sort)
+      end
+
+      if options.has_key?(:profile)
+        self.profile = options.delete(:profile)
       end
 
       apply_basic_options(options)

@@ -116,13 +116,13 @@ describe "Legato::Model" do
     it 'has results' do
       options = {}
       profile = stub
-      query = stub(:results => "a query")
+      query = stub(:apply_options => "a query")
       Legato::Query.stubs(:new).returns(query)
 
       @model.results(profile, options).should == "a query"
 
       Legato::Query.should have_received(:new).with(@model)
-      query.should have_received(:results).with(profile, options)
+      query.should have_received(:apply_options).with(options.merge(:profile => profile))
     end
 
     it 'has a query with realtime set' do
