@@ -233,13 +233,13 @@ module Legato
     end
 
     def to_params
-      base_params.dup.tap do |params|
+      base_params.tap do |params|
 
-      [metrics, dimensions, sort].each do |list|
-        params.merge!(list.to_params(tracking_scope)) unless list.nil?
+        [metrics, dimensions, sort].compact.each do |list|
+          params.merge!(list.to_params(tracking_scope))
+        end
+
       end
-
-      end.reject! {|k,v| v.nil? || v.to_s.strip.length == 0}
     end
 
     def to_query_string
@@ -269,7 +269,7 @@ module Legato
         'quotaUser' => quota_user,
         'userIp' => user_ip,
         'samplingLevel' => sampling_level
-      }
+      }.reject! {|_,v| v.nil? || v.to_s.strip.length == 0}
     end
 
     def tracking_scope_valid?
