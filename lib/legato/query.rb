@@ -233,25 +233,13 @@ module Legato
     end
 
     def to_params
-      params = {
-        'ids' => profile_id,
-        'start-date' => Legato.format_time(start_date),
-        'end-date' => Legato.format_time(end_date),
-        'max-results' => limit,
-        'start-index' => offset,
-        'segment' => segment_id || segment,
-        'filters' => filters.to_params, # defaults to AND filtering
-        'fields' => REQUEST_FIELDS,
-        'quotaUser' => quota_user,
-        'userIp' => user_ip,
-        'samplingLevel' => sampling_level
-      }
+      base_params.dup.tap do |params|
 
       [metrics, dimensions, sort].each do |list|
         params.merge!(list.to_params(tracking_scope)) unless list.nil?
       end
 
-      params.reject {|k,v| v.nil? || v.to_s.strip.length == 0}
+      end.reject! {|k,v| v.nil? || v.to_s.strip.length == 0}
     end
 
     def to_query_string
@@ -267,6 +255,22 @@ module Legato
     end
 
     private
+
+    def base_params
+      {
+        'ids' => profile_id,
+        'start-date' => Legato.format_time(start_date),
+        'end-date' => Legato.format_time(end_date),
+        'max-results' => limit,
+        'start-index' => offset,
+        'segment' => segment_id || segment,
+        'filters' => filters.to_params, # defaults to AND filtering
+        'fields' => REQUEST_FIELDS,
+        'quotaUser' => quota_user,
+        'userIp' => user_ip,
+        'samplingLevel' => sampling_level
+      }
+    end
 
     def tracking_scope_valid?
       VALID_TRACKING_SCOPES.keys.include?(tracking_scope)
