@@ -11,15 +11,14 @@ module Legato
         "/accounts/#{id}"
       end
 
-      attr_accessor :id, :name, :user
+      GA_ATTRIBUTES = {
+        :id => 'id',
+        :name => 'name'
+      }
+
+      include Model
+
       attr_writer :web_properties
-
-      def initialize(attributes, user)
-        self.user = user
-
-        self.id = attributes['id'] || attributes[:id]
-        self.name = attributes['name'] || attributes[:name]
-      end
 
       def web_properties
         @web_properties ||= WebProperty.for_account(self)

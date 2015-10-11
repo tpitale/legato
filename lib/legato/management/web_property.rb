@@ -18,19 +18,9 @@ module Legato
         :website_url => 'websiteUrl'
       }
 
-      attr_accessor *GA_ATTRIBUTES.keys
-      attr_accessor :user, :attributes
+      include Model
+
       attr_writer :account, :profiles
-
-      def initialize(attributes, user)
-        self.user = user
-
-        GA_ATTRIBUTES.each do |key,string_key|
-          self.send("#{key}=", attributes.delete(string_key) || attributes.delete(key))
-        end
-
-        self.attributes = attributes
-      end
 
       def self.for_account(account)
         all(account.user, account.path+'/webproperties')
