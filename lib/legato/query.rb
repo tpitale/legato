@@ -79,6 +79,9 @@ module Legato
     end
 
     def apply_filter_expression(filter_set, *args, &block)
+      # if given :filters or :segment_filters, make a set
+      filter_set = send(filter_set) if filter_set.is_a?(Symbol)
+
       @profile = extract_profile(args)
 
       join_character = Legato.and_join_character # filters are joined by AND

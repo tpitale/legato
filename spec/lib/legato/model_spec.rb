@@ -72,14 +72,14 @@ describe "Legato::Model" do
       end
 
       it 'returns a Query instance for a filter' do
-        query = stub(:apply_filter => "a query")
+        query = stub(:apply_filter_expression => "a query")
         Legato::Query.stubs(:new).returns(query)
 
         @model.filter :high, &@block
         @model.high('arg1').should == 'a query'
 
         Legato::Query.should have_received(:new).with(@model)
-        query.should have_received(:apply_filter).with('arg1')
+        query.should have_received(:apply_filter_expression).with(:filters, 'arg1')
       end
     end
 
@@ -99,14 +99,14 @@ describe "Legato::Model" do
       end
 
       it 'returns a Query instance for a segment' do
-        query = stub(:apply_segment_filter => "a query")
+        query = stub(:apply_filter_expression => "a query")
         Legato::Query.stubs(:new).returns(query)
 
         @model.segment :high, &@block
         @model.high('arg1').should == 'a query'
 
         Legato::Query.should have_received(:new).with(@model)
-        query.should have_received(:apply_segment_filter).with('arg1')
+        query.should have_received(:apply_filter_expression).with(:segment_filters, 'arg1')
       end
     end
 

@@ -33,16 +33,13 @@ module Legato
     #   parameters used for filtering the request to GA
     # @return [Proc] the body of newly defined method
     def filter(name, &block)
-      filters[name] = block
-
-      (class << self; self; end).instance_eval do
-        define_method(name) {|*args| Query.new(self).apply_filter(*args, &block)}
-      end
+      add_method_to_set(name, :filters, &block)
     end
 
     def segments
       @segments ||= {}
     end
+    alias :segment_filters :segments
 
     # Define a segment
     #
@@ -51,11 +48,7 @@ module Legato
     #   parameters used for segmenting the request to GA
     # @return [Proc] the body of newly defined method
     def segment(name, &block)
-      segments[name] = block
-
-      (class << self; self; end).instance_eval do
-        define_method(name) {|*args| Query.new(self).apply_segment_filter(*args, &block)}
-      end
+      add_method_to_set(name, :segment_filters, &block)
     end
 
     # Set the class used to make new instances of returned results from GA
@@ -95,6 +88,14 @@ module Legato
     # @return [Query] a new query with `realtime` property set
     def realtime
       Query.new(self).realtime
+    end
+
+    def add_method_to_set(name, type, &block)
+      send(type)[name] = block
+
+      (class << self; self; end).instance_eval do
+        define_method(name) {|*args| Query.new(self).apply_filter_expression(type, *args, &block)}
+      end
     end
   end
 end
