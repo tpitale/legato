@@ -32,7 +32,7 @@ module Legato
       methods.each do |method|
         class_eval <<-CODE
           def #{method}(field, value, join_character=nil)
-            Filter.new(field, :#{method}, value, join_character)
+            Filter.new(field, :#{method}, value, join_character, tracking_scope)
           end
         CODE
       end
