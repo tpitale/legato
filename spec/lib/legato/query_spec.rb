@@ -10,7 +10,7 @@ describe Legato::Query do
       it "returns a new filter for #{operator} to the set" do
         Legato::Filter.stubs(:new).returns("a filter")
         filter = @query.send(operator, :key, 2000)
-        Legato::Filter.should have_received(:new).with(:key, operator, 2000, nil)
+        Legato::Filter.should have_received(:new).with(:key, operator, 2000, nil, @query.tracking_scope)
       end
     end
   end
