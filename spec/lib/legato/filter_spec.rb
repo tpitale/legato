@@ -1,9 +1,14 @@
 require 'spec_helper'
 
 describe Legato::Filter do
+  let(:klass) { Class.new.tap { |k| k.extend(Legato::Model)} }
+  let(:query) { Legato::Query.new(klass) }
+
   context "a Filter instance with mcf" do
     before :each do
-      @filter = Legato::Filter.new(:exits, :lt, 1000, nil, "mcf")
+      query.tracking_scope = 'mcf'
+
+      @filter = Legato::Filter.new(query, :exits, :lt, 1000, nil)
     end
 
     it 'represents itself as a parameter' do
@@ -11,14 +16,14 @@ describe Legato::Filter do
     end
 
     it 'joins with another filter' do
-      filter2 = Legato::Filter.new(:pageviews, :gt, 1000, ',', "mcf")
+      filter2 = Legato::Filter.new(query, :pageviews, :gt, 1000, ',')
       filter2.join_with(@filter.to_param).should == "mcf:exits<1000,mcf:pageviews>1000"
     end
   end
 
   context "a Filter instance" do
     before :each do
-      @filter = Legato::Filter.new(:exits, :lt, 1000, nil)
+      @filter = Legato::Filter.new(query, :exits, :lt, 1000, nil)
     end
 
     it 'has a field' do
@@ -52,7 +57,7 @@ describe Legato::Filter do
     end
 
     it 'joins with another filter' do
-      filter2 = Legato::Filter.new(:pageviews, :gt, 1000, ',')
+      filter2 = Legato::Filter.new(query, :pageviews, :gt, 1000, ',')
 
       filter2.join_with(@filter.to_param).should == "ga:exits<1000,ga:pageviews>1000"
     end
