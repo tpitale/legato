@@ -1,3 +1,9 @@
+## Legato 0.7.0 ##
+
+* Ensure `Filter` changes its `tracking_scope` when the query's scope is changed (by calls to `realtime`).
+
+    *Tony Pitale*
+
 ## Legato 0.6.2 ##
 
 * Add `filters` and `segment_filters` to query duplicating
