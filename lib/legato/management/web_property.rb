@@ -41,8 +41,7 @@ module Legato
       end
 
       def self.build_from_summary(attributes, user, account)
-        profiles = attributes.delete('profiles') || attributes.delete(:profiles)
-        profiles ||= []
+        profiles = attributes.delete('profiles') || attributes.delete(:profiles) || []
 
         WebProperty.new(attributes, user).tap { |web_property|
           web_property.account = account

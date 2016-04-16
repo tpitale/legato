@@ -50,6 +50,14 @@ describe Legato::Management::AccountSummary do
               :type => "WEB4"
             }
           ]
+        },
+        {
+          :kind => "analytics#webPropertySummary",
+          :id => "UA-3",
+          :name => "WebProperty3",
+          :internalWebPropertyId => 789,
+          :level => "STANDARD",
+          :websiteUrl => "http://www.google.com"
         }
       ]
     }
@@ -86,18 +94,24 @@ describe Legato::Management::AccountSummary do
     end
 
     it "builds the web_properties instances" do
-      account_summary.web_properties.size.should == 2
+      account_summary.web_properties.size.should == 3
       account_summary.web_properties.first.attributes[:kind].should == "analytics#webPropertySummary"
       account_summary.web_properties.first.id.should == "UA-1"
       account_summary.web_properties.first.name.should == "WebProperty1"
       account_summary.web_properties.first.account_id.should == 12345
       account_summary.web_properties.first.attributes[:internalWebPropertyId].should == 123
       account_summary.web_properties.first.attributes[:level].should == "STANDARD"
+      account_summary.web_properties[1].attributes[:kind].should == "analytics#webPropertySummary"
+      account_summary.web_properties[1].id.should == "UA-2"
+      account_summary.web_properties[1].name.should == "WebProperty2"
+      account_summary.web_properties[1].account_id.should == 12345
+      account_summary.web_properties[1].attributes[:internalWebPropertyId].should == 456
+      account_summary.web_properties[1].attributes[:level].should == "STANDARD"
       account_summary.web_properties.last.attributes[:kind].should == "analytics#webPropertySummary"
-      account_summary.web_properties.last.id.should == "UA-2"
-      account_summary.web_properties.last.name.should == "WebProperty2"
+      account_summary.web_properties.last.id.should == "UA-3"
+      account_summary.web_properties.last.name.should == "WebProperty3"
       account_summary.web_properties.last.account_id.should == 12345
-      account_summary.web_properties.last.attributes[:internalWebPropertyId].should == 456
+      account_summary.web_properties.last.attributes[:internalWebPropertyId].should == 789
       account_summary.web_properties.last.attributes[:level].should == "STANDARD"
     end
 
@@ -157,6 +171,7 @@ describe Legato::Management::AccountSummary do
       account_summary.web_properties[0].profiles[2].id.should == 1236
       account_summary.web_properties[1].profiles.size.should == 1
       account_summary.web_properties[1].profiles[0].id.should == 1237
+      account_summary.web_properties[2].profiles.size.should == 0
     end
 
     it "can be used for traversing to web_properties from accounts" do
