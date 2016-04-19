@@ -35,7 +35,7 @@ module Legato
       end
 
       def self.build_from_summary(attributes, user)
-        properties = attributes['webProperties'] || attributes[:webProperties]
+        properties = attributes['webProperties'] || attributes[:webProperties] || []
 
         Account.new(attributes, user).tap { |account|
           account.web_properties = properties.map { |property|
