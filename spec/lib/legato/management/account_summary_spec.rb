@@ -63,8 +63,19 @@ describe Legato::Management::AccountSummary do
     }
   }
 
+  let(:sample_dict_without_web_property) {
+    {
+      :id => 67890,
+      :kind => "analytics#accountSummary",
+      :name => "Account 2",
+    }
+  }
+
   let(:user) { stub(:api_key => nil) }
   let(:account_summary) { Legato::Management::AccountSummary.new(sample_dict, user) }
+  let(:account_summary_without_web_property) do
+    Legato::Management::AccountSummary.new(sample_dict_without_web_property, user)
+  end
 
   def self.subject_class_name
     "account_summary"
@@ -142,6 +153,13 @@ describe Legato::Management::AccountSummary do
       account_summary.profiles[3].web_property_id.should == "UA-2"
       account_summary.profiles[3].attributes[:type].should == "WEB4"
     end
+
+    it 'builds the account instance without any web properties' do
+      account_summary_without_web_property.account.id.should == 67890
+      account_summary_without_web_property.account.name.should == "Account 2"
+      account_summary_without_web_property.account.user.should == user
+    end
+
   end
 
   context "allows forward and reverse traversing" do
