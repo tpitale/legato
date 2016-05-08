@@ -3,6 +3,7 @@ require "legato/version"
 require 'multi_json'
 require 'cgi'
 require 'ostruct'
+require 'set'
 
 if Object.const_defined?("ActiveSupport")
   require "active_support/core_ext/string"
