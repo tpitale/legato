@@ -21,6 +21,10 @@ module Legato
       Hash[data["totalsForAllResults"].map{|k,v| [Legato.from_ga_string(k), number_for(v)]}]
     end
 
+    def sampled
+      data["containsSampledData"]
+    end
+
     def rows
       Array.wrap(data['rows']).compact
     end
