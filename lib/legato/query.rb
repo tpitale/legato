@@ -3,7 +3,7 @@ module Legato
     include Enumerable
 
     MONTH = 2592000
-    REQUEST_FIELDS = 'columnHeaders/name,rows,totalResults,totalsForAllResults'
+    REQUEST_FIELDS = 'columnHeaders/name,rows,totalResults,totalsForAllResults,containsSampledData'
 
     BASIC_OPTION_KEYS = [
       :sort, :limit, :offset, :start_date, :end_date, :quota_user,
@@ -160,6 +160,7 @@ module Legato
       @collection = response.collection
       @total_results = response.total_results
       @totals_for_all_results = response.totals_for_all_results
+      @sampled = response.sampled
       @loaded = true
     end
 
@@ -177,6 +178,11 @@ module Legato
     def totals_for_all_results
       load unless loaded?
       @totals_for_all_results
+    end
+
+    def sampled
+      load unless loaded?
+      @sampled
     end
 
     def each(&block)

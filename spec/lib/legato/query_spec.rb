@@ -60,7 +60,7 @@ describe Legato::Query do
     end
 
     it "loads a collection of results" do
-      response = stub(:collection => [], :total_results => 0, :totals_for_all_results => {})
+      response = stub(:collection => [], :total_results => 0, :totals_for_all_results => {}, :sampled => false)
       user = stub(:request => response)
       query.stubs(:profile => stub(:user => user))
 
@@ -71,23 +71,24 @@ describe Legato::Query do
       response.should have_received(:collection)
       response.should have_received(:total_results)
       response.should have_received(:totals_for_all_results)
+      response.should have_received(:sampled)
     end
 
     it "returns the collection" do
-      query.stubs(:request_for_query).returns(stub(:collection => [1,2,3], :total_results => 3, :totals_for_all_results => {'foo' => 34.2}))
+      query.stubs(:request_for_query).returns(stub(:collection => [1,2,3], :total_results => 3, :totals_for_all_results => {'foo' => 34.2}, :sampled => false))
       query.load
       query.collection.should == [1,2,3]
       query.to_a.should == [1,2,3]
     end
 
     it "returns the total number of results" do
-      query.stubs(:request_for_query).returns(stub(:collection => [1,2,3], :total_results => 3, :totals_for_all_results => {'foo' => 34.2}))
+      query.stubs(:request_for_query).returns(stub(:collection => [1,2,3], :total_results => 3, :totals_for_all_results => {'foo' => 34.2}, :sampled => false))
       query.load
       query.total_results.should == 3
     end
 
     it "returns the totals for all results" do
-      query.stubs(:request_for_query).returns(stub(:collection => [1,2,3], :total_results => 3, :totals_for_all_results => {'foo' => 34.2}))
+      query.stubs(:request_for_query).returns(stub(:collection => [1,2,3], :total_results => 3, :totals_for_all_results => {'foo' => 34.2}, :sampled => false))
       query.load
       query.totals_for_all_results.should == {'foo' => 34.2}
     end
