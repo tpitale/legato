@@ -168,7 +168,6 @@ module Legato
       load unless loaded?
       @collection
     end
-    alias :to_a :collection
 
     def total_results
       load unless loaded?
