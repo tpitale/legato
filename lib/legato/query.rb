@@ -7,7 +7,7 @@ module Legato
 
     BASIC_OPTION_KEYS = [
       :sort, :limit, :offset, :start_date, :end_date, :quota_user,
-      :user_ip, :sampling_level, :segment_id
+      :user_ip, :sampling_level, :segment_id, :tracking_scope
     ]
 
     VALID_TRACKING_SCOPES = {
