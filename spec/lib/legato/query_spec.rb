@@ -19,7 +19,7 @@ describe Legato::Query do
     let(:klass) { Class.new.tap { |k| k.extend(Legato::Model)} }
     let(:query) { Legato::Query.new(klass) }
 
-    let(:default_options) { {:start_date => query.start_date, :end_date => query.end_date} }
+    let(:default_options) { {:start_date => query.start_date, :end_date => query.end_date, :tracking_scope => query.tracking_scope} }
 
     before :each do
       @klass = klass
