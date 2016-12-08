@@ -8,6 +8,7 @@ module Legato
     end
 
     # TODO: refactor into request object again
+    # TODO: determine v3/v4 request here
     def request(query)
       append_quotas_to_query(query)
 

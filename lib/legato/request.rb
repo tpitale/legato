@@ -1,4 +1,6 @@
 module Legato
+  # TODO: move to v3::request
+  # Converts query/model template into a request for data
   class Request
     attr_reader :user, :query
 
@@ -32,6 +34,10 @@ module Legato
 
     def get(*args)
       user.access_token.get(*args)
+    end
+
+    def post
+      user.access_token.post
     end
 
     def query_string

@@ -235,6 +235,7 @@ module Legato
       self
     end
 
+    # TODO: move to v3::request
     def to_params
       base_params.tap do |params|
 
@@ -245,10 +246,12 @@ module Legato
       end
     end
 
+    # TODO: move to v3::request
     def to_query_string
       to_params.map {|k,v| [k,v].join("=")}.join("&")
     end
 
+    # TODO: move to v3::request
     def base_url
       raise "invalid tracking_scope" unless tracking_scope_valid?
 
@@ -256,9 +259,11 @@ module Legato
 
       "https://www.googleapis.com/analytics/v3/data/#{endpoint}"
     end
+    # POST https://analyticsreporting.googleapis.com/v4/reports:batchGet
 
     private
 
+    # TODO: move to v3::request
     def base_params
       {
         'ids' => profile_id,

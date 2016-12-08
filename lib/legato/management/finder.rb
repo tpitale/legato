@@ -8,12 +8,14 @@ module Legato
       def all(user, path=default_path)
         query = Legato::Management::Query.new(base_uri + path, self)
 
+        # TODO: always use V3 request for management, for now
         user.request(query).items.map {|item| new(item, user)}
       end
 
       def get(user, path)
         query = Legato::Management::Query.new(base_uri + path, self)
 
+        # TODO: always use V3 request for management, for now
         new(user.request(query).data, user)
       end
     end
