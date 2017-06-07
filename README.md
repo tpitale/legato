@@ -218,7 +218,7 @@ for more details.
 
 **Note**: Legato does _not_ support [Users vs Sessions](https://developers.google.com/analytics/devguides/reporting/core/v3/segments#users-vs-sessions), yet. The default will be sessions (the equivalent of the earlier, now removed, dynamic segments).
 
-### Defining, using and chaining filters
+### Defining, using and chaining segments
 
 Return entries with exits counts greater than or equal to 2000
 
@@ -264,6 +264,7 @@ Legato::Management::Goal.all(user)
   * :sort - metric/dimension to sort by
   * :quota_user - any arbitrary string that uniquely identifies a user (40 characters max)
   * :sampling_level - 'FASTER' or 'HIGHER_PRECISION' https://developers.google.com/analytics/devguides/reporting/core/v3/reference#samplingLevel
+  * :segment_id - this will supercede any segments chained to the query
 
 ## Real Time Reporting ##
 
