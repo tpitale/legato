@@ -264,7 +264,7 @@ Legato::Management::Goal.all(user)
   * :sort - metric/dimension to sort by
   * :quota_user - any arbitrary string that uniquely identifies a user (40 characters max)
   * :sampling_level - 'FASTER' or 'HIGHER_PRECISION' https://developers.google.com/analytics/devguides/reporting/core/v3/reference#samplingLevel
-  * :segment_id - this will supercede any segments chained to the query
+  * :segment_id - this will supersede any segments chained to the query
 
 ## Real Time Reporting ##
 
