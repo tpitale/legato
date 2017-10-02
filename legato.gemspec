@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/tpitale/legato"
   s.summary     = %q{Access the Google Analytics API with Ruby}
   s.description = %q{Access the Google Analytics Core Reporting and Management APIs with Ruby. Create models for metrics and dimensions. Filter your data to tell you what you need.}
+  s.license     = "MIT"
 
   s.rubyforge_project = "legato"
 
