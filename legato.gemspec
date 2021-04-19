@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   # specify any dependencies here; for example:
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
-  s.add_development_dependency "mocha"
+  s.add_development_dependency "mocha", '~> 1.9.0'
   s.add_development_dependency "bourne"
   s.add_development_dependency "vcr", "2.0.0.beta2"
   s.add_development_dependency "fakeweb"
