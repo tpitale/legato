@@ -5,6 +5,9 @@ rvm:
   - 2.0.0
   - 2.1.2
   - 2.2.2
+  - 2.6.7
+  - 2.7.3
+  - 3.0.1
 script: bundle exec rspec spec
 notifications:
   webhooks:
