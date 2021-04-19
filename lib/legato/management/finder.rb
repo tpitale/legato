@@ -6,22 +6,20 @@ module Legato
       end
 
       def all(user, path=default_path)
-        items = []
+        results = []
 
         url = base_uri + path
 
-        loop do
+        while url && !url.empty?
           query = Legato::Management::Query.new(url, self)
           response = user.request(query)
 
-          response.items.each { |item| items << new(item, user) }
-
-          break if !response.data['nextLink'] || response.data['nextLink'].empty?
+          results += response.items.map { |item| new(item, user) }
 
           url = response.data['nextLink']
         end
 
-        items
+        results
       end
 
       def get(user, path)
