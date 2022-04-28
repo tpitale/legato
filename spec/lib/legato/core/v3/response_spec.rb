@@ -1,11 +1,12 @@
 require 'spec_helper'
 
-describe Legato::Response do
+describe Legato::Core::V3::Response do
   context "An instance of Response" do
     before :each do
-      raw_body = File.read(File.dirname(__FILE__) + '/../../fixtures/simple_response.json')
+      # TODO: so many directories up to fixtures
+      raw_body = File.read(File.dirname(__FILE__) + '/../../../../fixtures/simple_response.json')
 
-      @response = Legato::Response.new(stub(:body => raw_body))
+      @response = Legato::Core::V3::Response.new(stub(:body => raw_body))
     end
 
     it 'has a collection of OpenStruct instances' do

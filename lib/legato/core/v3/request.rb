@@ -1,4 +1,4 @@
-module Legato
+module Legato::Core::V3
   class Request
     attr_reader :user, :query
 
@@ -8,7 +8,7 @@ module Legato
     end
 
     def response(url = nil)
-      Legato::Response.new(raw_response, query.instance_klass)
+      Legato::Core::V3::Response.new(raw_response, query.instance_klass)
     end
 
     def raw_response
@@ -19,15 +19,24 @@ module Legato
       !user.api_key.nil?
     end
 
+    def base_url
+      # Handle management API queries
+      return query.base_url if query.respond_to?(:base_url)
+
+      raise "invalid tracking_scope" unless query.tracking_scope_valid?
+
+      "https://www.googleapis.com/analytics/v3/data/#{query.tracking_scope}"
+    end
+
     private
     def oauth_2_response
       # oauth 2
-      get(query.base_url, :params => query.to_params)
+      get(base_url, :params => query.to_params)
     end
 
     def oauth_1_response
       # oauth 1 + api key
-      get(query.base_url + query_string)
+      get(base_url + query_string)
     end
 
     def get(*args)
