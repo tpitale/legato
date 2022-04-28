@@ -502,5 +502,39 @@ describe Legato::Core::Query do
         query.to_params['sort'].should == 'pageviews'
       end
     end
+
+    context "as a response body" do
+      let(:profile) {Legato::Management::Profile.new({id: '1234567'}, nil)}
+
+      it 'has all expected fields' do
+        expected = {
+          reportRequests: [{
+            viewId: Legato.to_ga_string(profile.id),
+            dateRanges:[
+              {
+                startDate: Legato.format_time(Time.now-Legato::Core::Query::MONTH),
+                endDate: Legato.format_time(Time.now)
+              }
+            ],
+            metrics: [{expression: 'ga:visitors'}, {expression: 'ga:percentNewVisits'}],
+            dimensions: [{name: 'ga:date'}, {name: 'ga:hour'}],
+            orderBys: [
+              {fieldName: 'ga:field1'},
+              {fieldName: 'ga:field2', sortOrder: 'DESCENDING'}
+            ]
+          }]
+        }
+
+        query.profile = profile
+
+        query.dimensions << :date
+        query.dimensions << :hour
+        query.metrics << :visitors
+        query.metrics << :percent_new_visits
+        query.sort = ['field1', '-field2']
+
+        expect(query.to_body).to eq(expected)
+      end
+    end
   end
 end

@@ -45,6 +45,7 @@ end
 require 'legato/core'
 require 'legato/user'
 require 'legato/profile_methods'
+require 'legato/request_formatters'
 
 require 'legato/management/model'
 require 'legato/management/query'

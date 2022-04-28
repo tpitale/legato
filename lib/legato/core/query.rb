@@ -265,8 +265,34 @@ module Legato::Core
     end
 
     # V4
-    # def to_body
-    # end
+    # TODO: extract to formatter class
+    def to_body
+      {
+        # TODO: support batch of requests by passing >1
+        reportRequests: [
+          {
+            viewId: profile_id,
+            # TODO: support >1 date ranges
+            dateRanges: [
+              {
+                startDate: Legato.format_time(start_date),
+                endDate: Legato.format_time(end_date)
+              }
+            ],
+            metrics: metrics.to_report_format,
+            dimensions: dimensions.to_report_format,
+            orderBys: sort.to_report_format,
+            samplingLevel: sampling_level
+            # segments: [],
+            # TODO: filters are wildly different
+            # filters: filters.to_report_format
+            # includeEmptyRows: include_empty_rows
+            # pageSize
+            # pageToken
+          }.reject{|_,v| v.nil?}
+        ]
+      }
+    end
 
     private
 
