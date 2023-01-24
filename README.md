@@ -1,8 +1,8 @@
 # Legato: Ruby Client for the Google Analytics Core Reporting and Management API #
 
-[![Gem Version](https://badge.fury.io/rb/legato.png)](http://badge.fury.io/rb/legato)
-[![Build Status](https://travis-ci.org/tpitale/legato.png)](https://travis-ci.org/tpitale/legato)
-[![Code Climate](https://codeclimate.com/github/tpitale/legato.png)](https://codeclimate.com/github/tpitale/legato)
+[![Gem Version](https://badge.fury.io/rb/legato.svg)](http://badge.fury.io/rb/legato)
+[![Build Status](https://github.com/tpitale/legato/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/tpitale/legato/actions/workflows/test.yml)
+[![Code Climate](https://codeclimate.com/github/tpitale/legato.svg)](https://codeclimate.com/github/tpitale/legato)
 
 ## [Check out the Wiki!](https://github.com/tpitale/legato/wiki) ##
 
