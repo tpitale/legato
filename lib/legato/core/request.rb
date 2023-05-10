@@ -1,5 +1,5 @@
 require_relative 'v3/request'
-# require_relative 'v4/request'
+require_relative 'v4/request'
 
 module Legato::Core
   class Request
