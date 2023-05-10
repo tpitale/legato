@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Legato::Query do
+describe Legato::Core::Query do
   def self.it_defines_operators(*operators)
     operators.each do |operator|
       it "creates a method for the operator #{operator}" do
@@ -17,7 +17,7 @@ describe Legato::Query do
 
   context "a query" do
     let(:klass) { Class.new.tap { |k| k.extend(Legato::Model)} }
-    let(:query) { Legato::Query.new(klass) }
+    let(:query) { Legato::Core::Query.new(klass) }
 
     let(:default_options) { {:start_date => query.start_date, :end_date => query.end_date, :tracking_scope => query.tracking_scope} }
 
@@ -168,8 +168,8 @@ describe Legato::Query do
       end
 
       it 'does not share metrics across queries' do
-        query1 = Legato::Query.new(@klass)
-        query2 = Legato::Query.new(@klass)
+        query1 = Legato::Core::Query.new(@klass)
+        query2 = Legato::Core::Query.new(@klass)
 
         query1.dimensions << :city
         expect(query2.dimensions).to_not include(:city)
@@ -196,8 +196,8 @@ describe Legato::Query do
       end
 
       it 'does not share metrics across queries' do
-        query1 = Legato::Query.new(@klass)
-        query2 = Legato::Query.new(@klass)
+        query1 = Legato::Core::Query.new(@klass)
+        query2 = Legato::Core::Query.new(@klass)
 
         query1.metrics << :pageviews
         expect(query2.metrics).to_not include(:pageviews)
@@ -361,7 +361,7 @@ describe Legato::Query do
 
         it "does not replace the start date if option is omitted" do
           query.apply_options({})
-          Legato.format_time(query.start_date).should == Legato.format_time(@now-Legato::Query::MONTH)
+          Legato.format_time(query.start_date).should == Legato.format_time(@now-Legato::Core::Query::MONTH)
         end
 
         it "replaces the end date" do
@@ -373,28 +373,6 @@ describe Legato::Query do
           query.apply_options({})
           Legato.format_time(query.end_date).should == Legato.format_time(@now)
         end
-      end
-    end
-
-    context "with the scope set" do
-      it 'raises when an invalid scope is passed in' do
-        query.tracking_scope = "what"
-        expect { query.base_url }.to raise_error
-      end
-
-      it 'sets the correct endpoint url' do
-        query.tracking_scope = "mcf"
-        expect(query.base_url).to eql("https://www.googleapis.com/analytics/v3/data/mcf")
-      end
-
-      it 'has the correct api endpoint' do
-        query.tracking_scope = "ga"
-        expect(query.base_url).to eql("https://www.googleapis.com/analytics/v3/data/ga")
-      end
-
-      it 'has the realtime api endpoint' do
-        query.tracking_scope = "rt"
-        expect(query.base_url).to eql("https://www.googleapis.com/analytics/v3/data/realtime")
       end
     end
 
@@ -413,8 +391,8 @@ describe Legato::Query do
 
         query.to_params.should == {
           'ids' => 'ga:1234567890',
-          'start-date' => Legato.format_time(Time.now-Legato::Query::MONTH),
-          'fields' => Legato::Query::REQUEST_FIELDS,
+          'start-date' => Legato.format_time(Time.now-Legato::Core::Query::MONTH),
+          'fields' => Legato::Core::Query::REQUEST_FIELDS,
           'end-date' => Legato.format_time(Time.now)
         }
       end
@@ -425,7 +403,7 @@ describe Legato::Query do
         query.end_date = now
         query.to_params.should == {
           'start-date' => Legato.format_time(now),
-          'fields' => Legato::Query::REQUEST_FIELDS,
+          'fields' => Legato::Core::Query::REQUEST_FIELDS,
           'end-date' => Legato.format_time(now)
         }
       end
@@ -437,7 +415,7 @@ describe Legato::Query do
         query.to_params.should == {
           'start-date' => "2014-01-01",
           'end-date' => "yesterday",
-          'fields' => Legato::Query::REQUEST_FIELDS,
+          'fields' => Legato::Core::Query::REQUEST_FIELDS,
         }
       end
 
@@ -522,6 +500,40 @@ describe Legato::Query do
         query.stubs(:sort).returns(sort)
 
         query.to_params['sort'].should == 'pageviews'
+      end
+    end
+
+    context "as a response body" do
+      let(:profile) {Legato::Management::Profile.new({id: '1234567'}, nil)}
+
+      it 'has all expected fields' do
+        expected = {
+          reportRequests: [{
+            viewId: Legato.to_ga_string(profile.id),
+            dateRanges:[
+              {
+                startDate: Legato.format_time(Time.now-Legato::Core::Query::MONTH),
+                endDate: Legato.format_time(Time.now)
+              }
+            ],
+            metrics: [{expression: 'ga:visitors'}, {expression: 'ga:percentNewVisits'}],
+            dimensions: [{name: 'ga:date'}, {name: 'ga:hour'}],
+            orderBys: [
+              {fieldName: 'ga:field1'},
+              {fieldName: 'ga:field2', sortOrder: 'DESCENDING'}
+            ]
+          }]
+        }
+
+        query.profile = profile
+
+        query.dimensions << :date
+        query.dimensions << :hour
+        query.metrics << :visitors
+        query.metrics << :percent_new_visits
+        query.sort = ['field1', '-field2']
+
+        expect(query.to_body).to eq(expected)
       end
     end
   end

@@ -42,9 +42,10 @@ module Legato
   end
 end
 
-require 'legato/request'
+require 'legato/core'
 require 'legato/user'
 require 'legato/profile_methods'
+require 'legato/request_formatters'
 
 require 'legato/management/model'
 require 'legato/management/query'
@@ -57,8 +58,6 @@ require 'legato/management/profile'
 require 'legato/management/goal'
 
 require 'legato/list_parameter'
-require 'legato/response'
 require 'legato/filter'
 require 'legato/filter_set'
-require 'legato/query'
 require 'legato/model'

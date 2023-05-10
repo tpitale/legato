@@ -1,17 +1,18 @@
 module Legato
   class User
-    attr_accessor :access_token, :api_key, :quota_user, :user_ip
+    attr_accessor :access_token, :api_key, :quota_user, :user_ip, :version
 
-    def initialize(token, api_key = nil)
+    def initialize(token, api_key = nil, version: 3)
       self.access_token = token
       self.api_key = api_key
+      self.version = version
     end
 
     # TODO: refactor into request object again
     def request(query)
       append_quotas_to_query(query)
 
-      Request.new(self, query).response
+      Core::Request[version].new(self, query).response
     end
 
     # Management Associations

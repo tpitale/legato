@@ -279,7 +279,7 @@ You can also call `realtime` on your model to get a new `Query` instance with re
 ```ruby
 query = Exit.realtime
 query.realtime? #=> true
-query.tracking_scope #=> 'rt'
+query.tracking_scope #=> 'realtime'
 ```
 
 ## Managing Quotas ##

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Legato::Filter do
   let(:klass) { Class.new.tap { |k| k.extend(Legato::Model)} }
-  let(:query) { Legato::Query.new(klass) }
+  let(:query) { Legato::Core::Query.new(klass) }
 
   context "a Filter instance with mcf" do
     before :each do

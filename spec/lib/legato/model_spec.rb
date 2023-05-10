@@ -73,12 +73,12 @@ describe "Legato::Model" do
 
       it 'returns a Query instance for a filter' do
         query = stub(:apply_filter_expression => "a query")
-        Legato::Query.stubs(:new).returns(query)
+        Legato::Core::Query.stubs(:new).returns(query)
 
         @model.filter :high, &@block
         @model.high('arg1').should == 'a query'
 
-        Legato::Query.should have_received(:new).with(@model)
+        Legato::Core::Query.should have_received(:new).with(@model)
         query.should have_received(:apply_filter_expression).with(:filters, 'arg1')
       end
     end
@@ -100,12 +100,12 @@ describe "Legato::Model" do
 
       it 'returns a Query instance for a segment' do
         query = stub(:apply_filter_expression => "a query")
-        Legato::Query.stubs(:new).returns(query)
+        Legato::Core::Query.stubs(:new).returns(query)
 
         @model.segment :high, &@block
         @model.high('arg1').should == 'a query'
 
-        Legato::Query.should have_received(:new).with(@model)
+        Legato::Core::Query.should have_received(:new).with(@model)
         query.should have_received(:apply_filter_expression).with(:segment_filters, 'arg1')
       end
     end
@@ -117,11 +117,11 @@ describe "Legato::Model" do
       options = {}
       profile = stub
       query = stub(:apply_options => "a query")
-      Legato::Query.stubs(:new).returns(query)
+      Legato::Core::Query.stubs(:new).returns(query)
 
       @model.results(profile, options).should == "a query"
 
-      Legato::Query.should have_received(:new).with(@model)
+      Legato::Core::Query.should have_received(:new).with(@model)
       query.should have_received(:apply_options).with(options.merge(:profile => profile))
     end
 

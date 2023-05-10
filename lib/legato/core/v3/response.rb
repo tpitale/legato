@@ -1,4 +1,4 @@
-module Legato
+module Legato::Core::V3
   class Response
     def initialize(raw_response, instance_klass = OpenStruct)
       @raw_response = raw_response

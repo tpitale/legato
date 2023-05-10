@@ -80,21 +80,21 @@ module Legato
     #   to Google Analytics which returns the result data
     def results(profile, options = {})
       # TODO: making tracking scope configurable when results are querried.  not sure how to do this.
-      Query.new(self).apply_options(options.merge(:profile => profile))
+      Legato::Core::Query.new(self).apply_options(options.merge(:profile => profile))
     end
 
     # Builds a `query` and sets the `realtime` property
     #
     # @return [Query] a new query with `realtime` property set
     def realtime
-      Query.new(self).realtime
+      Legato::Core::Query.new(self).realtime
     end
 
     def add_method_to_set(name, type, &block)
       send(type)[name] = block
 
       (class << self; self; end).instance_eval do
-        define_method(name) {|*args| Query.new(self).apply_filter_expression(type, *args, &block)}
+        define_method(name) {|*args| Legato::Core::Query.new(self).apply_filter_expression(type, *args, &block)}
       end
     end
   end

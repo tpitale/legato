@@ -1,4 +1,4 @@
-module Legato
+module Legato::Core
   class Query
     include Enumerable
 
@@ -32,7 +32,7 @@ module Legato
       methods.each do |method|
         class_eval <<-CODE
           def #{method}(field, value, join_character=nil)
-            Filter.new(self, field, :#{method}, value, join_character)
+            Legato::Filter.new(self, field, :#{method}, value, join_character)
           end
         CODE
       end
@@ -42,13 +42,13 @@ module Legato
     attr_accessor :profile, :start_date, :end_date
     attr_accessor :sort, :limit, :offset, :quota_user, :user_ip, :sampling_level, :segment_id #, :segment # individual, overwritten
     attr_accessor :filters, :segment_filters # combined, can be appended to
-    attr_accessor :tracking_scope
+    attr_writer :tracking_scope
 
     def self.from_query(query)
       new(query.parent_klass, query.tracking_scope, query.filters, query.segment_filters)
     end
 
-    def initialize(klass, tracking_scope = "ga", filters = FilterSet.new, segment_filters = FilterSet.new)
+    def initialize(klass, tracking_scope = "ga", filters = Legato::FilterSet.new, segment_filters = Legato::FilterSet.new)
       @loaded = false
       @parent_klass = klass
       self.filters = filters
@@ -68,6 +68,14 @@ module Legato
 
     def instance_klass
       @parent_klass.instance_klass
+    end
+
+    def tracking_scope
+      VALID_TRACKING_SCOPES[@tracking_scope]
+    end
+
+    def tracking_scope_valid?
+      VALID_TRACKING_SCOPES.keys.include?(@tracking_scope)
     end
 
     def apply_filter(*args, &block)
@@ -139,12 +147,12 @@ module Legato
     #   field, operator = key, :eql
     #   field, operator = key.target, key.operator if key.is_a?(SymbolOperatorMethods)
 
-    #   Filter.new(field, operator, value, join_character)
+    #   Legato::Filter.new(field, operator, value, join_character)
     # end
 
     def extract_profile(args)
-      return args.shift if args.first.is_a?(Management::Profile)
-      return args.pop if args.last.is_a?(Management::Profile)
+      return args.shift if args.first.is_a?(Legato::Management::Profile)
+      return args.pop if args.last.is_a?(Legato::Management::Profile)
       profile
     end
 
@@ -233,7 +241,7 @@ module Legato
     end
 
     def realtime?
-      tracking_scope == 'rt'
+      @tracking_scope == 'rt'
     end
 
     def realtime
@@ -251,16 +259,39 @@ module Legato
       end
     end
 
+    # V3
     def to_query_string
       to_params.map {|k,v| [k,v].join("=")}.join("&")
     end
 
-    def base_url
-      raise "invalid tracking_scope" unless tracking_scope_valid?
-
-      endpoint = VALID_TRACKING_SCOPES[tracking_scope]
-
-      "https://www.googleapis.com/analytics/v3/data/#{endpoint}"
+    # V4
+    # TODO: extract to formatter class
+    def to_body
+      {
+        # TODO: support batch of requests by passing >1
+        reportRequests: [
+          {
+            viewId: profile_id,
+            # TODO: support >1 date ranges
+            dateRanges: [
+              {
+                startDate: Legato.format_time(start_date),
+                endDate: Legato.format_time(end_date)
+              }
+            ],
+            metrics: metrics.to_report_format,
+            dimensions: dimensions.to_report_format,
+            orderBys: sort.to_report_format,
+            samplingLevel: sampling_level
+            # segments: [],
+            # TODO: filters are wildly different
+            # filters: filters.to_report_format
+            # includeEmptyRows: include_empty_rows
+            # pageSize
+            # pageToken
+          }.reject{|_,v| v.nil?}
+        ]
+      }
     end
 
     private
@@ -279,10 +310,6 @@ module Legato
         'userIp' => user_ip,
         'samplingLevel' => sampling_level
       }.reject! {|_,v| v.nil? || v.to_s.strip.length == 0}
-    end
-
-    def tracking_scope_valid?
-      VALID_TRACKING_SCOPES.keys.include?(tracking_scope)
     end
 
     def request_for_query

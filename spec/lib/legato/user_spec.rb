@@ -4,7 +4,7 @@ describe Legato::User do
   context "an instance of Legato::User" do
     let(:instance_klass) { Class.new }
     let(:klass) { Class.new.tap {|k| k.extend(Legato::Model)} }
-    let(:query) { Legato::Query.new(klass) }
+    let(:query) { Legato::Core::Query.new(klass) }
     let(:access_token) { stub }
     let(:user) { Legato::User.new(access_token) }
 
@@ -13,7 +13,7 @@ describe Legato::User do
     end
 
     it 'assigns a quota user to the query' do
-      Legato::Request.stubs(:new).returns(stub(:response => 'response'))
+      Legato::Core::V3::Request.stubs(:new).returns(stub(:response => 'response'))
 
       user.quota_user = 'user12345678'
       user.request(query)
@@ -22,7 +22,7 @@ describe Legato::User do
     end
 
     it 'assigns a user ip to the query' do
-      Legato::Request.stubs(:new).returns(stub(:response => 'response'))
+      Legato::Core::V3::Request.stubs(:new).returns(stub(:response => 'response'))
 
       user.user_ip = '127.0.0.1'
       user.request(query)
@@ -33,12 +33,12 @@ describe Legato::User do
     it 'returns a response for a given query' do
       query.stubs(:to_params).returns('params')
       access_token.stubs(:get).returns('a response')
-      Legato::Response.stubs(:new)
+      Legato::Core::V3::Response.stubs(:new)
       query.stubs(:base_url).returns("the_api_url")
 
       user.request(query)
 
-      Legato::Response.should have_received(:new).with('a response', instance_klass)
+      Legato::Core::V3::Response.should have_received(:new).with('a response', instance_klass)
       access_token.should have_received(:get).with("the_api_url", :params => "params")
     end
 
